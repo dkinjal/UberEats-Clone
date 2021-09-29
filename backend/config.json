@@ -1,0 +1,12 @@
+{
+    "DB":{
+        "host":"db-instance-kd.ciklk7hxoq0w.us-east-2.rds.amazonaws.com",
+        "username":"admin",
+        "password":"admin123",
+        "port":"3306",
+        "database":"UberEats"
+    },
+    "secret":"cmpe_273_secure_string",
+    "frontEnd":"http://http://localhost:3000/"
+}
+
