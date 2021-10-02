@@ -33,9 +33,11 @@ export default function RestaurantCard({restaurantDetails}) {
           </Typography>
         </CardContent>
         <CardActions>
+        <Link to ='/Favourites'>
         <IconButton variant='outlined' aria-label="add to favorites">
           <FavoriteBorderIcon />
         </IconButton>
+        </Link>
           <Button size="small"><AttachMoneyIcon/>{restaurantDetails.Restaurant_ID}</Button>
         </CardActions>
       </Card>

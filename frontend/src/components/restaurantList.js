@@ -1,14 +1,10 @@
 import { Container } from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import Grid from '@material-ui/core/Grid'
-
 import RestaurantCard from "./restaurantCard";
-
-
 
   export default function RestaurantList() {
     const [RestaurantDetails, setRestaurantDetails] = useState([])
-
         
     useEffect(()=>{
         fetch('http://localhost:4001/restaurant')
@@ -24,7 +20,6 @@ import RestaurantCard from "./restaurantCard";
                     <RestaurantCard restaurantDetails={details}/> 
                 </Grid>
             ))}
-
             </Grid>
         </Container>
     )

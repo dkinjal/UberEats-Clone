@@ -12,7 +12,7 @@ export default function UpdateDish() {
       .then(response => 
         {let data = (response.data[0])
           console.log(response.data[0])
-          setRestDetails(response.data[0])
+          //setRestDetails(response.data[0])
           
         })  
       
@@ -21,7 +21,7 @@ export default function UpdateDish() {
         <div>
             <Router>
                 <Route path={'?Dish_ID=' + DishID}>
-                    <p>{DishID}</p>
+                    
                 </Route>
             </Router>
             <h1>hello</h1>
