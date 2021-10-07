@@ -7,7 +7,7 @@ import CustomerProfile from "./components/customerProfile";
 import RestaurantProfile from "./components/restaurantProfile";
 import RestaurantCard  from "./components/restaurantCard";
 import HomePage from './components/Home';
-import Favourites from './components/Favourites'
+import Favourites from './components/favourites/Favourites'
 import RestaurantList from './components/restaurantList';
 import Login from './components/customerOnly/Login';
 import Signup from './components/customerOnly/Signup';
@@ -17,7 +17,9 @@ import Landing from './components/Landing';
 import ImageUpload from "./components/ImageUpload";
 import DishCard2 from './components/DishCard2';
 import UpdateDish from './components/dishOnly/updateDish';
-import Orders from './components/ordersOnly/Orders'
+import Orders from './components/ordersOnly/Orders';
+import SearchResults from './components/customerOnly/SearchResults';
+import AddDish from "./components/dishOnly/addDish";
 
 const theme = createTheme({
     palette:
@@ -55,7 +57,7 @@ function App() {
                 <Route path='/restaurantCard'>
                 <RestaurantCard/>
                 </Route>
-                <Route path='/Favourites'>
+                <Route path='/favourites'>
                 <Favourites/>
                 </Route>
                 <Route path='/login'>
@@ -66,6 +68,9 @@ function App() {
                 </Route>
                 <Route path='/restaurantLogin'>
                 <RestaurantLogin/>
+                </Route>
+                <Route path='/search'>
+                <SearchResults/>
                 </Route>
                 <Route path='/restaurantSignup'>
                 <RestaurantSignup/>
@@ -81,6 +86,9 @@ function App() {
                 </Route>
                 <Route path='/UpdateDish'>
                 <UpdateDish/>
+                </Route>
+                <Route path='/addDish'>
+                <AddDish/>
                 </Route>
                 <Route path='/orders'>
                 <Orders/>

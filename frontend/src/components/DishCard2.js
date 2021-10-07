@@ -13,8 +13,7 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 
 export default function DishCard2({DishDetails}) {  
-  // <Router><Route path={'/UpdateDish?Dish_ID=' + DishDetails.Dish_ID}><UpdateDish/></Route>;
-  // </Router>
+
 
   const [DishID, setDishID] = React.useState(DishDetails.Dish_ID);
   return (
@@ -42,7 +41,7 @@ export default function DishCard2({DishDetails}) {
         <IconButton variant='outlined' aria-label="add to favorites">
           <FavoriteBorderIcon />
         </IconButton>
-          <Button size="small"><AttachMoneyIcon/>aaa</Button>
+          <Button size="small"><AttachMoneyIcon/>{DishDetails.Dish_Cost}</Button>
         </CardActions>
       </Card>
     );

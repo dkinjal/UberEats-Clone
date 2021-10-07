@@ -1,25 +1,14 @@
-import React, {useState} from "react";
-import Navbar from './Navbar'
-import food from '../images/food.png'
+import React, {useState, useEffect} from "react";
+import Navbar from '../Navbar'
+import food from '../../images/food.png'
 import Paper from '@mui/material/Paper';
 import Grid from '@material-ui/core/Grid';
-import RestaurantCard from "./restaurantCard";
+import RestaurantCard from "../restaurantCard";
 
 
 
 const styles = {
-    paperContainer: {
-        backgroundImage: `url(${food})`,
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        overflow:"hidden",
-        display: "flex",
-        alignItems: "center",
-        zIndex: -1,
-        width: '100vw',
-        height: '100vh',
-    },
+    
     Nav:{
         position:"fixed",
         margin:'0',
@@ -27,14 +16,20 @@ const styles = {
     }
 };
 
-export default function Landing() {
+export default function SearchResults() {
     const [RestaurantDetails, setRestaurantDetails] = useState([])
-    
+    useEffect(()=>{
+        fetch(`http://localhost:4001/search/${localStorage.getItem('search_id')}`)
+        .then(res => res.json())
+        .then(data =>{
+            return (setRestaurantDetails(data))
+        })
+    },[])
     
     return (
         <div>
         <Navbar 
-        setRestaurantDetails={setRestaurantDetails} 
+        // setRestaurantDetails={setRestaurantDetails} 
         style={styles.Nav} />
         <Paper  style={styles.paperContainer}>
         <Grid container spacing={3} >

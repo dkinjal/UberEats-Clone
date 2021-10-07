@@ -10,6 +10,7 @@ import Backdrop from '@mui/material/Backdrop';
 import CountrySelect from './country'
 import Button from '@mui/material/Button';
 import Grid from '@material-ui/core/Grid';
+import { Link } from 'react-router-dom';
 import DishCard2 from './DishCard2';
 import CardMedia from '@mui/material/CardMedia';
 import Modal from '@mui/material/Modal';
@@ -109,11 +110,9 @@ export default function RestaurantProfile(){
     this.setState({restDetails: restDetailsTemp});
     }
 
-    
-  
     return(
         <container>
-            <Navbar className={Classes.navbar} position='absolute' style={{ position: 'fixed', top: 0 , left : 0,  margin: 0}}/>
+          <Navbar className={Classes.navbar} position='absolute' style={{ position: 'fixed', top: 0 , left : 0,  margin: 0}}/>
         
         <Stack direction="column" spacing={3}>
         <div>
@@ -179,7 +178,7 @@ export default function RestaurantProfile(){
                 defaultValue=""
                 variant="filled"
                 value={RestTimingFrom+'-'+RestTimingTo}
-                onChange={(e)=>onChangeDetails}
+                onChange={onChangeDetails}
                />
               
 
@@ -224,6 +223,8 @@ export default function RestaurantProfile(){
                
             ))}
              <Grid item md={4} sm={6} >
+            <Link to={"/addDish?Rest_ID="+ Restaurant_ID} >
+            
             <Card  elevation={3} sx={{ maxWidth: 345,  }}>
             <CardMedia
               component="img"
@@ -233,9 +234,9 @@ export default function RestaurantProfile(){
             />
               <CardContent>
                 <Typography>Add Dish</Typography>
-                
               </CardContent>
             </Card>
+            </Link>
             </Grid>
             
           </Grid>

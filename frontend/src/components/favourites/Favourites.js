@@ -2,8 +2,8 @@ import { Container } from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import Grid from '@material-ui/core/Grid'
 
-import RestaurantCard from "./restaurantCard";
-import Navbar from './Navbar'
+import RestaurantCard from "../restaurantCard";
+import Navbar from '../Navbar'
 
   export default function Favourites() {
       const customer_ID=1;

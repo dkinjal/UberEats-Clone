@@ -2,7 +2,12 @@ import React, {useEffect, useState} from "react";
 import { Container } from "@material-ui/core";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import { Link } from 'react-router-dom';
+import {useLocation} from "react-router-dom";
 
+import Paper from '@mui/material/Paper';
+import Grid from '@material-ui/core/Grid';
 
 
 export default function AddDish() { 
@@ -11,7 +16,10 @@ export default function AddDish() {
     const [DishCategory, setDishCategory]= useState('');
     const [DishCost, setDishCost]= useState('');
     const [DishIngredients, setDishIngredients]= useState('');
-    
+    const search = useLocation().search;
+    const RestID = new URLSearchParams(search).get('Rest_ID');
+    console.log(RestID)
+
 
     function addDish(){
         fetch(`http://localhost:4001/dish`,{
@@ -21,8 +29,9 @@ export default function AddDish() {
                     DishName:DishName,
                     DishDescription:DishDescription,
                     DishCost: DishCost,
-                    DishIngredients: DishIngredients,
-                    DishCategory: DishCategory
+                    MainIngredients: DishIngredients,
+                    DishCategory: DishCategory,
+                    RestID: RestID
                 })})
                 .then(res => res.json())
             .then(data => {
@@ -32,7 +41,10 @@ export default function AddDish() {
 
 
     return (
-        <Container>
+        <Grid container justify = "center">
+          <Paper elevation={3} sx={{ width: 500, height: 600}} >
+          <Grid container justify = "center">
+          <Stack direction="column"  sx={{width:'35ch'}}>
             <h1>ADD DISH</h1>
             <TextField fullWidth id="outlined-basic" label="Dish Name" 
             onChange={(e)=>{setDishName(e.target.value)}}
@@ -55,10 +67,14 @@ export default function AddDish() {
             variant="outlined" />
             <br/><br/>
 
-
+           <Link to='/restaurantProfile'>
             <Button onClick={addDish}  variant="contained" color="success">
-                Login
+                ADD DISH
             </Button>
-        </Container>
+            </Link>
+            </Stack>
+            </Grid>
+            </Paper>
+        </Grid>
 
     )}

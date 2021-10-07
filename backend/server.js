@@ -80,6 +80,12 @@ var connection = mysql.createPool(
 
   var profile = require( './routes/ImageRoute' );
   app.use( '/profile', profile );
+
+  var search = require( './routes/SearchRoute' );
+  app.use( '/search', search );
+
+  var dish = require( './routes/DishRoute' );
+  app.use( '/dish', dish );
   
   app.listen(4001, ()=>{
     console.log('Sever listening on 4001');

@@ -1,8 +1,9 @@
-import * as React from 'react';
+import  React, {useEffect} from 'react';
 import { styled, alpha, useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import AppBar from '@mui/material/AppBar';
+import { useHistory } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import { useLocation } from 'react-router-dom';
@@ -30,6 +31,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import { padding } from '@mui/system';
+import SearchRestaurant from '../functions/searchFunction'
 const drawerWidth = 240;
 
 const Main = styled('main', 
@@ -104,9 +106,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(true);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const history= useHistory();
 
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  // const isMenuOpen = Boolean(anchorEl);
+  // const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [profileState, setProfileState] = React.useState('/customerProfile');
@@ -153,12 +157,20 @@ export default function PrimarySearchAppBar() {
       }
     }
 
-  function searchRestaurant(){
-    console.log('e')
-  } 
-
-  
-  
+   const setSearchMain= ()=>{
+    console.log(search + "aaa")
+    
+   }
+   const handleKeyDown =(e)=> {
+    //e.preventDefault();
+    setSearch(e.target.value)
+    if (e.key === 'Enter') {
+      localStorage.setItem('search_id',search );
+    }
+  }
+  useEffect(()=>{
+    console.log(search);
+},[search])
 
   return (
     <Box  sx={{ flexGrow: 1 }}>
@@ -177,16 +189,20 @@ export default function PrimarySearchAppBar() {
               <img src={UberEatsLogo} alt='' width="150" height="80" />
           
           {/* <h3>{profileState}</h3> */}
-          <Search onChange={searchRestaurant}>
-            <SearchIconWrapper>
+          <Search >
+          <Link to={'/search'}>
+          <IconButton size="large"  color="inherit"> 
               <SearchIcon />
-            </SearchIconWrapper>
+           </IconButton>
+           </Link >
             <StyledInputBase
               placeholder="What are you craving?"
-              inputProps={{ 'aria-label': 'search',
-             }}
+              inputProps={{ 'aria-label': 'search',}}
+              //onChange={(e)=>setSearchMain(e.target.value)}
+              onChange={(e)=>localStorage.setItem('search_id',e.target.value )}
             />
           </Search>
+          
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <Link to={'/favourites'}>
@@ -247,21 +263,29 @@ export default function PrimarySearchAppBar() {
         <Divider />
         
         <List>
-          {['Add a restaurant', 'Orders', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <AddBusinessIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          
+          <ListItem>
+            <ListItemIcon><AddBusinessIcon /></ListItemIcon>
+            <ListItemText>Add a restaurant</ListItemText>
+          </ListItem>
+          <Link to='/orders'>
+          <ListItem>
+            <ListItemIcon><AddBusinessIcon /></ListItemIcon>
+            <ListItemText>My Orders</ListItemText>
+          </ListItem>
+          </Link>
+          <Link to='/orders'>
+          <ListItem>
+            <ListItemIcon><AddBusinessIcon /></ListItemIcon>
+            <ListItemText>Orders</ListItemText>
+          </ListItem>
+          </Link>
         </List>
         
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
         </Main>
-      
     </Box>
   );
 }
