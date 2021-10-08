@@ -24,6 +24,7 @@ router.post('/signup',async function(req, res){
           res.send({message:error.message})
         }
       }else{
+        
         console.log(JSON.stringify(results))
         res.send({message:"Success"})
       }
@@ -51,6 +52,7 @@ router.post('/login',async function(req, res){
         console.log(password, '-----',results[0].Cust_Password)
         bcrypt.compare(password, results[0].Cust_Password,(err,response)=>{
           if(response){
+            res.cookie('cookie',email,{maxAge: 900000, httpOnly: false, path : '/'});
             req.session.user= results
             res.send(results)
           }else{

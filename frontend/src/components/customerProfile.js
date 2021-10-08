@@ -32,8 +32,8 @@ export default function CustomerProfile(){
     const [CustPhone, setCustPhone] = useState([])
     const [CustEmail, setCustEmail] = useState([])
     const [CustNickname, setCustNickname] = useState([])
-    //const [CustDetails, setCustDetails] = useState([])
 
+    const [CustProfile, setCustProfile] = useState([])
 
 
     useEffect(()=>{
@@ -44,7 +44,8 @@ export default function CustomerProfile(){
           setCustDetails(res.data[0])
           setCustName(data.Cust_Name);
           setCustEmail(data.Cust_Email);
-          setCustCity(data.Cust_Country);
+          setCustCity(data.Cust_City);
+          setCustCountry(data.Cust_Country);
           setCustState(data.Cust_State);
           setCustNickname(data.Cust_Nickname);
           setCustPhone(data.Cust_Phone);
@@ -75,13 +76,13 @@ export default function CustomerProfile(){
                 // },
               }} >
             <Stack direction="column" spacing={1}>
-            <div><h1 value= {CustDetails.Cust_Name}>{CustDetails.Cust_Name}</h1>
-            <h2>{CustDetails.Cust_Phone}</h2></div>
+            <div><h1 value= {CustName}>{CustName}</h1>
+            <h2>{CustPhone}</h2></div>
                 <br/>
                 <TextField
                 id="filled-disabled"
                 label="DOB"
-                value= {CustDetails.Cust_DOB}
+                value= {CustDOB}
                 defaultValue="Hello World"
                 variant="filled"
                 onChange={e=>setCustDOB(e.target.value)}
@@ -90,7 +91,7 @@ export default function CustomerProfile(){
                 <TextField
                 id="filled-disabled"
                 label="City"
-                value= {CustDetails.Cust_City}
+                value= {CustCity}
                 defaultValue="Hello World"
                 variant="filled"
                 onChange={e=>setCustCity(e.target.value)}
@@ -98,7 +99,7 @@ export default function CustomerProfile(){
                 <TextField
                 id="filled-disabled"
                 label="State"
-                value= {CustDetails.Cust_State}
+                value= {CustState}
                 defaultValue="Hello World"
                 variant="filled"
                 onChange={e=>setCustState(e.target.value)}
@@ -106,7 +107,7 @@ export default function CustomerProfile(){
                 <TextField
                 id="filled-disabled"
                 label="Country"
-                value= {CustDetails.Cust_Country}
+                value= {CustCountry}
                 defaultValue="Hello World"
                 variant="filled"
                 onChange={e=>setCustCountry(e.target.value)}
@@ -114,7 +115,7 @@ export default function CustomerProfile(){
                 <TextField
                 id="filled-disabled"
                 label="Nickname"
-                value= {CustDetails.Cust_Nickname}
+                value= {CustNickname}
                 defaultValue="Hello World"
                 variant="filled"
                 onChange={e=>setCustNickname(e.target.value)}
@@ -126,7 +127,7 @@ export default function CustomerProfile(){
                 <TextField
                 id="filled-disabled"
                 label="Phone"
-                value= {CustDetails.Cust_Phone}
+                value= {CustPhone}
                 onChange={e=>setCustPhone(e.target.value)}
                 defaultValue="Hello World"
                 variant="filled"
@@ -134,7 +135,7 @@ export default function CustomerProfile(){
                 <TextField
                 id="filled-disabled"
                 label="Email"
-                value= {CustDetails.Cust_Email}
+                value= {CustEmail}
                 onChange={e=>setCustEmail(e.target.value)}
                 defaultValue="Hello World"
                 variant="filled"

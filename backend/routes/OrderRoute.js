@@ -20,17 +20,6 @@ router.get('/:Restaurant_ID', function(req, res){
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
 router.get('/',async function(req, res){
     //console.log(req)
     //console.log(res)
@@ -48,6 +37,30 @@ router.get('/',async function(req, res){
         }
       });
     });
+
+
+    
+router.post('/:OrderID',async function(req, res){
+  var body= req.body;
+  const sqlput = "UPDATE ORDER_DETAILS SET Delivery_Status=? where Order_ID=?";
+  var values=[body.Delivery_Status,req.params.OrderID]
+  console.log(values)
+  
+  connection.query(sqlput, values, async function(error, results){
+    if(error){
+      res.writeHead(200, {
+        'Content-Type':'text/plain'
+      });
+      res.end(error.code)
+    }else{
+      res.writeHead(200, {
+        'Content-Type':'text/plain'
+      });
+      res.end(JSON.stringify(results))
+    }
+  });
+});
+
 
     module.exports= router
   

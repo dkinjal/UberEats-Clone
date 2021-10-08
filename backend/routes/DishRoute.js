@@ -38,7 +38,8 @@ router.post('/:Dish_ID',async function(req, res){
   var body= req.body;
   console.log(body.RestID +'mmm')
   const sqlput = "INSERT INTO RESTAURANT_MENU (Dish_Name, Ingredients, Dish_Category, Dish_Description, Dish_Cost, Restaurant_ID) VALUES (?,?,?,?,?,?)";
-  var values=[body.DishName, body.MainIngredients, body.DishCategory, body.DishDescription, body.DishCost, body.DishID, body.RestID]
+  console.log(sqlput)
+  var values=[body.DishName, body.MainIngredients, body.DishCategory, body.DishDescription, body.DishCost, body.RestID]
   connection.query(sqlput, values, async function(error, results){
 
   console.log(error, results,'bbb')

@@ -5,8 +5,18 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import AppBar from '@mui/material/AppBar';
 import { useHistory } from "react-router-dom";
 import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import InputAdornment from '@mui/material/InputAdornment';
+import Input from '@mui/material/Input';
+
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+// import TabContext from '@mui/lab/TabContext';
+import TabList from '@material-ui/lab/TabList';
+import TabContext from '@material-ui/lab/TabContext';
+import TabPanel from '@material-ui/lab/TabPanel';
 import Toolbar from '@mui/material/Toolbar';
 import { useLocation } from 'react-router-dom';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import IconButton from '@mui/material/IconButton';
 import UberEatsLogo  from '../images/UberEatsLogo.png';
@@ -33,6 +43,10 @@ import List from '@mui/material/List';
 import { padding } from '@mui/system';
 import SearchRestaurant from '../functions/searchFunction'
 const drawerWidth = 240;
+
+
+
+
 
 const Main = styled('main', 
   { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -138,14 +152,7 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(null);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
-
-  const handleMobileMenuOpen = (location, event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
+  
   const menuId = 'primary-search-account-menu';
   const usePathname =()=>{
       const location = useLocation();
@@ -171,7 +178,11 @@ export default function PrimarySearchAppBar() {
   useEffect(()=>{
     console.log(search);
 },[search])
+const [value, setValue] = React.useState('1');
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   return (
     <Box  sx={{ flexGrow: 1 }}>
       <AppBar style={{ background: '#516285' }} position="static">
@@ -204,10 +215,42 @@ export default function PrimarySearchAppBar() {
           </Search>
           
           <Box sx={{ flexGrow: 1 }} />
+          <div>
+            
+            <Input
+            variant="filled"
+           
+            startAdornment={<InputAdornment color="secondary"position="start">
+            <LocationOnOutlinedIcon color="white"/>
+          </InputAdornment>}
+              placeholder="Location"
+              onChange={(e)=>localStorage.setItem('search_id',e.target.value )}
+            />
+          </div>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+
+          <Box sx={{ width: '100%', typography: 'body1' }}>
+          <TabContext value={value}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <TabList onChange={handleChange} aria-label="lab API tabs example">
+            <Tab label="Delivery" value="1" />
+            <Tab label="Pick-up" value="2" />
+            
+          </TabList>
+        </Box>
+        {/* <TabPanel value="1">Item One</TabPanel>
+        <TabPanel value="2">Item Two</TabPanel>
+        <TabPanel value="3">Item Three</TabPanel> */}
+      </TabContext>
+    </Box>
             <Link to={'/favourites'}>
             <IconButton size="large"  color="inherit">              
               <FavoriteBorderIcon></FavoriteBorderIcon>
+            </IconButton>
+            </Link>
+            <Link to={'/cart'}>
+            <IconButton size="large"  color="inherit">              
+              <ShoppingCartOutlinedIcon/>
             </IconButton>
             </Link>
             <Link to={'/'}>
