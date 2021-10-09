@@ -54,6 +54,7 @@ router.post('/login',async function(req, res){
           if(response){
             res.cookie('cookie',email,{maxAge: 900000, httpOnly: false, path : '/'});
             req.session.user= results
+            console.log(results)
             res.send(results)
           }else{
             console.log(results)

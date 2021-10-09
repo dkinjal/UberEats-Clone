@@ -8,10 +8,14 @@ import Paper from '@mui/material/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@mui/material/Button';
 import { useHistory } from "react-router-dom";
+import ChangeImage from "../ImageOnly/ChangeImage"
 
 
-
-
+const style1={
+  width:'30ch', 
+  display:'grid', 
+  "text-align": "-webkit-center"
+}
 const axios = require('axios');
 export default function UpdateDish() {  
     const search = useLocation().search;
@@ -21,6 +25,7 @@ export default function UpdateDish() {
     const [DishDescription, setDishDescription] = useState()
     const [MainIngredients, setMainIngredients] = useState()
     const [DishCategory, setDishCategory] = useState()
+    const [Dishimage, setDishImage]=useState()
     const history= useHistory();
 
     
@@ -33,8 +38,10 @@ export default function UpdateDish() {
           setDishCategory(data.Dish_Category);
           setDishCost(data.Dish_Cost);
           setMainIngredients(data.Ingredients);
-  
+          setDishImage(data.Dish_Image_Location);
           
+        }).catch(Error=>{
+          console.log(Error)
         })  
   },[DishID])  
 
@@ -48,7 +55,8 @@ export default function UpdateDish() {
               
           })
           .then(response=>{
-              history.push('/restaurantProfile')
+              //history.push('/restaurantProfile')
+              history.goBack();
           })
   }
     
@@ -56,10 +64,11 @@ export default function UpdateDish() {
     return (
        
       <Grid container justify = "center">
-          <Paper elevation={3} sx={{ width: 500, height: 600}} >
+          <Paper elevation={3} sx={{ width: 500}} >
           <Grid container justify = "center">
-            <Stack direction="column" spacing={3} sx={{width:'25ch'}}>
+            <Stack direction="column" spacing={3} sx={style1}>
             <h3 > MAKE CHANGES</h3>
+            <ChangeImage ImageLocation = {Dishimage} calledFrom='dish' ID={DishID}/>
             <TextField id="outlined-basic" 
             value= {DishName || ''}
             onChange={(e)=>setDishName(e.target.value)}

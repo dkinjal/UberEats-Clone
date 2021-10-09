@@ -5,11 +5,15 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { Link } from 'react-router-dom';
 import {useLocation} from "react-router-dom";
-
+import ChangeImage from "../ImageOnly/ChangeImage";
 import Paper from '@mui/material/Paper';
 import Grid from '@material-ui/core/Grid';
 
-
+const style1={
+    width:'30ch', 
+    display:'grid', 
+    "text-align": "-webkit-center"
+  }
 export default function AddDish() { 
     const [DishName, setDishName]= useState('');
     const [DishDescription, setDishDescription]= useState('');
@@ -42,10 +46,13 @@ export default function AddDish() {
 
     return (
         <Grid container justify = "center">
-          <Paper elevation={3} sx={{ width: 500, height: 600}} >
+          <Paper elevation={3} sx={{ width: 500}} >
           <Grid container justify = "center">
-          <Stack direction="column"  sx={{width:'35ch'}}>
+          <Stack direction="column"  sx={style1}>
             <h1>ADD DISH</h1>
+            <ChangeImage  ImageLocation = {localStorage.getItem('imagedata')}
+            calledFrom='addDish' />
+
             <TextField fullWidth id="outlined-basic" label="Dish Name" 
             onChange={(e)=>{setDishName(e.target.value)}}
             variant="outlined" />

@@ -12,7 +12,8 @@ import { Link } from 'react-router-dom';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 
-export default function RestaurantCard({restaurantDetails}) {  
+export default function RestaurantCard({restaurantDetails}) { 
+  localStorage.setItem('RestName', restaurantDetails.Restaurant_Name); 
   return (
       <Card  elevation={3} sx={{ maxWidth: 345 }}>
         <CardMedia
@@ -22,7 +23,7 @@ export default function RestaurantCard({restaurantDetails}) {
           alt="Food image"
         />
         <CardContent>
-          <Link to={'/restaurantTab'}>
+          <Link to={`/menu?RestID=${restaurantDetails.Restaurant_ID}`}>
           <Typography gutterBottom variant="h5" component="div">
             {restaurantDetails.Restaurant_Name}
           </Typography>

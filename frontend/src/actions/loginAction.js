@@ -6,11 +6,12 @@ export const login = createAsyncThunk(
     'users/login', async(input)=>{
       console.log('inside action')
       const result = await axios.post('http://localhost:4001/user/login',input)
-      console.log(result.status);
+      //console.log(result.status);
       if(result.status===200){
         let data = result.data[0];
         localStorage.setItem('email', data.Cust_Email);
         localStorage.setItem('password', data.Cust_Password);
+        localStorage.setItem('city', data.Cust_City);
         return {auth:true, email:data.Cust_Email, password: data.Cust_Password};
       }else{
         console.log('fail')

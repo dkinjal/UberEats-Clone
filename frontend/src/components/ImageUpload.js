@@ -1,31 +1,35 @@
 import React, { Component, useState } from 'react';
 import axios from 'axios';
-import $ from 'jquery';
-
-export default function ImageUpload(){
-
+export default function ImageUpload(props){
+    const calledFrom = props.calledFrom;
+    const ID = props.ID;
+    console.log(calledFrom, ID)
     const [selectedFile, setSelectedFile] = useState(null)
-    const [trial, setTrial] = useState('Hello')
+    
 
     const singleFileChangedHandler = ( event ) => {
         setSelectedFile( event.target.files[0]);
     }
 
     const singleFileUploadHandler = () => {
-        setTrial(selectedFile[0])
+        
         const data = new FormData();// If file selected
         if ( {selectedFile} ) 
             {
-                console.log(selectedFile)
+                
                 data.append( 'profileImage', selectedFile, selectedFile.name );
-
-            axios.post( 'http://localhost:4001/profile', data, {
+                
+            if(calledFrom==="addDish"){
+                localStorage.setItem('imagedata',selectedFile)
+            }else{
+            axios.post( `http://localhost:4001/profile/${calledFrom}/${ID}`, data, {
                 headers: {
                     'accept': 'application/json',
                     'Accept-Language': 'en-US,en;q=0.8',
                     'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
                 }
             })
+        
         .then( ( response ) => 
             {if ( 200 === response.status ) {
                 // If file size is larger than expected.
@@ -40,6 +44,7 @@ export default function ImageUpload(){
                 // Success
                     let fileName = response.data;
                     console.log( 'fileName', fileName );
+
                     return (fileName)
                     
                 }
@@ -48,14 +53,13 @@ export default function ImageUpload(){
         // If another error
             console.log(error)
         });
-        } else {
+        }} else {
         // if file not selected throw error
             console.log('Please upload a file')
         }};
 
 
    return(
-    
      <div className="container">
       {/* For Alert box*/}
       <div id="oc-alert-container"></div>{/* Single File Upload*/}

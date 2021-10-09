@@ -80,8 +80,9 @@ export default function Login() {
 
     const Classes = useStyles()
     let redirectVar = null;
+    console.log(cookie);
         if(cookie.load('cookie')){
-            redirectVar = <Redirect to= "/home"/>
+            redirectVar = <Redirect to= "/login"/>
         }
     return(
 

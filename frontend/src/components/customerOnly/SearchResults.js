@@ -4,11 +4,9 @@ import food from '../../images/food.png'
 import Paper from '@mui/material/Paper';
 import Grid from '@material-ui/core/Grid';
 import RestaurantCard from "../restaurantCard";
-
-
+import Container from '@material-ui/core/Container'
 
 const styles = {
-    
     Nav:{
         position:"fixed",
         margin:'0',
@@ -31,7 +29,8 @@ export default function SearchResults() {
         <Navbar 
         // setRestaurantDetails={setRestaurantDetails} 
         style={styles.Nav} />
-        <Paper  style={styles.paperContainer}>
+<Container>
+        {/* <Paper  style={styles.paperContainer}> */}
         <Grid container spacing={3} >
             {RestaurantDetails.map(details=>(
                 <Grid item md={3} key={details.Restaurant_ID}>
@@ -39,7 +38,8 @@ export default function SearchResults() {
                 </Grid>
             ))}
             </Grid>
-        </Paper>
+            </Container>
+        {/* </Paper> */}
         </div>
 
 

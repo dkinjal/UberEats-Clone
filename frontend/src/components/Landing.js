@@ -4,7 +4,13 @@ import food from '../images/food.png'
 import Paper from '@mui/material/Paper';
 import Grid from '@material-ui/core/Grid';
 import RestaurantCard from "./restaurantCard";
+import {Redirect} from 'react-router';
+import cookie from 'react-cookies';
 
+let redirectVar = null;
+        if(cookie.load('cookie')){
+            redirectVar = <Redirect to= "/home"/>
+        }
 
 
 const styles = {
@@ -33,6 +39,7 @@ export default function Landing() {
     
     return (
         <div>
+        <redirectVar/>
         <Navbar 
         setRestaurantDetails={setRestaurantDetails} 
         style={styles.Nav} />

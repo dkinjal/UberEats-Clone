@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import './App.css';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import Create from './components/Create'
 import {createTheme, ThemeProvider} from '@material-ui/core'
 import CustomerProfile from "./components/customerProfile";
 import RestaurantProfile from "./components/restaurantProfile";
@@ -20,7 +19,7 @@ import UpdateDish from './components/dishOnly/updateDish';
 import Orders from './components/ordersOnly/Orders';
 import SearchResults from './components/customerOnly/SearchResults';
 import AddDish from "./components/dishOnly/addDish";
-
+import RestaurantMenu from "./components/restaurantOnly/RestaurantMenu";
 const theme = createTheme({
     palette:
     {primary:
@@ -41,9 +40,6 @@ function App() {
             <Switch>
                 <Route exact path="/">
                 <HomePage/>
-                </Route>
-                <Route path='/create'>
-                <Create />
                 </Route>
                 <Route path='/restaurantList'>
                 <RestaurantList />
@@ -68,6 +64,9 @@ function App() {
                 </Route>
                 <Route path='/restaurantLogin'>
                 <RestaurantLogin/>
+                </Route>
+                <Route path='/menu'>
+                <RestaurantMenu/>
                 </Route>
                 <Route path='/search'>
                 <SearchResults/>

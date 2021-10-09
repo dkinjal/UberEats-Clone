@@ -45,10 +45,10 @@ const profileImgUpload = multer({
    }).single('profileImage');
 
 
-router.post( '/', ( req, res ) => 
-{profileImgUpload( req, res, ( error ) => {
+router.post( '/cust', ( req, res ) => 
+{
+  profileImgUpload( req, res, ( error ) => {
     console.log( 'requestOkokok', req.file );
-    //console.log( 'error', error );
     if( error ){
      console.log( 'errors', error );
      res.json( { error: error } );
@@ -61,6 +61,8 @@ router.post( '/', ( req, res ) =>
       // If Success
       const imageName = req.file.key;
       const imageLocation = req.file.location;// Save the file name into database into profile model
+      const ID = req.file.ID;
+      console.log(ID+'IDddddd')
       res.json( {
        image: imageName,
        location: imageLocation
@@ -97,5 +99,63 @@ router.post( '/', ( req, res ) =>
     }
    });
   });
+
+
+  router.post( '/dish/:ID', ( req, res ) => 
+  {console.log('Inside dish image upload'+ req.params.ID)
+    profileImgUpload( req, res, ( error ) => {
+       console.log( 'requestOkokok', req.file );
+      // console.log(req.body)
+      if( error ){
+       console.log( 'errors', error );
+       res.json( { error: error } );
+      } else {
+       // If File not found
+       if( req.file === undefined ){
+        //console.log( 'Error: No File Selected!' );
+        res.json( 'Error: No File Selected' );
+       } else {
+        // If Success
+        const imageName = req.file.key;
+        const imageLocation = req.file.location;// Save the file name into database into profile model
+        const ID = req.file.ID;
+        console.log(ID+'IDddddd')
+        res.json( {
+         image: imageName,
+         location: imageLocation
+        });
+      /////////////////sql query//////////////
+      // router.put("/", async function (req, res) {
+          //var body = req.body;
+          //console.log(req.body);
+          const sqlput =
+            "UPDATE  RESTAURANT_MENU SET DISH_IMAGE_LOCATION=? WHERE DISH_ID =?"
+          var values = [
+             imageLocation, req.params.ID
+          ];
+        
+          connection.query(sqlput, values,  function (error, results) {
+            console.log(error, results, 'aaaaa')
+            if (error) {
+              console.log('inside error')  
+              res.writeHead(200, {
+                "Content-Type": "text/plain",
+              });
+              res.end(error.code);
+            } else {
+              console.log('in success')  
+              // res.writeHead(200, {
+              //   "Content-Type": "text/plain",
+              // });
+              res.end(JSON.stringify(results));
+            }
+          });
+        //});
+      ////////////sql query end///////////////
+      }
+      }
+     });
+    });
+  
 
   module.exports = router;

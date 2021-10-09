@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {login, clear} from "../actions/loginAction"
 
-
 //===============CUSTOMER LOGIN REDUCER===================================
 export const LoginReducer = createSlice({
     name: "login",

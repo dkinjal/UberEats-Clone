@@ -6,13 +6,26 @@ import { Typography } from "@material-ui/core";
 import {FormControlLabel, makeStyles} from '@material-ui/core'
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import Navbar from './Navbar'
+import Navbar from './Navbar';
 import CountrySelect from './country'
 import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import ImageUpload from "./ImageUpload";
+import { IconButton } from "@mui/material";
 const axios = require('axios');
 
 
-
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 const useStyles= makeStyles({
     field:{
@@ -21,9 +34,9 @@ const useStyles= makeStyles({
   })
 
 export default function CustomerProfile(){
-    const Classes = useStyles()
+    // const Classes = useStyles()
     const Cust_ID =1;
-    const [CustDetails, setCustDetails] = useState([])
+    // const [CustDetails, setCustDetails] = useState([])
     const [CustName, setCustName] = useState([])
     const [CustDOB, setCustDOB] = useState([])
     const [CustCity, setCustCity] = useState([])
@@ -32,16 +45,17 @@ export default function CustomerProfile(){
     const [CustPhone, setCustPhone] = useState([])
     const [CustEmail, setCustEmail] = useState([])
     const [CustNickname, setCustNickname] = useState([])
-
     const [CustProfile, setCustProfile] = useState([])
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
 
     useEffect(()=>{
       axios.get(`http://localhost:4001/customer/${Cust_ID}`)
-      // fetch(`http://localhost:4001/customer/${Cust_ID}`)
       .then(res => 
           {let data = res.data[0];
-          setCustDetails(res.data[0])
+          // setCustDetails(res.data[0])
           setCustName(data.Cust_Name);
           setCustEmail(data.Cust_Email);
           setCustCity(data.Cust_City);
@@ -49,7 +63,8 @@ export default function CustomerProfile(){
           setCustState(data.Cust_State);
           setCustNickname(data.Cust_Nickname);
           setCustPhone(data.Cust_Phone);
-          setCustDetails(data.Cust_DOB);
+          setCustDOB(data.Cust_DOB);
+          setCustProfile(data.Cust_Profile_Location)
           })
       },[])
   
@@ -60,10 +75,29 @@ export default function CustomerProfile(){
         <div>
             <Navbar/>
         <Container>
-        
         <Stack direction="row" spacing={3}>
-            <Avatar alt="Cindy Baker" src="http://localhost:3000/girl-avatar.png" 
+            <IconButton onClick={handleOpen} >
+            <Avatar
+            alt="Cindy Baker" src={CustProfile} 
             sx={{ width: 200, height: 200 }} />
+            </IconButton>
+{/* ------------------------------------------------------------------------ */}
+      <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <ImageUpload calledFrom="cust" ID={Cust_ID}/>
+              </Box>
+            </Modal>
+{/* ------------------------------------------------------------------ */}
+
+
+
+
+
             
             <Box
              sx={{
@@ -141,6 +175,11 @@ export default function CustomerProfile(){
                 variant="filled"
                 /> 
                 <br/> 
+                <Button 
+                
+                variant='contained'
+                color='success'>Edit</Button>
+                
                 <Button 
                 variant='contained'
                 color='success'>Save Changes</Button>

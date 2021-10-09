@@ -62,6 +62,7 @@ export default function RestaurantProfile(){
     const [RestDayTo, setRestDayTo] = useState()
     const [RestCuisine, setRestCuisine] = useState()
     const [RestID, setRestID] = useState()
+    const [RestEmail, setRestEmail] = useState()
     const [RestLocation, setRestLocation] = useState()
     const [RestDeliveryMode, setRestDeliveryMode] = useState()
     const [RestTimingFrom, setRestTimingFrom] = useState({})
@@ -69,7 +70,7 @@ export default function RestaurantProfile(){
     const [RestContact, setRestContact] = useState({})
     const [RestProfile, setRestProfile] = useState({})
     const [open, setOpen] = React.useState(false);
-    const [ifDisable, setIfDisable]= useState(true);
+    const [ifDisable, setIfDisable]= useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const Restaurant_ID=1;
@@ -100,6 +101,7 @@ export default function RestaurantProfile(){
           setRestTimingFrom(data.Restaurant_Time_From)
           setRestTimingTo(data.Restaurant_Time_To)
           setRestContact(data.Restaurant_Contact)
+          setRestEmail(data.Restaurant_Email)
           setRestProfile(data.Restaurant_Profile_Location)
         })  
       },[])
@@ -109,7 +111,20 @@ export default function RestaurantProfile(){
     restDetailsTemp.name = event.target.value;
     this.setState({restDetails: restDetailsTemp});
     }
-
+    const updateRestaurant=()=>{
+      axios.post(`http://localhost:4001/restaurant/${RestID}`,{
+              RestName: RestName,
+              RestTimingFrom: RestTimingFrom,
+              RestTimingTo: RestTimingTo,
+              RestEmail: RestEmail,
+              RestContact: RestContact
+              
+          })
+          .then(response=>{
+              //history.push('/restaurantProfile')
+              //history.goBack();
+          })
+    }
     return(
         <container>
           <Navbar className={Classes.navbar} position='absolute' style={{ position: 'fixed', top: 0 , left : 0,  margin: 0}}/>
@@ -133,7 +148,7 @@ export default function RestaurantProfile(){
             <Typography id="transition-modal-title" variant="h6" component="h2">
               Update Profile Picture
             </Typography>
-            <div>{ImageUpload()}</div>
+            <div>{ImageUpload}</div>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}>
               Make sure the image is jpg/ png/ gif.
             </Typography>
@@ -174,6 +189,15 @@ export default function RestaurantProfile(){
                 <TextField
                 disabled={ifDisable}
                 id="filled-disabled"
+                label="Working Days"
+                defaultValue=""
+                variant="filled"
+                value={RestDayFrom+'-'+RestDayTo}
+                onChange={onChangeDetails}
+               />
+                <TextField
+                disabled={ifDisable}
+                id="filled-disabled"
                 label="Timings"
                 defaultValue=""
                 variant="filled"
@@ -190,7 +214,7 @@ export default function RestaurantProfile(){
                 label="Email"
                 defaultValue=""
                 variant="filled"
-                value={RestContact}
+                value={RestEmail}
                 /> 
                 <TextField
                 id="filled-disabled"
@@ -202,10 +226,11 @@ export default function RestaurantProfile(){
                 /> 
                 <br/>   
                 <Button 
-                onClick={(e)=>setIfDisable(true)}
+                
                 variant='contained'
                 color='success'>Edit</Button>
                 <Button 
+                onClick={updateRestaurant}
                 variant='contained'
                 color='success'>Save Changes</Button>
                  <Button 
@@ -225,7 +250,7 @@ export default function RestaurantProfile(){
              <Grid item md={4} sm={6} >
             <Link to={"/addDish?Rest_ID="+ Restaurant_ID} >
             
-            <Card  elevation={3} sx={{ maxWidth: 345,  }}>
+            <Card  elevation={3} sx={{ maxWidth: 345, minHeight:307 }}>
             <CardMedia
               component="img"
               height="140"

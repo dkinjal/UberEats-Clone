@@ -7,8 +7,22 @@ var connection= db.connection;
 //addOrder
 
 router.get('/:Dish_ID', function(req, res){
-   connection.query("SELECT * FROM RESTAURANT_MENU WHERE Restaurant_ID='"+req.params.Dish_ID+"'", async function(error, results){
-    console.log(error, results,'aaaa')
+  console.log(req.params.Dish_ID, "nnn")
+   connection.query("SELECT * FROM RESTAURANT_MENU WHERE DISH_ID='"+req.params.Dish_ID+"'", async function(error, results){
+    console.log(error, results,'aabaa')
+    if(error){
+      res.end(error.code)
+    }else{
+      res.end(JSON.stringify(results))
+    }
+  });
+});
+
+
+router.get('/rest/:RestID', function(req, res){
+  console.log(req.params.RestID, "nnooon")
+   connection.query("SELECT * FROM RESTAURANT_MENU WHERE Restaurant_ID='"+req.params.RestID+"'", async function(error, results){
+    console.log(error, results,'aabaa')
     if(error){
       res.end(error.code)
     }else{

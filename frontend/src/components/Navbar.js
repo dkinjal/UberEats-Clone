@@ -4,12 +4,13 @@ import { Link } from 'react-router-dom';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import AppBar from '@mui/material/AppBar';
 import { useHistory } from "react-router-dom";
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
+import Cart from './cartOnly/Cart'
 import InputAdornment from '@mui/material/InputAdornment';
 import Input from '@mui/material/Input';
-
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import Modal from '@mui/material/Modal';import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 // import TabContext from '@mui/lab/TabContext';
 import TabList from '@material-ui/lab/TabList';
 import TabContext from '@material-ui/lab/TabContext';
@@ -44,9 +45,19 @@ import { padding } from '@mui/system';
 import SearchRestaurant from '../functions/searchFunction'
 const drawerWidth = 240;
 
+let typeoflogin ="none"
 
-
-
+const style = {
+  position: 'absolute',
+  top: '20%',
+  left: '73%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 const Main = styled('main', 
   { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -121,7 +132,9 @@ export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(true);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const history= useHistory();
-
+  const [open2, setOpen2] = React.useState(false);
+  const handleOpen = () => setOpen2(true);
+  const handleClose = () => setOpen2(false);
 
   // const isMenuOpen = Boolean(anchorEl);
   // const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -248,11 +261,33 @@ const [value, setValue] = React.useState('1');
               <FavoriteBorderIcon></FavoriteBorderIcon>
             </IconButton>
             </Link>
-            <Link to={'/cart'}>
-            <IconButton size="large"  color="inherit">              
+            
+            <IconButton size="large"  color="inherit"
+            onClick={handleOpen}
+            >              
               <ShoppingCartOutlinedIcon/>
             </IconButton>
-            </Link>
+           {/* -------------------------------------------------------------- */}
+           <Modal
+        open={open2}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        {/* <Box sx={style}> */}
+          {/* <Typography id="modal-modal-title" variant="h6" component="h2">
+            Text in a modal
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography> */}
+          <Cart />
+        {/* </Box> */}
+      </Modal>
+
+
+
+            {/* ------------------------------------------------------------- */}
             <Link to={'/'}>
             <IconButton
               size="large"
