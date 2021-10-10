@@ -45,7 +45,7 @@ const profileImgUpload = multer({
    }).single('profileImage');
 
 
-router.post( '/cust', ( req, res ) => 
+router.post( '/cust:ID', ( req, res ) => 
 {
   profileImgUpload( req, res, ( error ) => {
     console.log( 'requestOkokok', req.file );
@@ -67,14 +67,11 @@ router.post( '/cust', ( req, res ) =>
        image: imageName,
        location: imageLocation
       });
-    /////////////////sql query//////////////
-    // router.put("/", async function (req, res) {
-        //var body = req.body;
-        //console.log(req.body);
+
         const sqlput =
           "UPDATE  CUSTOMER_DETAILS SET Cust_Profile_Name =?, Cust_Profile_Location=? WHERE Cust_ID =?"
         var values = [
-          imageName, imageLocation, '1'
+          imageName, imageLocation, req.params.ID
         ];
       
         connection.query(sqlput, values,  function (error, results) {
@@ -157,5 +154,56 @@ router.post( '/cust', ( req, res ) =>
      });
     });
   
-
+    router.post( '/rest/:ID', ( req, res ) => 
+    {
+      profileImgUpload( req, res, ( error ) => {
+        console.log( 'requestOkokok', req.file );
+        if( error ){
+         console.log( 'errors', error );
+         res.json( { error: error } );
+        } else {
+         // If File not found
+         if( req.file === undefined ){
+          //console.log( 'Error: No File Selected!' );
+          res.json( 'Error: No File Selected' );
+         } else {
+          // If Success
+          const imageName = req.file.key;
+          const imageLocation = req.file.location;// Save the file name into database into profile model
+          const ID = req.file.ID;
+          console.log(ID+'IDddddd')
+          res.json( {
+           image: imageName,
+           location: imageLocation
+          });
+        
+            const sqlput =
+              "UPDATE  RESTAURANT_DETAILS SET Restaurant_Profile_Location =? WHERE Restaurant_ID =?"
+            var values = [
+               imageLocation, req.params.ID
+            ];
+          
+            connection.query(sqlput, values,  function (error, results) {
+              console.log(error, results, 'aaaaa')
+              if (error) {
+                console.log('inside error')  
+                res.writeHead(200, {
+                  "Content-Type": "text/plain",
+                });
+                res.end(error.code);
+              } else {
+                console.log('in success')  
+                // res.writeHead(200, {
+                //   "Content-Type": "text/plain",
+                // });
+                res.end(JSON.stringify(results));
+              }
+            });
+          //});
+        ////////////sql query end///////////////
+        }
+        }
+       });
+      });
+    
   module.exports = router;

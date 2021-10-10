@@ -15,7 +15,7 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 export default function RestaurantCard({restaurantDetails}) { 
    
   return (
-      <Card  elevation={3} sx={{ maxWidth: 345 }}>
+      <Card  elevation={3} sx={{minHeight:450, Height:345, maxWidth: 345 }}>
         <CardMedia
           component="img"
           height="140"

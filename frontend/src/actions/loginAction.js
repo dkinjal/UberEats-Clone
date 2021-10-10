@@ -26,7 +26,7 @@ export const login = createAsyncThunk(
 export const clear = createAsyncThunk(
     'users/clear',
     async () => {
-      window.location.href="/login";
+      
       return {arg: true}
 
     }

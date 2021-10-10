@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from "react";
 import Navbar from '../Navbar'
-import food from '../../images/food.png'
-import Paper from '@mui/material/Paper';
+
 import Grid from '@material-ui/core/Grid';
 import RestaurantCard from "../restaurantCard";
 import Container from '@material-ui/core/Container'
+import axios from "axios";
 
 const styles = {
     Nav:{
@@ -16,14 +16,14 @@ const styles = {
 
 export default function SearchResults() {
     const [RestaurantDetails, setRestaurantDetails] = useState([])
+    const deliveryType = localStorage.getItem('DeliveryType')
+    let searchvalue = localStorage.getItem('search_id')
     useEffect(()=>{
-        fetch(`http://localhost:4001/search/${localStorage.getItem('search_id')}`)
+        fetch(`http://localhost:4001/search/${searchvalue}`)
         .then(res => res.json())
-        .then(data =>{
-            return (setRestaurantDetails(data))
-        })
-    },[])
-    
+        // .then(  data=>
+            .then(data =>{setRestaurantDetails(data)})
+    },[deliveryType, searchvalue])
     return (
         <div>
         <Navbar 

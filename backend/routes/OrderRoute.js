@@ -10,7 +10,7 @@ var connection= db.connection;
 
 router.get('/rest/:RestID', function(req, res){
   console.log('RestID'+ req.params.RestID)
-   connection.query("SELECT *  FROM ORDER_DETAILS WHERE Restaurant_ID='"+req.params.RestID+"' ", async function(error, results){
+   connection.query("SELECT * , CUST_NAME, SUM(ORDER_DETAILS.Dish_Count) AS DishCount, SUM(ORDER_DETAILS.Dish_Cost) AS DishCost2 FROM ORDER_DETAILS, CUSTOMER_DETAILS WHERE Restaurant_ID='"+req.params.RestID+"' AND ORDER_DETAILS.Cust_ID= CUSTOMER_DETAILS.Cust_ID GROUP BY  ORDER_DETAILS.Order_ID ", async function(error, results){
     console.log(error, results,'aaaa')
     if(error){
       res.end(error.code)
@@ -22,10 +22,11 @@ router.get('/rest/:RestID', function(req, res){
 });
 
 
-router.get('/',async function(req, res){
+router.get('/:Cust_ID',async function(req, res){
     //console.log(req)
     //console.log(res)
-      await connection.query("SELECT * FROM ORDER_DETAILS WHERE Cust_ID ='"+req.body.Cust_ID+"'", async function(error, results){
+    query="SELECT *, SUM(Dish_Count) AS Quantity FROM ORDER_DETAILS, RESTAURANT_DETAILS WHERE CUST_ID='"+req.params.Cust_ID+"'AND RESTAURANT_DETAILS.Restaurant_ID= ORDER_DETAILS.Restaurant_ID GROUP BY ORDER_ID"
+      await connection.query(query, async function(error, results){
         if(error){
           res.writeHead(200, {
             'Content-Type':'text/plain'
@@ -35,6 +36,8 @@ router.get('/',async function(req, res){
           res.writeHead(200, {
             'Content-Type':'text/plain'
           });
+          console.log("success")
+          console.log(JSON.stringify(results))
           res.end(JSON.stringify(results))
         }
       });
@@ -42,8 +45,9 @@ router.get('/',async function(req, res){
 
 
 
-router.post('/:OrderID',async function(req, res){
+router.post('/update1/:OrderID',async function(req, res){
   var body= req.body;
+  console.log('update delivery status kkkkk'+ body.DeliveryStatus)
   const sqlput = "UPDATE ORDER_DETAILS SET Delivery_Status=? where Order_ID=?";
   var values=[body.DeliveryStatus,req.params.OrderID]
   console.log(values)
@@ -81,9 +85,12 @@ router.post('/',async function(req, res){
       var output=[];
   console.log(last+"last")
   for(let q=0; q< mainbody.length; q++){
-  const sqlput = "INSERT INTO ORDER_DETAILS (ORDER_ID,Dish_Count, Dish_Name, Delivery_Status, Order_Status, Restaurant_ID, Order_Mode, Cust_ID, Dish_Cost) VALUES(?,?,?,?,?,?,?,?,?)";
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  const sqlput = "INSERT INTO ORDER_DETAILS (ORDER_ID,Dish_Count, Dish_Name, Delivery_Status, Order_Status, Restaurant_ID, Order_Mode, Cust_ID, Dish_Cost,Order_Time) VALUES(?,?,?,?,?,?,?,?,?,?)";
   var body= mainbody[q]
-  var values=[last+1, body.DishCount,body.DishName, body.DeliveryStatus, body.OrderStatus, body.RestID, body.OrderMode, body.CustID, body.DishCost]
+  var values=[last+1, body.DishCount,body.DishName, body.DeliveryStatus, body.OrderStatus, body.RestID, body.OrderMode, body.CustID, body.DishCost, date+time]
   connection.query(sqlput, values, async function(error, results){
     if(error){
       console.log(error+"error ")
@@ -101,12 +108,20 @@ router.post('/',async function(req, res){
   });
 } res.send(output)
 }});
-
-
-
-
-
 })
+
+router.get('/receipt/:orderID', function(req, res){
+  console.log('RestID'+ req.params.orderID)
+   connection.query("SELECT *  FROM ORDER_DETAILS WHERE Order_ID='"+req.params.orderID+"' ", async function(error, results){
+    console.log(error, results,'aaaa')
+    if(error){
+      res.end(error.code)
+    }else{
+      console.log(results)
+      res.end(JSON.stringify(results))
+    }
+  });
+});
 
 
     module.exports= router

@@ -3,6 +3,8 @@ import axios from 'axios';
 export default function ImageUpload(props){
     const calledFrom = props.calledFrom;
     const ID = props.ID;
+    const handleClose = props.handleClose
+    const setRestProfile= props.setRestProfile
     console.log(calledFrom, ID)
     const [selectedFile, setSelectedFile] = useState(null)
     
@@ -42,9 +44,11 @@ export default function ImageUpload(props){
                     }
                 } else {
                 // Success
+                    
                     let fileName = response.data;
+                    
                     console.log( 'fileName', fileName );
-
+                    handleClose();
                     return (fileName)
                     
                 }

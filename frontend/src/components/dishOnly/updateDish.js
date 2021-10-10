@@ -9,6 +9,25 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@mui/material/Button';
 import { useHistory } from "react-router-dom";
 import ChangeImage from "../ImageOnly/ChangeImage"
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import ImageUpload from '../ImageUpload'
+import { IconButton } from "@mui/material";
+import Avatar from '@mui/material/Avatar';
+
+
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 
 const style1={
@@ -21,29 +40,35 @@ export default function UpdateDish() {
     const search = useLocation().search;
     const DishID = new URLSearchParams(search).get('Dish_ID');
     const [DishName, setDishName] = useState()
+    const [DishDetails, setDishDetails] = useState()
     const [DishCost, setDishCost] = useState()
+    const [DishProfile, setDishProfile] = useState()
     const [DishDescription, setDishDescription] = useState()
     const [MainIngredients, setMainIngredients] = useState()
+    const [DishType, setDishType] = useState()
     const [DishCategory, setDishCategory] = useState()
     const [Dishimage, setDishImage]=useState()
     const history= useHistory();
-
-    
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false)
   useEffect(()=>{
     axios.get(`http://localhost:4001/dish/${DishID}`)
       .then(response => 
         {let data = (response.data[0])
           console.log(response.data[0])
+          setDishDetails(data);
           setDishName(data.Dish_Name);
           setDishCategory(data.Dish_Category);
           setDishCost(data.Dish_Cost);
           setMainIngredients(data.Ingredients);
-          setDishImage(data.Dish_Image_Location);
-          
+          setDishProfile(data.Dish_Image_Location);
+          setDishDetails(data.Dish_Description);
+          setDishType(data.Dish_Type);
         }).catch(Error=>{
           console.log(Error)
         })  
-  },[DishID])  
+  },[DishID,])  
 
   function handleSubmit(){
     axios.post(`http://localhost:4001/dish/${DishID}`,{
@@ -52,6 +77,8 @@ export default function UpdateDish() {
               DishCost: DishCost,
               DishDescription: DishDescription,
               MainIngredients: MainIngredients,
+              DishType: DishType,
+              DishProfile: DishProfile
               
           })
           .then(response=>{
@@ -68,7 +95,26 @@ export default function UpdateDish() {
           <Grid container justify = "center">
             <Stack direction="column" spacing={3} sx={style1}>
             <h3 > MAKE CHANGES</h3>
-            <ChangeImage ImageLocation = {Dishimage} calledFrom='dish' ID={DishID}/>
+            {/* <ChangeImage ImageLocation = {Dishimage} calledFrom='dish' ID={DishID}/> */}
+            <IconButton onClick={handleOpen} >
+            <Avatar
+            alt="Cindy Baker" src={DishProfile} 
+            sx={{ width: 200, height: 200 }} />
+            </IconButton>
+
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style} >
+                
+                <ImageUpload setDishProfile={setDishProfile} handleClose= {handleClose} calledFrom="dish" ID={DishID}/>
+               
+              </Box>
+            </Modal>
+
             <TextField id="outlined-basic" 
             value= {DishName || ''}
             onChange={(e)=>setDishName(e.target.value)}
@@ -93,6 +139,12 @@ export default function UpdateDish() {
             value= {DishCategory || ''}
             onChange={(e)=>setDishCategory(e.target.value)}
             variant="outlined" ></TextField>
+
+          <TextField id="outlined-basic" label="Dish Type" 
+            value= {DishType || ''}
+            onChange={(e)=>setDishType(e.target.value)}
+            variant="outlined" ></TextField>
+
             <Button variant="contained" color="success" onClick={handleSubmit} >
               Save
             </Button>

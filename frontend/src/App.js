@@ -20,7 +20,8 @@ import Orders from './components/ordersOnly/Orders';
 import SearchResults from './components/customerOnly/SearchResults';
 import AddDish from "./components/dishOnly/addDish";
 import RestaurantMenu from "./components/restaurantOnly/RestaurantMenu";
-import Checkout from './components/cartOnly/Checkout'
+import Checkout from './components/cartOnly/Checkout';
+import MyOrders from "./components/ordersOnly/MyOrder";
 const theme = createTheme({
     palette:
     {primary:
@@ -40,7 +41,7 @@ function App() {
         <Router>
             <Switch>
                 <Route exact path="/">
-                <HomePage/>
+                <Landing/>
                 </Route>
                 <Route path='/restaurantList'>
                 <RestaurantList />
@@ -53,6 +54,9 @@ function App() {
                 </Route>
                 <Route path='/restaurantCard'>
                 <RestaurantCard/>
+                </Route>
+                <Route path='/myorder'>
+                <MyOrders/>
                 </Route>
                 <Route path='/favourites'>
                 <Favourites/>

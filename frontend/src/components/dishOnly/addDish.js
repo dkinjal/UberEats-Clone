@@ -8,7 +8,23 @@ import {useLocation} from "react-router-dom";
 import ChangeImage from "../ImageOnly/ChangeImage";
 import Paper from '@mui/material/Paper';
 import Grid from '@material-ui/core/Grid';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import { IconButton } from "@mui/material";
+import Avatar from '@mui/material/Avatar';
 
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 const style1={
     width:'30ch', 
     display:'grid', 
@@ -20,7 +36,13 @@ export default function AddDish() {
     const [DishCategory, setDishCategory]= useState('');
     const [DishCost, setDishCost]= useState('');
     const [DishIngredients, setDishIngredients]= useState('');
+    const [DishProfile, setDishProfile]= useState('');
+    const [DishType, setDishType]= useState('');
     const search = useLocation().search;
+    const [open, setOpen] = React.useState(false);
+
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     const RestID = new URLSearchParams(search).get('Rest_ID');
     console.log(RestID)
 
@@ -35,7 +57,8 @@ export default function AddDish() {
                     DishCost: DishCost,
                     MainIngredients: DishIngredients,
                     DishCategory: DishCategory,
-                    RestID: RestID
+                    RestID: RestID,
+                    DishType: DishType
                 })})
                 .then(res => res.json())
             .then(data => {
@@ -50,8 +73,28 @@ export default function AddDish() {
           <Grid container justify = "center">
           <Stack direction="column"  sx={style1}>
             <h1>ADD DISH</h1>
-            <ChangeImage  ImageLocation = {localStorage.getItem('imagedata')}
-            calledFrom='addDish' />
+            {/* <ChangeImage  ImageLocation = {localStorage.getItem('imagedata')}
+            calledFrom='addDish' /> */}
+             {/* <IconButton onClick={handleOpen} >
+            <Avatar
+            alt="Cindy Baker" src={DishProfile} 
+            sx={{ width: 200, height: 200 }} />
+            </IconButton> */}
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style} >
+                
+                
+                {/* <ChangeImage setDishProfile={setDishProfile}
+             handleClose= {handleClose} calledFrom="dish" ID={DishID}/>/>
+                */}
+              </Box>
+            </Modal>
+
 
             <TextField fullWidth id="outlined-basic" label="Dish Name" 
             onChange={(e)=>{setDishName(e.target.value)}}
@@ -71,6 +114,10 @@ export default function AddDish() {
             <br/><br/>
             <TextField fullWidth id="outlined-basic" label="Dish Category" 
             onChange={(e)=>{setDishCategory(e.target.value)}}
+            variant="outlined" />
+            <br/><br/>
+            <TextField fullWidth id="outlined-basic" label="Dish Type" 
+            onChange={(e)=>{setDishType(e.target.value)}}
             variant="outlined" />
             <br/><br/>
 

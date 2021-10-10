@@ -84,6 +84,31 @@ export default function RestaurantProfile(){
     
     
 
+const getRestOne=()=>{
+  axios.get(`http://localhost:4001/restaurant/one/${Restaurant_ID}`)
+      .then(response => 
+        {let data = (response.data[0])
+          console.log(response.data[0])
+          setRestDetails(response.data[0])
+          setRestName(data.Restaurant_Name)
+          setRestDescription(data.Restaurant_Description)
+          setRestDayFrom(data.Restaurant_Day_From)
+          setRestDayTo(data.Restaurant_Day_To)
+          setRestCuisine(data.Restaurant_Cuisine)
+          setRestID(data.Restaurant_ID)
+          setRestType(data.Restaurant_Type)
+          setRestLocation(data.Restaurant_Location)
+          setRestDeliveryMode(data.Restaurant_Delivery_Mode)
+          setRestTimingFrom(data.Restaurant_Time_From)
+          setRestTimingTo(data.Restaurant_Time_To)
+          setRestContact(data.Restaurant_Contact)
+          setRestEmail(data.Restaurant_Email)
+          setRestProfile(data.Restaurant_Profile_Location)
+        }).catch=(error)=>{
+          console.log(error)
+        }  
+      }
+
 
 
 
@@ -118,7 +143,7 @@ console.log(Restaurant_ID+'rrr')
         }).catch=(error)=>{
           console.log(error)
         }  
-      },[Restaurant_ID])
+      },[Restaurant_ID, RestDetails])
 
     function onChangeDetails(event){
     let restDetailsTemp = this.state.restDetails;
@@ -135,13 +160,13 @@ console.log(Restaurant_ID+'rrr')
               
               RestName: RestName,
               RestTimingFrom: RestTimingFrom,
-              RestTimingTo: RestTimingTo,
+              
               RestEmail: RestEmail,
               RestContact: RestContact,
               RestDescription: RestDescription,
               RestType: RestType,
               RestDayFrom: RestDayFrom,
-              RestDayTo: RestDayTo,
+             
               RestDeliveryMode: RestDeliveryMode,
               RestCuisine: RestCuisine
 
@@ -171,8 +196,10 @@ console.log(Restaurant_ID+'rrr')
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
-              <Box sx={style}>
-                <ImageUpload calledFrom="rest" ID={RestID}/>
+              <Box sx={style} >
+                
+                <ImageUpload setRestProfile={setRestProfile} handleClose= {handleClose} calledFrom="rest" ID={RestID}/>
+               
               </Box>
             </Modal>
 
@@ -181,7 +208,6 @@ console.log(Restaurant_ID+'rrr')
              sx={{
               width: 350,
               height: 300,
-                bgcolor: 'rgba(255, 255, 255, 0.7)',
                
               }} >
                 
@@ -203,8 +229,8 @@ console.log(Restaurant_ID+'rrr')
                 id="filled-disabled"
                 label="Working Days"
                 defaultValue=""
-                value={RestDayFrom+'-'+RestDayTo}
-                //onChange={(e)=>setRestDayFrom(e.target.value)}
+                value={RestDayFrom}
+                onChange={(e)=>setRestDayFrom(e.target.value)}
                />
                 <TextField
                 disabled={ifDisable}
@@ -212,10 +238,17 @@ console.log(Restaurant_ID+'rrr')
                 label="Timings"
                 defaultValue=""
                 
-                value={RestTimingFrom+'-'+RestTimingTo}
-                onChange={onChangeDetails}
+                value={RestTimingFrom}
+                onChange={(e)=>setRestTimingFrom(e.target.value)}
                />
-
+                <TextField
+                id="filled-disabled"
+                disabled={ifDisable}
+                label="Delivery Mode"
+                value={RestDeliveryMode}                
+                defaultValue=""
+                onChange={(e)=>setRestDeliveryMode(e.target.value)}
+                ></TextField>
                 <TextField
                 disabled={ifDisable}
                 id="filled-disabled"
@@ -232,7 +265,7 @@ console.log(Restaurant_ID+'rrr')
                 <TextField
                 disabled={ifDisable}
                 id="filled-disabled"
-                label="Email"
+                label=""
                 defaultValue=""
                
                 value={RestEmail}

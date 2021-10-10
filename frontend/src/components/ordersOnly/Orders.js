@@ -57,7 +57,7 @@ export default function Orders(){
     let RestID=useSelector(state => state.restLogin.restID)
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-     const handleChange = (event) => {
+    const handleChange = (event) => {
        setDeliveryStatus(event.target.value);
      };
      const search = useLocation().search;
@@ -71,19 +71,22 @@ export default function Orders(){
         .then(data =>{
           console.log(data)
           setOrderDetails(data)
+          setDeliveryStatus(data.Delivery_Status)
           
         }).catch=(Error)=>{
           console.log(Error)
         }
-        },[DeliveryStatus, RestID, DeliveryStatusParam])
+        },[ DeliveryStatus,RestID, DeliveryStatusParam])
 
-      function handleDeliveryChange(e){
-        setDeliveryStatus(DeliveryStatusParam)
-        console.log(e.target.value)
+      function handleDeliveryChange(e, orderID){
+        console.log('inside delivery change'+ e.target.value+ orderID)
+        setDeliveryStatus(e.target.value)
+        console.log(DeliveryStatus)
+        let OrderID= orderID
         localStorage.setItem('DeliveryStatus',e.target.value)
-        axios.post(`http://localhost:4001/order/${1}`, {
-        DeliveryStatus: DeliveryStatusParam
-      },{withCredentials: true})
+        axios.post(`http://localhost:4001/order/update1/${OrderID}`, {
+        DeliveryStatus: localStorage.getItem('DeliveryStatus')
+      })
       .then(function (response) {
         console.log(response);
       })
@@ -91,13 +94,6 @@ export default function Orders(){
         console.log(error);
       });
       }
-
-      const columns=[{ field: 'Cust_ID', headerName: 'Customer ID', width: 170 },
-      { field: 'Dish_Name', headerName: 'Dish Name', width: 180 },
-      { field: 'Delivery_Status', headerName: 'Delivery Status', width: 190 },
-      { field: 'Order_Status', headerName: 'Order Status', width: 180 },
-      { field: 'Order_ID', headerName: 'Order ID', width: 160 },
-      { field: 'Order_Mode', headerName: 'Order Mode', width: 180 }]
       
       function onCellClick(e){
         console.log("Cell clicked "+ e.value)
@@ -108,59 +104,14 @@ export default function Orders(){
             <div>
                 <Navbar/>
             
-            {/* <Container>
-                
-            <div style={{ height: 400, width: '100%' }}>
-              <DataGrid
-                rows={OrderDetails}
-                columns={columns}
-                // loading={OrderDetails.rows.length === 0}
-                rowHeight={38}
-                checkboxSelection
-                disableSelectionOnClick
-                onCellClick={onCellClick}
-                
-                getRowId={(row) => row.Order_ID}
-              />
-              <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-              ><Box sx={style}>
-              
-              <FormControl fullWidth>
-                <InputLabel >Delivery Status</InputLabel>
-                <Select                  
-                  value={DeliveryStatus}
-                  onChange={handleChange}>
-                  <MenuItem value='Order Received'>Order Received</MenuItem>
-                  <MenuItem value='Preparing'>Preparing</MenuItem>
-                  <MenuItem value='Pickup Ready'>Pickup Ready</MenuItem>
-                  <MenuItem value='Picked up'>Picked up</MenuItem>
-
-                </Select>
-              </FormControl>
-              <br/>
-              <br/>
-              <br/>
-              <Link to={'/orders?Delivery='+ DeliveryStatus}>
-              <Button 
-                onClick={handleDeliveryChange}
-                variant='contained'
-                color='success'>Done</Button>
-                </Link>
-            </Box></Modal>
-            </div>
-            </Container> */}
-
+<Container>
             <TableContainer sx={{maxWidth:1000}} component={Paper}>
       <Table checkboxSelection sx={{  }} aria-label="simple table">
         <TableHead>
           <TableRow>
           <TableCell padding="checkbox">
           <FormControl component="fieldset">
-      <FormLabel component="legend">Gender</FormLabel>
+      <FormLabel component="legend"></FormLabel>
       <RadioGroup
         aria-label="gender"
         defaultValue="female"
@@ -168,11 +119,13 @@ export default function Orders(){
       ></RadioGroup>
       </FormControl>
           </TableCell>
-            <TableCell align="left">Customer ID</TableCell>
-            <TableCell align="right">Orders</TableCell>
-            <TableCell align="right">Price</TableCell>
-            <TableCell align="right">Quantity</TableCell>
-            <TableCell align="right">Order Mode</TableCell>
+            <TableCell >Customer</TableCell>
+            <TableCell >Order ID</TableCell>
+            <TableCell >Total Price</TableCell>
+            <TableCell >Quantity</TableCell>
+            <TableCell >Order Mode</TableCell>
+            <TableCell >Delivery Status</TableCell>
+            
           </TableRow>
         </TableHead>
         <TableBody>
@@ -182,25 +135,38 @@ export default function Orders(){
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell padding="checkbox">
-            {/* <Checkbox value={OrderDetails.Cust_ID}
-              // indeterminate={numSelected > 0 && numSelected < rowCount}
-              // checked={numSelected === rowCount}
-              onClick={(e)=>console.log(e.target.value)}
-            />
-             */}
-              <FormControlLabel value={OrderDetails.Cust_ID} control={<Radio />} label="" />
-              
+            
           </TableCell>
-              <TableCell component="th" scope="row">{OrderDetails.Cust_ID}</TableCell>
-              <TableCell align="right">{OrderDetails.Order_ID}</TableCell>
-              <TableCell align="right">{OrderDetails.Dish_Cost}$</TableCell>
-              <TableCell align="right">{OrderDetails.Dish_Count}</TableCell>
-              <TableCell align="right">{OrderDetails.Order_Mode}</TableCell>
+              <TableCell  component="th" scope="row">{OrderDetails.Cust_Name}</TableCell>
+              <TableCell >{OrderDetails.Order_ID}</TableCell>
+              <TableCell >{OrderDetails.DishCost2}$</TableCell>
+              <TableCell >{OrderDetails.Dish_Count}</TableCell>
+              <TableCell >{OrderDetails.Order_Mode}</TableCell>
+              <TableCell >{OrderDetails.Delivery_Status}</TableCell>
+
+              <TableCell >
+              <Select
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    value={DeliveryStatus}
+    label="Update"
+    onChange={(e)=>handleDeliveryChange(e,OrderDetails.Order_ID)}
+  >
+    <MenuItem value='Order Received'>Order Received</MenuItem>
+    <MenuItem value='Preparing'>Preparing</MenuItem>
+    <MenuItem value='On the way'>On the way</MenuItem>
+    <MenuItem value='Delivered'>Delivered</MenuItem>
+    <MenuItem value='Pick up Ready'>Pick up Ready</MenuItem>
+    <MenuItem value='Picked up'>Picked up</MenuItem>
+
+  </Select>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </TableContainer>
+    </Container>
 
             </div>
           );

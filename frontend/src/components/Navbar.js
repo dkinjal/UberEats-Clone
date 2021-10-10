@@ -8,12 +8,16 @@ import { useHistory } from "react-router-dom";
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
+import { useSelector, useDispatch } from "react-redux";
+import {clear} from '../actions/loginAction'
+import {restClear} from '../actions/restLoginAction'
+import {clearCart} from '../actions/cartAction'
 import Cart from './cartOnly/Cart'
 import InputAdornment from '@mui/material/InputAdornment';
 import Input from '@mui/material/Input';
 import Modal from '@mui/material/Modal';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-// import TabContext from '@mui/lab/TabContext';
+import LoginIcon from '@mui/icons-material/Login';
 import TabList from '@material-ui/lab/TabList';
 import TabContext from '@material-ui/lab/TabContext';
 import TabPanel from '@material-ui/lab/TabPanel';
@@ -137,13 +141,21 @@ export default function PrimarySearchAppBar() {
   const [open2, setOpen2] = React.useState(false);
   const handleOpen = () => setOpen2(true);
   const handleClose = () => setOpen2(false);
-
+  const RestID=useSelector(state => state.restLogin.restID)
+  const count = useSelector(state=> state.addToCart.totalCount)
+  const dispatch= useDispatch()
   // const isMenuOpen = Boolean(anchorEl);
   // const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [profileState, setProfileState] = React.useState('/customerProfile');
   
+  const handleLogout =()=>{
+    dispatch(clear())
+    dispatch(restClear())
+    dispatch(clearCart())
+
+  }
 
   const [search, setSearch]= React.useState('');
 
@@ -179,10 +191,7 @@ export default function PrimarySearchAppBar() {
       }
     }
 
-   const setSearchMain= ()=>{
-    console.log(search + "aaa")
-    
-   }
+   
    const handleKeyDown =(e)=> {
     //e.preventDefault();
     setSearch(e.target.value)
@@ -193,11 +202,16 @@ export default function PrimarySearchAppBar() {
   useEffect(()=>{
     console.log(search);
 },[search])
-const [value, setValue] = React.useState('');
+const [value, setValue] = React.useState('Delivery');
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
     localStorage.setItem('DeliveryType',value )
+
+
+
+
+
   };
   return (
     <Box  sx={{ flexGrow: 1 }}>
@@ -216,22 +230,22 @@ const [value, setValue] = React.useState('');
               <img src={UberEatsLogo} alt='' width="150" height="80" />
           
           {/* <h3>{profileState}</h3> */}
-          <Search >
+          {RestID?<div></div>:<Search >
           <Link to={'/search'}>
           <IconButton size="large"  color="inherit"> 
               <SearchIcon />
            </IconButton>
-           </Link >
+           </Link>
             <StyledInputBase
               placeholder="What are you craving?"
               inputProps={{ 'aria-label': 'search',}}
               //onChange={(e)=>setSearchMain(e.target.value)}
               onChange={(e)=>localStorage.setItem('search_id',e.target.value )}
             />
-          </Search>
+          </Search>}
           
           <Box sx={{ flexGrow: 1 }} />
-          <div>
+          {RestID?<div></div>:<div>
             
             <Input
             variant="filled"
@@ -243,9 +257,9 @@ const [value, setValue] = React.useState('');
               
               // onChange={(e)=>localStorage.setItem('city',e.target.value )}
             >{localStorage.getItem('city')}</Input>
-          </div>
+          </div>}
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-
+          {RestID?<div></div>:
           <Box sx={{ width: '100%', typography: 'body1' }}>
           <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -255,22 +269,29 @@ const [value, setValue] = React.useState('');
             
           </TabList>
         </Box>
-        <TabPanel value="Delivery"></TabPanel>
-        <TabPanel value="Pickup"></TabPanel>
+        {/* <TabPanel value="Delivery"></TabPanel>
+        <TabPanel value="Pickup"></TabPanel> */}
         
       </TabContext>
-    </Box>
-            <Link to={'/favourites'}>
-            <IconButton size="large"  color="inherit">              
+    </Box>}
+
+            {RestID?<div></div>:<Link to={'/favourites'}>
+            <IconButton size="large" color="inherit">              
               <FavoriteBorderIcon></FavoriteBorderIcon>
             </IconButton>
             </Link>
+            }
             
-            <IconButton size="large"  color="inherit"
+            {RestID?<div></div>:<IconButton size="large"  color="inherit"
             onClick={handleOpen}
-            >              
-              <ShoppingCartOutlinedIcon/>
-            </IconButton>
+            >  
+            <Badge badgeContent={count} color="error">
+            <ShoppingCartOutlinedIcon/>
+          </Badge>            
+              
+            </IconButton>}
+            
+            
            {/* -------------------------------------------------------------- */}
            <Modal
         open={open2}
@@ -285,14 +306,23 @@ const [value, setValue] = React.useState('');
 
 
             {/* ------------------------------------------------------------- */}
-            <Link to={'/'}>
+           
+            {RestID?<Link to={'/restaurantProfile'}>
             <IconButton
               size="large"
               color="inherit"
             >
                <HomeOutlinedIcon/>
             </IconButton>
-            </Link>
+            </Link>:
+           <Link to={'/'}>
+            <IconButton
+              size="large"
+              color="inherit"
+            >
+               <HomeOutlinedIcon/>
+            </IconButton>
+            </Link>}
             <Link to='/landing'>
             <IconButton
               size="large"
@@ -300,7 +330,7 @@ const [value, setValue] = React.useState('');
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
+              onClick={handleLogout}
               color="inherit"
             >
              <LogoutIcon/>
@@ -324,13 +354,13 @@ const [value, setValue] = React.useState('');
         open={open}
       >
         <DrawerHeader>
-            <List>
+            {/* <List>
             <Link to='/login'>
             <ListItem button >
                 <ListItemText primary='Sign In' />
             </ListItem>
             </Link>
-            </List>
+            </List> */}
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
@@ -344,12 +374,28 @@ const [value, setValue] = React.useState('');
             <ListItemText>Add a restaurant</ListItemText>
           </ListItem>
           </Link>
-          <Link to='/orders'>
+          {RestID?<div></div>:<Link to='/myorder'>
           <ListItem>
             <ListItemIcon><AddBusinessIcon /></ListItemIcon>
             <ListItemText>My Orders</ListItemText>
           </ListItem>
+          </Link>}
+
+          <Link to='/login'>
+          <ListItem>
+            <ListItemIcon><LoginIcon /></ListItemIcon>
+            <ListItemText>User Sign in</ListItemText>
+          </ListItem>
           </Link>
+
+          <Link to='/restaurantLogin'>
+          <ListItem>
+            <ListItemIcon><LoginIcon /></ListItemIcon>
+            <ListItemText>Business Sign in</ListItemText>
+          </ListItem>
+          </Link>
+
+
           <Link to='/customerProfile'>
           <ListItem>
             <ListItemIcon><AccountCircle /></ListItemIcon>
