@@ -1,3 +1,4 @@
+import { switchUnstyledClasses } from '@mui/core';
 import { createSlice } from '@reduxjs/toolkit';
 import { addToCart } from '../actions/cartAction';
 import Cart from '../components/cartOnly/Cart';
@@ -9,12 +10,14 @@ export const CartReducer = createSlice({
         Cart:[],
         error:null,
         count:0,
-        RestID: 0
+        RestID: 0,
+        subTotal:0
     },
    
     extraReducers:{
         [addToCart.fulfilled] : (state,action) => {
             let index=null;
+            state.subTotal=0;
             state.RestID= action.payload.RestID
             for(let i=0; i< state.Cart.length; i++){
                 if(action.payload.DishID===state.Cart[i].DishID){
@@ -47,6 +50,16 @@ export const CartReducer = createSlice({
                 console.log("here")
                 state.error = "Issues"
             }
+            
+                // state.Cart.map((x)=>(
+                //   x.subTotal= (x.subTotal+ (x.DishCost* x.count))
+                // ))
+                for(let i=0; i< state.Cart.length; i++){
+                    
+                    state.subTotal= (state.subTotal+ (state.Cart[i].DishCost* state.Cart[i].count))
+                }
+                
+                
             //return state;
         },  
         // [clear.fulfilled] : (state, action) => {
@@ -57,7 +70,9 @@ export const CartReducer = createSlice({
         //         state.email=''
         //     }
         //     return state;
-        // }     
+        // } 
+        
+        
     }
 });
 

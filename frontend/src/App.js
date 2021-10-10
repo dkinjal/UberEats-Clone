@@ -20,6 +20,7 @@ import Orders from './components/ordersOnly/Orders';
 import SearchResults from './components/customerOnly/SearchResults';
 import AddDish from "./components/dishOnly/addDish";
 import RestaurantMenu from "./components/restaurantOnly/RestaurantMenu";
+import Checkout from './components/cartOnly/Checkout'
 const theme = createTheme({
     palette:
     {primary:
@@ -88,6 +89,9 @@ function App() {
                 </Route>
                 <Route path='/addDish'>
                 <AddDish/>
+                </Route>
+                <Route exact path="/checkout">
+                <Checkout/>
                 </Route>
                 <Route path='/orders'>
                 <Orders/>

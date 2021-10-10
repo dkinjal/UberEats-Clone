@@ -43,6 +43,7 @@ router.post('/login',async function(req, res){
   connection.query("SELECT * FROM CUSTOMER_DETAILS WHERE Cust_Email = ?;",
     email, 
   function(error, results){
+    console.log(error, results)
     if(error){
       console.log('aaa'+error)
       res.send({error:error})
@@ -52,6 +53,7 @@ router.post('/login',async function(req, res){
         console.log(password, '-----',results[0].Cust_Password)
         bcrypt.compare(password, results[0].Cust_Password,(err,response)=>{
           if(response){
+            console.log('success')
             res.cookie('cookie',email,{maxAge: 900000, httpOnly: false, path : '/'});
             req.session.user= results
             console.log(results)
@@ -97,11 +99,9 @@ router.post('/restsignup',async function(req, res){
 
 
   router.post('/restlogin',async function(req, res){
-  
     const email = req.body.email;
     const password = req.body.password;
     console.log(email, password)
-    // connection.query("SELECT * FROM USER WHERE Cust_ID = '"+{username}+"'",
     connection.query("SELECT * FROM RESTAURANT_DETAILS WHERE Restaurant_Email = ?;",
       email, 
     function(error, results){
@@ -111,19 +111,20 @@ router.post('/restsignup',async function(req, res){
       }
       console.log(results.length)
         if(results.length>0){
-          console.log(password, '-----',results[0].Cust_Password)
-          bcrypt.compare(password, results[0].Cust_Password,(err,response)=>{
+          console.log(password, '-----',results[0].Restaurant_Password)
+          bcrypt.compare(password, results[0].Restaurant_Password,(err,response)=>{
             if(response){
+              console.log('success')
               req.session.user= results
-              res.send(results)
+              res.end(JSON.stringify(results));
             }else{
               console.log(results)
-              res.send({message:"Wrong username/password!"})
+              res.status(204).send({message:"Error"})
             }
           });
         }else{
           console.log('eee')
-          res.send({message:"User doesn't exist!"})
+          res.status(204).send({message:"Error"})
               }
       
     });

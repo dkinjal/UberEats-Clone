@@ -27,18 +27,14 @@ const style = {
   p: 4,
 };
 
-const useStyles= makeStyles({
-    field:{
-      fontSize:'52'
-    }
-  })
+
 
 export default function CustomerProfile(){
-    // const Classes = useStyles()
-    const Cust_ID =1;
-    // const [CustDetails, setCustDetails] = useState([])
+    const CustID =1;
     const [CustName, setCustName] = useState([])
     const [CustDOB, setCustDOB] = useState([])
+    const [CustStreet, setCustStreet] = useState([])
+
     const [CustCity, setCustCity] = useState([])
     const [CustState, setCustState] = useState([])
     const [CustCountry, setCustCountry] = useState([])
@@ -50,9 +46,30 @@ export default function CustomerProfile(){
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    const saveChanges=()=>{
+      console.log(CustCountry)
+      axios.post(`http://localhost:4001/customer/${CustID}`,{
+              
+              Cust_Name: CustName,
+              Cust_DOB: CustDOB,
+              Cust_City: CustCity,
+              Cust_State: CustState,
+              Cust_Country: CustCountry,
+              Cust_Nickname: CustNickname,
+              Cust_Email: CustEmail,
+              Cust_Phone: CustPhone,
+              Cust_Street: CustStreet
 
+
+          })
+          .then(response=>{
+              
+              //history.push('/restaurantProfile')
+              //history.goBack();
+          })
+    }
     useEffect(()=>{
-      axios.get(`http://localhost:4001/customer/${Cust_ID}`)
+      axios.get(`http://localhost:4001/customer/${CustID}`)
       .then(res => 
           {let data = res.data[0];
           // setCustDetails(res.data[0])
@@ -65,6 +82,7 @@ export default function CustomerProfile(){
           setCustPhone(data.Cust_Phone);
           setCustDOB(data.Cust_DOB);
           setCustProfile(data.Cust_Profile_Location)
+          setCustStreet(data.Cust_Street)
           })
       },[])
   
@@ -89,15 +107,10 @@ export default function CustomerProfile(){
               aria-describedby="modal-modal-description"
             >
               <Box sx={style}>
-                <ImageUpload calledFrom="cust" ID={Cust_ID}/>
+                <ImageUpload calledFrom="cust" ID={CustID}/>
               </Box>
             </Modal>
 {/* ------------------------------------------------------------------ */}
-
-
-
-
-
             
             <Box
              sx={{
@@ -121,7 +134,13 @@ export default function CustomerProfile(){
                 variant="filled"
                 onChange={e=>setCustDOB(e.target.value)}
                 />
-                
+                <TextField
+                id="filled-disabled"
+                label="Street"
+                value= {CustStreet}
+                variant="filled"
+                onChange={e=>setCustStreet(e.target.value)}
+                /> 
                 <TextField
                 id="filled-disabled"
                 label="City"
@@ -144,7 +163,7 @@ export default function CustomerProfile(){
                 value= {CustCountry}
                 defaultValue="Hello World"
                 variant="filled"
-                onChange={e=>setCustCountry(e.target.value)}
+                
                 />
                 <TextField
                 id="filled-disabled"
@@ -154,8 +173,9 @@ export default function CustomerProfile(){
                 variant="filled"
                 onChange={e=>setCustNickname(e.target.value)}
                 />
-                <CountrySelect/>
-
+                <CountrySelect 
+                setCustCountry={setCustCountry}
+                CustCountry={CustCountry}/>
                 <br/>
                 <Typography>Contact</Typography>
                 <TextField
@@ -181,6 +201,7 @@ export default function CustomerProfile(){
                 color='success'>Edit</Button>
                 
                 <Button 
+                onClick={saveChanges}
                 variant='contained'
                 color='success'>Save Changes</Button>
 

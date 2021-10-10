@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
-export default function CountrySelect() {
+const CountrySelect=({setCustCountry, custCountry})=>{
   return (
     <Autocomplete
       id="country-select-demo"
@@ -12,7 +12,11 @@ export default function CountrySelect() {
       autoHighlight
       getOptionLabel={(option) => option.label}
       renderOption={(props, option) => (
-        <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+        <Box 
+        onClick={()=>
+          { console.log(option.label)
+            setCustCountry(option.label)}}
+        component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
           <img
             loading="lazy"
             width="20"
@@ -25,6 +29,7 @@ export default function CountrySelect() {
       )}
       renderInput={(params) => (
         <TextField
+        value={custCountry}
         variant='filled'
           {...params}
           label="Choose a country"
@@ -463,3 +468,5 @@ const countries = [
   { code: 'ZM', label: 'Zambia', phone: '260' },
   { code: 'ZW', label: 'Zimbabwe', phone: '263' },
 ];
+
+export default CountrySelect;

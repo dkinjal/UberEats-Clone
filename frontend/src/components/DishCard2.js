@@ -37,7 +37,7 @@ export default function DishCard2({DishDetails}) {
     dispatch(addToCart(data))
   }
   return (
-      <Card  elevation={3} sx={{ maxWidth: 345 , minHeight:300}}>
+      <Card  elevation={3} sx={{ maxWidth: 345 , minHeight:400, maxHeight:400}}>
         <CardMedia
           component="img"
           height="140"
@@ -49,13 +49,14 @@ export default function DishCard2({DishDetails}) {
             <Typography gutterBottom variant="h5" component="div">
             {DishDetails.Dish_Name}
           </Typography>
+          <Typography><b>{DishDetails.Dish_Category}</b></Typography>
           </Link>
           <Typography variant="body2" color="text.secondary">
             {/* {DishDetails.Dish_ID} */}
             {DishDetails.Dish_Description}
           </Typography>
           <Typography variant="caption" color="text.secondary" component="div">
-            {DishDetails.Ingredients}
+            <b>Ingredients:</b> {DishDetails.Ingredients}
           </Typography>
         </CardContent>
         <CardActions>

@@ -46,25 +46,12 @@ export default function Login() {
     // }, [isPassed, isError, dispatch])
     },[dispatch, history, isError, isPassed, redux_data])
 
-    // function login(){
-    //     fetch(`http://localhost:4001/user/login`,{
-    //         method:'POST',
-    //         headers:{"Content-type": "application/json"},
-    //         body: JSON.stringify({
-    //             email:email,
-    //             password:password
-    //         })})
-    //         .then(res => res.json())
-    //     .then(data => {setError(data.message)
-    //         history.push('/landing')
-    //     })
-    // }
     const loginUser= async()=>{
         //dispatch(clear());
         const email_val = /^\S+@\S+\.\S+$/
         if (!email_val.test(email)){
             console.log('email')
-            //notify(`Invalid Email`)
+            
             return
         }
         if (password.length === 0){

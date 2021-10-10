@@ -9,6 +9,7 @@ export const LoginReducer = createSlice({
         password: '',
         error: '',
         pass: '',
+        custID:''
     },
    
     extraReducers:{
@@ -19,6 +20,7 @@ export const LoginReducer = createSlice({
                 state.pass = true
                 state.email = action.payload.email;
                 state.password= action.payload.password;
+                state.custID = action.payload.custID
             }
             else {
                 console.log("here")
@@ -32,6 +34,7 @@ export const LoginReducer = createSlice({
                 state.pass = false
                 state.password = ''
                 state.email=''
+                state.custID=''
             }
             return state;
         }     

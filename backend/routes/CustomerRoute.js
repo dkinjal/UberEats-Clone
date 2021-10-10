@@ -58,9 +58,9 @@ getDetailsbyID = (Cust_ID) => {
 };
 
 //updateCustomerDetails
-router.put("/", async function (req, res) {
+router.post("/:CustID", async function (req, res) {
+  console.log('inside cust  update')
   var customer_name = req.body.Cust_Name;
-  var cust_id = req.body.Cust_ID;
   var cust_DOB = req.body.Cust_DOB;
   var cust_city = req.body.Cust_City;
   var cust_state = req.body.Cust_State;
@@ -68,8 +68,8 @@ router.put("/", async function (req, res) {
   var cust_nickname = req.body.Cust_Nickname;
   var cust_email = req.body.Cust_Email;
   var cust_phone = req.body.Cust_Phone;
-
-  await connection.query(
+console.log(cust_country+"country")
+   connection.query(
     "UPDATE CUSTOMER_DETAILS SET Cust_Name='" +
       customer_name +
       "',Cust_DOB='" +
@@ -87,7 +87,7 @@ router.put("/", async function (req, res) {
       "',Cust_Phone='" +
       cust_phone +
       "'WHERE Cust_Id='" +
-      cust_id +
+      req.params.CustID +
       "'",
     async function (error, results) {
       if (error) {

@@ -10,10 +10,10 @@ export const restLogin = createAsyncThunk(
       console.log(result.status);
       if(result.status===200){
         let data = result.data[0];
-        console.log(data.Restaurant_Email)
+        console.log(data.Restaurant_ID)
         localStorage.setItem('email', data.Restaurant_Email);
         localStorage.setItem('password', data.Restaurant_Password);
-        return {auth:true, name:data.Restaurant_Name,email: data.Restaurant_Email, password: data.Restaurant_Password};
+        return {auth:true, name:data.Restaurant_Name,email: data.Restaurant_Email, password: data.Restaurant_Password, restID:data.Restaurant_ID};
       }else{
         console.log('fail')
         return {auth: false, message: "Invalid credential"}

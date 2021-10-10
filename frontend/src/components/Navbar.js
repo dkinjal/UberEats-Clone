@@ -3,6 +3,7 @@ import { styled, alpha, useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import AppBar from '@mui/material/AppBar';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { useHistory } from "react-router-dom";
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import Box from '@mui/material/Box';
@@ -10,7 +11,8 @@ import Tab from '@mui/material/Tab';
 import Cart from './cartOnly/Cart'
 import InputAdornment from '@mui/material/InputAdornment';
 import Input from '@mui/material/Input';
-import Modal from '@mui/material/Modal';import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import Modal from '@mui/material/Modal';
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 // import TabContext from '@mui/lab/TabContext';
 import TabList from '@material-ui/lab/TabList';
 import TabContext from '@material-ui/lab/TabContext';
@@ -191,10 +193,11 @@ export default function PrimarySearchAppBar() {
   useEffect(()=>{
     console.log(search);
 },[search])
-const [value, setValue] = React.useState('1');
+const [value, setValue] = React.useState('');
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    localStorage.setItem('DeliveryType',value )
   };
   return (
     <Box  sx={{ flexGrow: 1 }}>
@@ -237,8 +240,9 @@ const [value, setValue] = React.useState('1');
             <LocationOnOutlinedIcon color="white"/>
           </InputAdornment>}
               placeholder="Location"
-              onChange={(e)=>localStorage.setItem('search_id',e.target.value )}
-            />
+              
+              // onChange={(e)=>localStorage.setItem('city',e.target.value )}
+            >{localStorage.getItem('city')}</Input>
           </div>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
 
@@ -246,14 +250,14 @@ const [value, setValue] = React.useState('1');
           <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Delivery" value="1" />
-            <Tab label="Pick-up" value="2" />
+            <Tab label="Delivery" value="Delivery" />
+            <Tab label="Pick-up" value="Pickup" />
             
           </TabList>
         </Box>
-        {/* <TabPanel value="1">Item One</TabPanel>
-        <TabPanel value="2">Item Two</TabPanel>
-        <TabPanel value="3">Item Three</TabPanel> */}
+        <TabPanel value="Delivery"></TabPanel>
+        <TabPanel value="Pickup"></TabPanel>
+        
       </TabContext>
     </Box>
             <Link to={'/favourites'}>
@@ -271,18 +275,11 @@ const [value, setValue] = React.useState('1');
            <Modal
         open={open2}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        
       >
-        {/* <Box sx={style}> */}
-          {/* <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography> */}
+       
           <Cart />
-        {/* </Box> */}
+        
       </Modal>
 
 
@@ -341,15 +338,22 @@ const [value, setValue] = React.useState('1');
         <Divider />
         
         <List>
-          
+        <Link to='/restaurantSignup'>
           <ListItem>
             <ListItemIcon><AddBusinessIcon /></ListItemIcon>
             <ListItemText>Add a restaurant</ListItemText>
           </ListItem>
+          </Link>
           <Link to='/orders'>
           <ListItem>
             <ListItemIcon><AddBusinessIcon /></ListItemIcon>
             <ListItemText>My Orders</ListItemText>
+          </ListItem>
+          </Link>
+          <Link to='/customerProfile'>
+          <ListItem>
+            <ListItemIcon><AccountCircle /></ListItemIcon>
+            <ListItemText>My Profile</ListItemText>
           </ListItem>
           </Link>
           <Link to='/orders'>

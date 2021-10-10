@@ -66,7 +66,7 @@ router.get('/one/:Restaurant_ID',async function(req, res){
   router.post('/:RestID',async function(req, res){
     var body= req.body;
     const sqlput = "UPDATE  RESTAURANT_DETAILS SET Restaurant_Name=?,Restaurant_Description=?,Restaurant_Contact=?, Restaurant_Type=?, Restaurant_Time_From=?, Restaurant_Time_To=?, Restaurant_Delivery_Mode=?, Restaurant_Cuisine=?, Restaurant_Day_From=?, Restaurant_Day_To=? WHERE Restaurant_ID=?";
-    var values=[body.Restaurant_Name, body.Restaurant_Description, body.Restaurant_Contact, body.Restaurant_Type, body.Restaurant_Time_From, body.Restaurant_Time_To, body.Restaurant_Delivery_Mode, body.Restaurant_Cuisine, body.Restaurant_Day_From, body.Restaurant_Day_To, req.params.RestID]
+    var values=[body.RestName, body.RestDescription, body.RestContact, body.RestType, body.RestTimingFrom, body.RestTimingTo, body.RestDeliveryMode, body.RestCuisine, body.RestDayFrom, body.RestDayTo, req.params.RestID]
     console.log(values)
     
     connection.query(sqlput, values, async function(error, results){

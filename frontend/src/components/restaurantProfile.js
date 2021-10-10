@@ -6,6 +6,8 @@ import {FormControlLabel, makeStyles} from '@material-ui/core'
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Navbar from './Navbar';
+import { useSelector, useDispatch } from "react-redux";
+
 import Backdrop from '@mui/material/Backdrop';
 import CountrySelect from './country'
 import Button from '@mui/material/Button';
@@ -18,6 +20,9 @@ import Fade from '@mui/material/Fade';
 import ImageUpload from './ImageUpload'
 import ProfileUpdate from './ProfileUpdate'
 import addRestProfile from "./ProfileUpdate";
+import { IconButton } from "@mui/material";
+import Avatar from '@mui/material/Avatar';
+
 import { Card } from "@mui/material";
 const axios = require('axios');
 
@@ -69,11 +74,14 @@ export default function RestaurantProfile(){
     const [RestTimingTo, setRestTimingTo] = useState({})
     const [RestContact, setRestContact] = useState({})
     const [RestProfile, setRestProfile] = useState({})
+    const [RestType, setRestType] = useState({})
     const [open, setOpen] = React.useState(false);
-    const [ifDisable, setIfDisable]= useState(false);
+    const [ifDisable, setIfDisable]= useState(true);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    const Restaurant_ID=1;
+    const Restaurant_ID=useSelector(state => state.restLogin.restID)
+
+    
     
 
 
@@ -84,8 +92,11 @@ export default function RestaurantProfile(){
       .then(res => res.json())
       .then(data =>{
         setDishDetails(data)})
-
-      axios.get('http://localhost:4001/restaurant/one/1')
+        .catch=(error)=>{
+          console.log(error)
+        }
+console.log(Restaurant_ID+'rrr')
+      axios.get(`http://localhost:4001/restaurant/one/${Restaurant_ID}`)
       .then(response => 
         {let data = (response.data[0])
           console.log(response.data[0])
@@ -96,6 +107,7 @@ export default function RestaurantProfile(){
           setRestDayTo(data.Restaurant_Day_To)
           setRestCuisine(data.Restaurant_Cuisine)
           setRestID(data.Restaurant_ID)
+          setRestType(data.Restaurant_Type)
           setRestLocation(data.Restaurant_Location)
           setRestDeliveryMode(data.Restaurant_Delivery_Mode)
           setRestTimingFrom(data.Restaurant_Time_From)
@@ -103,106 +115,115 @@ export default function RestaurantProfile(){
           setRestContact(data.Restaurant_Contact)
           setRestEmail(data.Restaurant_Email)
           setRestProfile(data.Restaurant_Profile_Location)
-        })  
-      },[])
+        }).catch=(error)=>{
+          console.log(error)
+        }  
+      },[Restaurant_ID])
 
     function onChangeDetails(event){
     let restDetailsTemp = this.state.restDetails;
     restDetailsTemp.name = event.target.value;
     this.setState({restDetails: restDetailsTemp});
     }
+    const editRestaurant =(e)=>{
+      e.preventDefault();
+      setIfDisable(false)
+    }
     const updateRestaurant=()=>{
+      console.log(RestName)
       axios.post(`http://localhost:4001/restaurant/${RestID}`,{
+              
               RestName: RestName,
               RestTimingFrom: RestTimingFrom,
               RestTimingTo: RestTimingTo,
               RestEmail: RestEmail,
-              RestContact: RestContact
-              
+              RestContact: RestContact,
+              RestDescription: RestDescription,
+              RestType: RestType,
+              RestDayFrom: RestDayFrom,
+              RestDayTo: RestDayTo,
+              RestDeliveryMode: RestDeliveryMode,
+              RestCuisine: RestCuisine
+
+
           })
           .then(response=>{
+              setIfDisable(true)
               //history.push('/restaurantProfile')
               //history.goBack();
           })
     }
     return(
-        <container>
-          <Navbar className={Classes.navbar} position='absolute' style={{ position: 'fixed', top: 0 , left : 0,  margin: 0}}/>
-        
-        <Stack direction="column" spacing={3}>
         <div>
-        <img onClick={handleOpen}  className={Classes.image} src={RestProfile} alt=''  />
-        <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-        >
-        <Fade in={open}>
-          <Box sx={style}>
-            <Typography id="transition-modal-title" variant="h6" component="h2">
-              Update Profile Picture
-            </Typography>
-            <div>{ImageUpload}</div>
-            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              Make sure the image is jpg/ png/ gif.
-            </Typography>
-            
-          </Box>
-        </Fade>
-      </Modal>
-        </div>
-        <Container>
-        <Stack direction="row" spacing={3}>
-          
-            {/* <Avatar alt="Cindy Baker" src="http://localhost:3000/restaurant-profile.png"  */}
-            {/* sx={{ width: 200, height: 200 }} /> */}
+          <Navbar className={Classes.navbar} position='absolute' style={{ position: 'fixed', top: 0 , left : 0,  margin: 0}}/>
+          <Container>
+          <Stack direction="row" spacing={3}>
+            <div>
+            <IconButton onClick={handleOpen} >
+            <Avatar
+            alt="Cindy Baker" src={RestProfile} 
+            sx={{ width: 200, height: 200 }} />
+            </IconButton>
+{/* ------------------------------------------------------------------------ */}
+      <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <ImageUpload calledFrom="rest" ID={RestID}/>
+              </Box>
+            </Modal>
+
             
             <Box
              sx={{
-                width: 750,
-                height: 300,
+              width: 350,
+              height: 300,
                 bgcolor: 'rgba(255, 255, 255, 0.7)',
-                // '&:hover': {
-                //   backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                //   opacity: [0.9, 0.8, 0.7],
-                // },
+               
               }} >
                 
             <Stack direction="column" spacing={1} >
             <div><h1 disabled={ifDisable}>{RestName}</h1>
             <Typography disabled={ifDisable}>{RestDescription}</Typography></div>
                 <br/>
+                <Typography>Location</Typography>
                 <TextField
                 id="filled-disabled"
                 disabled={ifDisable}
-                label="Location"
-                value={RestLocation}
-                variant="filled"
-                
-                ></TextField>
+                label=""
+                value={RestLocation}                
+                defaultValue=""
+                onChange={(e)=>setRestLocation(e.target.value)}
+                >{RestLocation}</TextField>
                 <TextField
                 disabled={ifDisable}
                 id="filled-disabled"
                 label="Working Days"
                 defaultValue=""
-                variant="filled"
                 value={RestDayFrom+'-'+RestDayTo}
-                onChange={onChangeDetails}
+                //onChange={(e)=>setRestDayFrom(e.target.value)}
                />
                 <TextField
                 disabled={ifDisable}
                 id="filled-disabled"
                 label="Timings"
                 defaultValue=""
-                variant="filled"
+                
                 value={RestTimingFrom+'-'+RestTimingTo}
                 onChange={onChangeDetails}
+               />
+
+                <TextField
+                disabled={ifDisable}
+                id="filled-disabled"
+                label="Cuisine"
+                defaultValue=""
+                
+                value={RestCuisine}
+                onChange={(e)=>setRestCuisine(e.target.value)}
                />
               
 
@@ -213,20 +234,22 @@ export default function RestaurantProfile(){
                 id="filled-disabled"
                 label="Email"
                 defaultValue=""
-                variant="filled"
+               
                 value={RestEmail}
+                onChange={(e)=>setRestEmail(e.target.value)}
                 /> 
                 <TextField
                 id="filled-disabled"
                 label="Phone"
                 defaultValue=""
-                variant="filled"
+                readOnly={true}
                 disabled={ifDisable}
                 value={RestContact}
+                onChange={(e)=>setRestContact(e.target.value)}
                 /> 
                 <br/>   
                 <Button 
-                
+                onClick={editRestaurant}
                 variant='contained'
                 color='success'>Edit</Button>
                 <Button 
@@ -238,7 +261,7 @@ export default function RestaurantProfile(){
                 >Logout</Button>
             </Stack>
             </Box>
-            
+            </div>
             <Grid container spacing={3} >
             {DishDetails.map(details=>(
              
@@ -267,8 +290,8 @@ export default function RestaurantProfile(){
           </Grid>
         </Stack>
         </Container>
-        </Stack>
+       
     
-    </container>
+    </div>
     )
 }
