@@ -19,7 +19,7 @@ export default function RestaurantCard({restaurantDetails}) {
         <CardMedia
           component="img"
           height="140"
-          image={restaurantDetails.Restaurant_Profile_Location}
+          image='https://uber-bucket-kd.s3.us-west-1.amazonaws.com/rest-1633931413703.png'
           alt="Food image"
         />
         <CardContent>
