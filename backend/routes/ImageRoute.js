@@ -45,7 +45,7 @@ const profileImgUpload = multer({
    }).single('profileImage');
 
 
-router.post( '/cust:ID', ( req, res ) => 
+router.post( '/cust/cust:ID', ( req, res ) => 
 {
   profileImgUpload( req, res, ( error ) => {
     console.log( 'requestOkokok', req.file );
