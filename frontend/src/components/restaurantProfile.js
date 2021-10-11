@@ -310,7 +310,7 @@ console.log(Restaurant_ID+'rrr')
             <CardMedia
               component="img"
               height="140"
-              image="http://localhost:3000/burger.png"
+              image="https://uber-bucket-kd.s3.us-west-1.amazonaws.com/nachos-1633732889680.png"
               alt="Food image"
             />
               <CardContent>

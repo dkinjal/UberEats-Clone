@@ -19,7 +19,7 @@ export default function RestaurantCard({restaurantDetails}) {
         <CardMedia
           component="img"
           height="140"
-          image="http://localhost:3000/pizza.png"
+          image={restaurantDetails.Restaurant_Profile_Location}
           alt="Food image"
         />
         <CardContent>

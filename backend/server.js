@@ -5,12 +5,16 @@ const session = require('express-session');
 const app = express();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const cors = require('cors')
 const passport =  require('passport')
 const passportLocal = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const { query } = require("express");
-
+const cors =require('cors');
+const corsConfig ={
+    credentials: true,
+    origin: true
+}
+// app.use(cors(corsConfig))
 //Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

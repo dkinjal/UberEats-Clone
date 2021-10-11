@@ -255,7 +255,7 @@ const [value, setValue] = React.useState('Delivery');
             <LocationOnOutlinedIcon color="white"/>
           </InputAdornment>}
               placeholder="Location"
-              
+              value={localStorage.getItem('city')}
               // onChange={(e)=>localStorage.setItem('city',e.target.value )}
             >{localStorage.getItem('city')}</Input>
           </div>}

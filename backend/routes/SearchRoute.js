@@ -16,14 +16,6 @@ router.get('/:searchvalue',async function(req, res){
         res.end(error.code)
       }else{
         console.log('here')
-        await connection.query("DROP TABLE TEMP_RESULT")
-        query = "CREATE TABLE TEMP_RESULT("+sql_query+")"
-        console.log('query'+ query)
-        await connection.query(query)
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-
         res.end(JSON.stringify(results))
       }
     });
