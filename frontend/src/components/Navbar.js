@@ -7,6 +7,7 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import { useHistory } from "react-router-dom";
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import Box from '@mui/material/Box';
+import backendurl from '../url';
 import Tab from '@mui/material/Tab';
 import { useSelector, useDispatch } from "react-redux";
 import {clear} from '../actions/loginAction'
@@ -207,7 +208,7 @@ const [value, setValue] = React.useState('Delivery');
   const handleChange = (event, newValue) => {
     setValue(newValue);
     localStorage.setItem('DeliveryType',value )
-
+    
 
 
 
@@ -260,6 +261,8 @@ const [value, setValue] = React.useState('Delivery');
           </div>}
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
           {RestID?<div></div>:
+                    <Link to='/search'>
+
           <Box sx={{ width: '100%', typography: 'body1' }}>
           <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -273,7 +276,8 @@ const [value, setValue] = React.useState('Delivery');
         <TabPanel value="Pickup"></TabPanel> */}
         
       </TabContext>
-    </Box>}
+    </Box>
+    </Link>}
 
             {RestID?<div></div>:<Link to={'/favourites'}>
             <IconButton size="large" color="inherit">              
@@ -395,13 +399,13 @@ const [value, setValue] = React.useState('Delivery');
           </ListItem>
           </Link>
 
-
+          {RestID?<div></div>:
           <Link to='/customerProfile'>
           <ListItem>
             <ListItemIcon><AccountCircle /></ListItemIcon>
             <ListItemText>My Profile</ListItemText>
           </ListItem>
-          </Link>
+          </Link>}
           <Link to='/orders'>
           <ListItem>
             <ListItemIcon><AddBusinessIcon /></ListItemIcon>

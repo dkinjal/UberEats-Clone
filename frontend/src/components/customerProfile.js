@@ -11,6 +11,7 @@ import CountrySelect from './country'
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import ImageUpload from "./ImageUpload";
+import backendurl from "../url";
 import { IconButton } from "@mui/material";
 const axios = require('axios');
 
@@ -48,7 +49,7 @@ export default function CustomerProfile(){
 
     const saveChanges=()=>{
       console.log(CustCountry)
-      axios.post(`http://localhost:4001/customer/${CustID}`,{
+      axios.post(`${backendurl}/customer/${CustID}`,{
               
               Cust_Name: CustName,
               Cust_DOB: CustDOB,
@@ -69,7 +70,7 @@ export default function CustomerProfile(){
           })
     }
     useEffect(()=>{
-      axios.get(`http://localhost:4001/customer/${CustID}`)
+      axios.get(`${backendurl}/customer/${CustID}`)
       .then(res => 
           {let data = res.data[0];
           // setCustDetails(res.data[0])

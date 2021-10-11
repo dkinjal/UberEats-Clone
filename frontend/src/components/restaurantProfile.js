@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Navbar from './Navbar';
 import { useSelector, useDispatch } from "react-redux";
-
+import backendurl from "../url";
 import Backdrop from '@mui/material/Backdrop';
 import CountrySelect from './country'
 import Button from '@mui/material/Button';
@@ -85,7 +85,7 @@ export default function RestaurantProfile(){
     
 
 const getRestOne=()=>{
-  axios.get(`http://localhost:4001/restaurant/one/${Restaurant_ID}`)
+  axios.get(`${backendurl}/restaurant/one/${Restaurant_ID}`)
       .then(response => 
         {let data = (response.data[0])
           console.log(response.data[0])
@@ -113,7 +113,7 @@ const getRestOne=()=>{
 
 
     useEffect(()=>{
-      fetch(`http://localhost:4001/restaurant/menu/${Restaurant_ID}`)
+      fetch(`${backendurl}/restaurant/menu/${Restaurant_ID}`)
       .then(res => res.json())
       .then(data =>{
         setDishDetails(data)})
@@ -121,7 +121,7 @@ const getRestOne=()=>{
           console.log(error)
         }
 console.log(Restaurant_ID+'rrr')
-      axios.get(`http://localhost:4001/restaurant/one/${Restaurant_ID}`)
+      axios.get(`${backendurl}/restaurant/one/${Restaurant_ID}`)
       .then(response => 
         {let data = (response.data[0])
           console.log(response.data[0])
@@ -156,7 +156,7 @@ console.log(Restaurant_ID+'rrr')
     }
     const updateRestaurant=()=>{
       console.log(RestName)
-      axios.post(`http://localhost:4001/restaurant/${RestID}`,{
+      axios.post(`${backendurl}/restaurant/${RestID}`,{
               
               RestName: RestName,
               RestTimingFrom: RestTimingFrom,

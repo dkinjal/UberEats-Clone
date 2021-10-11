@@ -8,7 +8,7 @@ import CartTable from "./CartTable";
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import { useHistory } from "react-router-dom";
-
+import backendurl from "../../url"
 const axios = require('axios');
 
 export default function Checkout() {
@@ -24,7 +24,7 @@ export default function Checkout() {
     const [CustStreet, setCustStreet] = useState([])
     
     useEffect(()=>{
-        axios.get(`http://localhost:4001/customer/${Cust_ID}`)
+        axios.get(`${backendurl}/customer/${Cust_ID}`)
       .then(res => 
           {let data = res.data[0];
           setCustCity(data.Cust_City);
@@ -48,7 +48,7 @@ const confirmOrder=()=>{
   ))
   console.log(data)
     // x.map((x)=>(
-    axios.post(`http://localhost:4001/order`,data
+    axios.post(`${backendurl}/order`,data
     // {
     //         DishName: x.DishName,
     //         DishCost: x.DishCost,

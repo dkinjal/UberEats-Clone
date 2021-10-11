@@ -10,7 +10,7 @@ import { Link, useHistory } from 'react-router-dom';
 import  {useState} from "react";
 import UberEatsLogo from '../Uber-Eats-Logo.png';
 import {Redirect} from 'react-router';
-
+import backendurl from "../../url";
 
 
 
@@ -33,7 +33,7 @@ export default function Signup() {
     let redirectvar =''
 
     function signup(){
-        fetch(`http://localhost:4001/user/signup`,{
+        fetch(`${backendurl}/user/signup`,{
             method:'POST',
             headers:{"Content-type": "application/json"},
             body: JSON.stringify({

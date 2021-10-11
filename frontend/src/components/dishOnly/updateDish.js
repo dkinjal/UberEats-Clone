@@ -14,7 +14,7 @@ import Box from '@mui/material/Box';
 import ImageUpload from '../ImageUpload'
 import { IconButton } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
-
+import backendurl from '../../url';
 
 
 const style = {
@@ -53,7 +53,7 @@ export default function UpdateDish() {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false)
   useEffect(()=>{
-    axios.get(`http://localhost:4001/dish/${DishID}`)
+    axios.get(`${backendurl}/dish/${DishID}`)
       .then(response => 
         {let data = (response.data[0])
           console.log(response.data[0])
@@ -71,7 +71,7 @@ export default function UpdateDish() {
   },[DishID,])  
 
   function handleSubmit(){
-    axios.post(`http://localhost:4001/dish/${DishID}`,{
+    axios.post(`${backendurl}/dish/${DishID}`,{
               DishCategory: DishCategory,
               DishName: DishName,
               DishCost: DishCost,

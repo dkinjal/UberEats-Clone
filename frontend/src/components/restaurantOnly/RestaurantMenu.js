@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid'
 import DishCard2 from "../DishCard2";
 import {useLocation} from "react-router-dom";
 import Navbar from '../Navbar'
-
+import backendurl from "../../url";
   export default function RestaurantMenu() {
     const [DishDetails, setDishDetails] = useState([])
     const search = useLocation().search;
@@ -12,7 +12,7 @@ import Navbar from '../Navbar'
     const RestID = new URLSearchParams(search).get('RestID');
   console.log(RestID)
     useEffect(()=>{
-        fetch(`http://localhost:4001/dish/rest/${RestID}`)
+        fetch(`${backendurl}/dish/rest/${RestID}`)
         .then(res => res.json())
         .then(data =>{setDishDetails(data)})
     },[RestID])

@@ -1,7 +1,7 @@
 import { Container } from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import Grid from '@material-ui/core/Grid'
-
+import backendurl from "../../url";
 import RestaurantCard from "../restaurantCard";
 import Navbar from '../Navbar'
 
@@ -10,7 +10,7 @@ import Navbar from '../Navbar'
     const [RestaurantDetails, setRestaurantDetails] = useState([])
     
     useEffect(()=>{
-        fetch(`http://localhost:4001/favourites/${customer_ID}`)
+        fetch(`${backendurl}/favourites/${customer_ID}`)
         .then(res => res.json())
         .then(data =>{setRestaurantDetails(data)})
     },[])

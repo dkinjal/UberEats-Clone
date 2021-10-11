@@ -20,7 +20,7 @@ import Dialog from '@mui/material/Dialog';
 import PropTypes from 'prop-types';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-
+import backendurl from '../url';
 
 export default function DishCard2({DishDetails}) {  
   const [DishID, setDishID] = React.useState(DishDetails.Dish_ID);

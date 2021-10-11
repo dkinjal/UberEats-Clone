@@ -28,7 +28,7 @@ import Select from '@mui/material/Select';
 import { Link } from 'react-router-dom';
 import {useLocation} from "react-router-dom";
 import Button from '@mui/material/Button';
-
+import backendurl from '../../url';
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
@@ -66,7 +66,7 @@ export default function Orders(){
      
       useEffect(()=>{
         console.log({RestID})
-        fetch(`http://localhost:4001/order/rest/${RestID}`)
+        fetch(`${backendurl}/order/rest/${RestID}`)
         .then(res => res.json())
         .then(data =>{
           console.log(data)
@@ -84,7 +84,7 @@ export default function Orders(){
         console.log(DeliveryStatus)
         let OrderID= orderID
         localStorage.setItem('DeliveryStatus',e.target.value)
-        axios.post(`http://localhost:4001/order/update1/${OrderID}`, {
+        axios.post(`${backendurl}/order/update1/${OrderID}`, {
         DeliveryStatus: localStorage.getItem('DeliveryStatus')
       })
       .then(function (response) {

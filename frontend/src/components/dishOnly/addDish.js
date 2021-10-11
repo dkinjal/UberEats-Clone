@@ -12,7 +12,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { IconButton } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
-
+import backendurl from "../../url";
 
 const style = {
     position: 'absolute',
@@ -48,7 +48,7 @@ export default function AddDish() {
 
 
     function addDish(){
-        fetch(`http://localhost:4001/dish`,{
+        fetch(`${backendurl}/dish`,{
                 method:'POST',
                 headers:{"Content-type": "application/json"},
                 body: JSON.stringify({

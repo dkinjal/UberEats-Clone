@@ -1,5 +1,6 @@
 import React, { Component, useState } from 'react';
 import axios from 'axios';
+import backendurl from "../url"
 export default function ImageUpload(props){
     const calledFrom = props.calledFrom;
     const ID = props.ID;
@@ -24,7 +25,7 @@ export default function ImageUpload(props){
             if(calledFrom==="addDish"){
                 localStorage.setItem('imagedata',selectedFile)
             }else{
-            axios.post( `http://localhost:4001/profile/${calledFrom}/${ID}`, data, {
+            axios.post( `${backendurl}/profile/${calledFrom}/${ID}`, data, {
                 headers: {
                     'accept': 'application/json',
                     'Accept-Language': 'en-US,en;q=0.8',

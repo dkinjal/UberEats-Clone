@@ -10,7 +10,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Link } from 'react-router-dom';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-
+import backendurl from '../url'
 
 export default function RestaurantCard({restaurantDetails}) { 
    
@@ -31,7 +31,6 @@ export default function RestaurantCard({restaurantDetails}) {
           </Typography>
           </Link>
           <Typography variant="body2" color="text.secondary">
-            Cheesy, customisable Lorem ipsum XYZ for the pizza cheesy hello bye tata
             {restaurantDetails.Restaurant_Description}
           </Typography>
         </CardContent>
@@ -41,7 +40,7 @@ export default function RestaurantCard({restaurantDetails}) {
           <FavoriteBorderIcon />
         </IconButton>
         </Link>
-          <Button size="small"><AttachMoneyIcon/>{restaurantDetails.Restaurant_ID}</Button>
+          {/* <Button size="small"><AttachMoneyIcon/>{restaurantDetails.Restaurant_ID}</Button> */}
         </CardActions>
       </Card>
     );

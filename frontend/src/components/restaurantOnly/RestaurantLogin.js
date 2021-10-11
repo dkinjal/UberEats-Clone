@@ -12,7 +12,7 @@ import uberEatsLogo from '../Uber-Eats-Logo.png';
 import { useSelector, useDispatch } from "react-redux";
 import { restLogin, restClear } from "../../actions/restLoginAction";
 import axios from "axios";
-
+import backendurl from "../../url";
 
 const useStyles= makeStyles({
     button1: {
@@ -66,7 +66,7 @@ export default function Login() {
         axios.defaults.withCredentials = true;
     }
     // function login(){
-    //     fetch(`http://localhost:4001/user/restlogin`,{
+    //     fetch(`${backendurl}/user/restlogin`,{
     //         method:'POST',
     //         headers:{"Content-type": "application/json"},
     //         body: JSON.stringify({

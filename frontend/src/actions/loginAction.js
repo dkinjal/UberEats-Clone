@@ -1,11 +1,11 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-
+import backendurl from "../url";
 //================LOGIN======================================
 export const login = createAsyncThunk(
     'users/login', async(input)=>{
       console.log('inside action')
-      const result = await axios.post('http://localhost:4001/user/login',input)
+      const result = await axios.post(`${backendurl}/user/login`,input)
       console.log(result.status);
       if(result.status===200){
         
@@ -37,7 +37,7 @@ export const clear = createAsyncThunk(
   export const custSignup = createAsyncThunk(
     'users/custsignup', async(input)=>{
       console.log('inside action')
-      const result = await axios.post('http://localhost:4001/user/signup',input)
+      const result = await axios.post(`${backendurl}/user/signup`,input)
       console.log(result.status);
       if(result.status===200){
         let data = result.data[0];

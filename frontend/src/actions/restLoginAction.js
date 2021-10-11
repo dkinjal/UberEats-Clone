@@ -1,11 +1,11 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-
+import backendurl from "../url";
 //===========RESTAURANT LOGIN
 export const restLogin = createAsyncThunk(
     'users/restlogin', async(input)=>{
       console.log('inside action')
-        const result = await axios.post('http://localhost:4001/user/restlogin',input)
+        const result = await axios.post(`${backendurl}/user/restlogin`,input)
 
       console.log(result.status);
       if(result.status===200){
@@ -35,7 +35,7 @@ export const restClear = createAsyncThunk(
   export const restSignup = createAsyncThunk(
     'users/restsignup', async(input)=>{
       console.log('inside action')
-        const result = await axios.post('http://localhost:4001/user/restsignup',input)
+        const result = await axios.post(`${backendurl}/user/restsignup`,input)
 
       console.log(result.status);
       if(result.status===200){

@@ -10,7 +10,7 @@ import { Link, useHistory } from 'react-router-dom';
 import  {useState} from "react";
 import UberEatsLogo from '../Uber-Eats-Logo.png'
 
-
+import backendurl from "../../url";
 
 const useStyles= makeStyles({
     button1: {
@@ -31,7 +31,7 @@ export default function Signup() {
     const history = useHistory();
 
     function signup(){
-        fetch(`http://localhost:4001/user/restsignup`,{
+        fetch(`${backendurl}/user/restsignup`,{
             method:'POST',
             headers:{"Content-type": "application/json"},
             body: JSON.stringify({

@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import RestaurantCard from "./restaurantCard";
 import {Redirect} from 'react-router';
 import cookie from 'react-cookies';
-
+import backendurl from '../url'
 let redirectVar = null;
         if(cookie.load('cookie')){
             redirectVar = <Redirect to= "/home"/>

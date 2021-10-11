@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import Navbar from '../Navbar'
-
+import backendurl from "../../url";
 import Grid from '@material-ui/core/Grid';
 import RestaurantCard from "../restaurantCard";
 import Container from '@material-ui/core/Container'
@@ -19,7 +19,7 @@ export default function SearchResults() {
     const deliveryType = localStorage.getItem('DeliveryType')
     let searchvalue = localStorage.getItem('search_id')
     useEffect(()=>{
-        fetch(`http://localhost:4001/search/${searchvalue}`)
+        fetch(`${backendurl}/search/${searchvalue}`)
         .then(res => res.json())
         // .then(  data=>
             .then(data =>{setRestaurantDetails(data)})

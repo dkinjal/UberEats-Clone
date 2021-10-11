@@ -16,7 +16,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { useSelector, useDispatch } from "react-redux";
 import Divider from '@mui/material/Divider';
-
+import backendurl from '../../url';
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -44,7 +44,7 @@ const[Total, setTotal]= useState([])
     const handleClose = () => setOpen(false);
      useEffect(()=>{
          console.log("insideeee")
-        fetch(`http://localhost:4001/order/${Cust_ID}`)
+        fetch(`${backendurl}/order/${Cust_ID}`)
         .then(res => res.json())
         .then(data =>{
           console.log(data)
@@ -56,7 +56,7 @@ const[Total, setTotal]= useState([])
         },[Cust_ID])
         
         const openReceipt=(orderID)=>{
-          fetch(`http://localhost:4001/order/receipt/${orderID}`)
+          fetch(`${backendurl}/order/receipt/${orderID}`)
         .then(res => res.json())
         .then(data =>{
           let tempTotal = 0;
