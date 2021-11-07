@@ -5,6 +5,7 @@ import RestLoginReducer from './RestLoginReducer';
 import RestSignupReducer from './RestSignupReducer';
 import CustSignupReducer from './SignupReducer';
 import CartReducer from './CartReducer';
+import CustomerReducer from './CustomerReducer';
 
 export default configureStore({
     reducer: {
@@ -12,6 +13,7 @@ export default configureStore({
         restLogin : RestLoginReducer,
         restSignup: RestSignupReducer,
         custSignup: CustSignupReducer,
-        addToCart : CartReducer
+        addToCart : CartReducer,
+        cust: CustomerReducer
     }
 }, composeWithDevTools());

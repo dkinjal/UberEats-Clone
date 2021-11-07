@@ -12,8 +12,11 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import ImageUpload from "./ImageUpload";
 import backendurl from "../url";
+import { useSelector, useDispatch } from "react-redux";
+import {updateCustomer, getCustomer} from '../actions/customerAction'
 import { IconButton } from "@mui/material";
 const axios = require('axios');
+
 
 
 const style = {
@@ -28,14 +31,12 @@ const style = {
   p: 4,
 };
 
-
-
 export default function CustomerProfile(){
-    const CustID =1;
+    const CustID ='617311df9c43bf3cb49b6a51';
     const [CustName, setCustName] = useState([])
     const [CustDOB, setCustDOB] = useState([])
     const [CustStreet, setCustStreet] = useState([])
-
+    const dispatch = useDispatch();
     const [CustCity, setCustCity] = useState([])
     const [CustState, setCustState] = useState([])
     const [CustCountry, setCustCountry] = useState([])
@@ -46,48 +47,76 @@ export default function CustomerProfile(){
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const redux_data = useSelector(state => state.cust);
+    const isPassed = redux_data.pass;
+    const isError = redux_data.error;
 
     const saveChanges=()=>{
       console.log(CustCountry)
-      axios.post(`${backendurl}/customer/${CustID}`,{
+      let data={
+        Cust_Name: CustName,
+        Cust_DOB: CustDOB,
+        Cust_City: CustCity,
+        Cust_State: CustState,
+        Cust_Country: CustCountry,
+        Cust_Nickname: CustNickname,
+        Cust_Email: CustEmail,
+        Cust_Phone: CustPhone,
+        Cust_Street: CustStreet,
+        Cust_ID: CustID
+      }
+      
+      dispatch(updateCustomer(data));
+      axios.defaults.withCredentials = true;
+      }
+      
+      // axios.post(`${backendurl}/customer/${CustID}`,{
               
-              Cust_Name: CustName,
-              Cust_DOB: CustDOB,
-              Cust_City: CustCity,
-              Cust_State: CustState,
-              Cust_Country: CustCountry,
-              Cust_Nickname: CustNickname,
-              Cust_Email: CustEmail,
-              Cust_Phone: CustPhone,
-              Cust_Street: CustStreet
+      //         Cust_Name: CustName,
+      //         Cust_DOB: CustDOB,
+      //         Cust_City: CustCity,
+      //         Cust_State: CustState,
+      //         Cust_Country: CustCountry,
+      //         Cust_Nickname: CustNickname,
+      //         Cust_Email: CustEmail,
+      //         Cust_Phone: CustPhone,
+      //         Cust_Street: CustStreet
 
 
-          })
-          .then(response=>{
+      //     })
+      //     .then(response=>{
               
-              //history.push('/restaurantProfile')
-              //history.goBack();
-          })
-    }
+      //         //history.push('/restaurantProfile')
+      //         //history.goBack();
+      //     })
+   
+
     useEffect(()=>{
-      axios.get(`${backendurl}/customer/${CustID}`)
-      .then(res => 
-          {let data = res.data[0];
-          // setCustDetails(res.data[0])
-          setCustName(data.Cust_Name);
-          setCustEmail(data.Cust_Email);
-          setCustCity(data.Cust_City);
-          setCustCountry(data.Cust_Country);
-          setCustState(data.Cust_State);
-          setCustNickname(data.Cust_Nickname);
-          setCustPhone(data.Cust_Phone);
-          setCustDOB(data.Cust_DOB);
-          setCustProfile(data.Cust_Profile_Location)
-          setCustStreet(data.Cust_Street)
-          })
-      },[])
-  
-
+      let data={
+        Cust_ID: CustID
+      }
+      dispatch(getCustomer(data));
+      axios.defaults.withCredentials = true;
+    
+      // axios.get(`${backendurl}/customer/${CustID}`)
+      // .then(res => 
+      //     {let data = res.data.product;
+      //     // setCustDetails(res.data[0])
+      //     console.log(res.data.product)
+      //     setCustName(data.Cust_Name);
+      //     setCustEmail(data.Cust_Email);
+      //     setCustCity(data.Cust_City);
+      //     setCustCountry(data.Cust_Country);
+      //     setCustState(data.Cust_State);
+      //     setCustNickname(data.Cust_Nickname);
+      //     setCustPhone(data.Cust_Phone);
+      //     setCustDOB(data.Cust_DOB);
+      //     setCustProfile(data.Cust_Profile_Location)
+      //     setCustStreet(data.Cust_Street)
+      //     })
+      // },[])
+    },[dispatch])
+    
 
 
     return(

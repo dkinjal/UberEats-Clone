@@ -2,68 +2,74 @@ const express = require("express");
 var router = express.Router();
 var db = require('../dbConnection.js')
 var connection= db.connection;
-
+var Menu = require('../Models/MenuModels');
 
 //addOrder
 
 router.get('/:Dish_ID', function(req, res){
-  console.log(req.params.Dish_ID, "nnn")
-   connection.query("SELECT * FROM RESTAURANT_MENU WHERE DISH_ID='"+req.params.Dish_ID+"'", async function(error, results){
-    console.log(error, results,'aabaa')
-    if(error){
-      res.end(error.code)
-    }else{
-      res.end(JSON.stringify(results))
-    }
-  });
+  Menu.find({"Dish_ID": req.params.Dish_ID}).exec().then(doc=>{
+        //req.session.user= res;
+        res.status(200).json({
+          message: "Success",
+          product: doc[0]
+        })
+    }).catch (error=>{
+      console.log(error);
+    })
 });
-
 
 router.get('/rest/:RestID', function(req, res){
   console.log(req.params.RestID, "nnooon")
-   connection.query("SELECT * FROM RESTAURANT_MENU WHERE Restaurant_ID='"+req.params.RestID+"'", async function(error, results){
-    console.log(error, results,'aabaa')
-    if(error){
-      res.end(error.code)
-    }else{
-      res.end(JSON.stringify(results))
-    }
-  });
+  Menu.find({"Restaurant_ID": req.params.RestID}).exec().then(doc=>{
+    //req.session.user= res;
+    res.status(200).json({
+      message: "Success",
+      product: doc[0]
+    })
+}).catch (error=>{
+  console.log(error);
+}) 
 });
-
 
 router.post('/:Dish_ID',async function(req, res){
   var body= req.body;
   console.log(req.body)
-  const sqlput = "Update RESTAURANT_MENU SET Dish_Name=?, Ingredients=?, Dish_Category=?, Dish_Description=?, Dish_Cost=?  WHERE Dish_ID=?";
-  var values=[body.DishName, body.MainIngredients, body.DishCategory, body.DishDescription, body.DishCost, req.params.Dish_ID]
-  connection.query(sqlput, values, async function(error, results){
-
-  console.log(error, results,'bbb')
-   if(error){
-     res.end(error.code)
-   }else{
-     res.end(JSON.stringify(results))
-   }
-  })
- });
-
+  Menu.findOneAndUpdate({"Dish_ID": req.params.Dish_ID},{
+    "Dish_Name":body.DishName,
+    "Ingredients":body.MainIngredients,
+    "Dish_Category":body.DishCategory,
+    "Dish_Description":body.DishDescription,
+    "Dish_Cost":body.DishCost
+  }).exec().then(doc=>{
+    console.log("Success aaa"+ doc[0])
+    res.send("Success");
+  }).catch(error=>{console.log(error+"iii")})
+});
+  
+ 
  router.post('/',async function(req, res){
   var body= req.body;
   console.log(body.RestID +'mmm')
-  const sqlput = "INSERT INTO RESTAURANT_MENU (Dish_Name, Ingredients, Dish_Category, Dish_Description, Dish_Cost, Restaurant_ID, Dish_Type) VALUES (?,?,?,?,?,?,?)";
-  console.log(sqlput)
-  var values=[body.DishName, body.MainIngredients, body.DishCategory, body.DishDescription, body.DishCost, body.RestID, body.DishType]
-  connection.query(sqlput, values, async function(error, results){
-
-  console.log(error, results,'bbb')
-   if(error){
-     res.end(error.code)
-   }else{
-     res.end(JSON.stringify(results))
-   }
+  const menu= new Menu({
+    "Dish_Name":body.DishName, 
+    "Ingredients":body.MainIngredients,
+    "Dish_Category": body.DishCategory, 
+    "Dish_Description":body.DishDescription, 
+    "Dish_Cost":body.DishCost, 
+    "Restaurant_ID":body.RestID, 
+    "Dish_Type":body.DishType
   })
- });
+  menu.save().then(result=>{
+    console.log(result)
+  })
+  .catch(error=>{
+    console.log(error)
+  });
+  res.status(200).json({
+    message: "Success",
+    product: menu
+  })
+  }); 
 
 
 module.exports= router

@@ -4,12 +4,12 @@ const express = require("express");
 var router = express.Router();
 var db = require('../dbConnection.js')
 var connection= db.connection;
-
+var Order = require('../Models/OrderModels')
 
 //addOrder
 
 router.get('/rest/:RestID', function(req, res){
-  console.log('RestID'+ req.params.RestID)
+  // Order.find({""})
    connection.query("SELECT * , CUST_NAME, SUM(ORDER_DETAILS.Dish_Count) AS DishCount, SUM(ORDER_DETAILS.Dish_Cost) AS DishCost2 FROM ORDER_DETAILS, CUSTOMER_DETAILS WHERE Restaurant_ID='"+req.params.RestID+"' AND ORDER_DETAILS.Cust_ID= CUSTOMER_DETAILS.Cust_ID GROUP BY  ORDER_DETAILS.Order_ID ", async function(error, results){
     console.log(error, results,'aaaa')
     if(error){
@@ -51,7 +51,8 @@ router.post('/update1/:OrderID',async function(req, res){
   const sqlput = "UPDATE ORDER_DETAILS SET Delivery_Status=? where Order_ID=?";
   var values=[body.DeliveryStatus,req.params.OrderID]
   console.log(values)
-  
+  //Order.findOneAndUpdate()
+
   connection.query(sqlput, values, async function(error, results){
     if(error){
       res.writeHead(200, {
@@ -98,29 +99,27 @@ router.post('/',async function(req, res){
       res.send(error.code)
     }else{
       console.log('success')
-      // res.writeHead(200, {
-      //   'Content-Type':'text/plain'
-      // });
-      // res.send(JSON.stringify(results))
       output.push(results)
       console.log(output)
     }
   });
 } res.send(output)
-}});
+}
+});
 })
 
 router.get('/receipt/:orderID', function(req, res){
   console.log('RestID'+ req.params.orderID)
-   connection.query("SELECT *  FROM ORDER_DETAILS WHERE Order_ID='"+req.params.orderID+"' ", async function(error, results){
-    console.log(error, results,'aaaa')
-    if(error){
-      res.end(error.code)
-    }else{
-      console.log(results)
-      res.end(JSON.stringify(results))
-    }
-  });
+  Order.find({"Order_ID": req.params.orderID}).exec().then(doc=>{
+    //console.log(doc[0]);
+        //req.session.user= res;
+        res.status(200).json({
+          message: "Success",
+          product: doc[0]
+        })
+    }).catch (error=>{
+      console.log(error);
+    }) 
 });
 
 

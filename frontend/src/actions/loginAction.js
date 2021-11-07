@@ -8,7 +8,6 @@ export const login = createAsyncThunk(
       const result = await axios.post(`${backendurl}/user/login`,input)
       console.log(result.status);
       if(result.status===200){
-        
         let data = result.data[0];
         localStorage.setItem('email', data.Cust_Email);
         localStorage.setItem('password', data.Cust_Password);

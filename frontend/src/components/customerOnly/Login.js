@@ -31,7 +31,6 @@ export default function Login() {
     const history = useHistory();
     const dispatch = useDispatch();
     const redux_data = useSelector(state => state.login);
-    console.log(redux_data.pass+ 'redux data')
     const isPassed = redux_data.pass;
     const isError = redux_data.error;
 

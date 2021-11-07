@@ -2,12 +2,14 @@ import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import backendurl from "../url";
 //===========RESTAURANT LOGIN
-export const restLogin = createAsyncThunk(
-    'users/restlogin', async(input)=>{
-      console.log('inside action')
-        const result = await axios.post(`${backendurl}/user/restlogin`,input)
 
-      console.log(result.status);
+
+export const restLogin = createAsyncThunk(
+    'users/restlogin', (input)=>{
+      console.log('inside action')
+        let result =  axios.post(`${backendurl}/user/restlogin`,input)
+
+      console.log(result.status + 'abb');
       if(result.status===200){
         let data = result.data[0];
         console.log(data.Restaurant_ID)
@@ -43,8 +45,6 @@ export const restClear = createAsyncThunk(
         let data = result.data[0];
         console.log('inside 200' + data) 
         localStorage.setItem('signup', "success");
-        
-
         return {auth:true};
       }else{
         console.log('fail')

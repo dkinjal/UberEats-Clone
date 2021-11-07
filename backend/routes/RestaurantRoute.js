@@ -4,171 +4,155 @@ const express = require("express");
 var router = express.Router();
 var db = require('../dbConnection.js')
 var connection= db.connection;
+const Restaurant = require('../Models/RestaurantModels')
+const Menu = require('../Models/MenuModels')
+const Order = require('../Models/OrderModels')
+const { checkAuth } = require("../utils/passport");
 
 
-router.get('/one/:Restaurant_ID',async function(req, res){
-    await connection.query("SELECT * FROM RESTAURANT_DETAILS WHERE Restaurant_ID='"+req.params.Restaurant_ID+"'", async function(error, results){
-      console.log(error, results)
-      if(error){
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-        res.end(error.code)
-      }else{
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-        res.end(JSON.stringify(results))
-      }
-    });
+router.get('/one/:Restaurant_ID',checkAuth,async function(req, res){
+  console.log(req.params.Restaurant_ID)
+    Customer.find({"Restaurant_ID": req.params.Restaurant_ID})
+    .exec().then(doc=>{
+      //console.log(doc[0]);
+          //req.session.user= res;
+          res.status(200).json({
+            message: "Success",
+            product: doc[0]
+          })
+      }).catch (error=>{
+        console.log(error);
+      }) 
   });
 
   //getAllRestaurants
   router.get('/',async function(req, res){
-    await connection.query("SELECT * FROM RESTAURANT_DETAILS", async function(error, results){
-      if(error){
-        res.writeHead(500, {
-          'Content-Type':'text/plain'
-        });
-        res.end(error.code)
-      }else{
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-        console.log(JSON.stringify(results))
-        res.end(JSON.stringify(results))
-      }
-    });
+    Customer.find().exec().then(doc=>{
+          //req.session.user= res;
+          res.status(200).json({
+            message: "Success",
+            product: doc[0]
+          })
+      }).catch (error=>{
+        console.log(error);
+      }) 
   });
+
 
 //addRestaurantDetails
   router.post('/',async function(req, res){
     body= req.body
-    const sqlput = "INSERT INTO RESTAURANT_DETAILS (Restaurant_Name, Restaurant_Description, Restaurant_Contact, Restaurant_Type, Restaurant_Time_From, Restaurant_Time_To, Restaurant_Delivery_Mode, Restaurant_Cuisine, Restaurant_Day_From, Restaurant_Day_To) VALUES (?,?,?,?,?,?,?,?,?,?)";
-    var values=[body.Restaurant_Name, body.Restaurant_Description, body.Restaurant_Contact, body.Restaurant_Type, body.Restaurant_Time_From, body.Restaurant_Time_To, body.Restaurant_Delivery_Mode, body.Restaurant_Cuisine, body.Restaurant_Day_From, body.Restaurant_Day_To]
-  
-    connection.query(sqlput, values, async function(error, results){
-      if(error){
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-        res.end(error.code)
-      }else{
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-        res.end(JSON.stringify(results))
-      }
+    
+    const restaurant = new Restaurant({
+      "Restaurant_Name":body.Restaurant_Name,
+      "Restaurant_Description":body.Restaurant_Description,
+      "Restaurant_Contact":body.Restaurant_Contact,
+      "Restaurant_Type":body.Restaurant_Type,
+      "Restaurant_Time_From":body.Restaurant_Time_From,
+      "Restaurant_Time_To":body.Restaurant_Time_To,
+      "Restaurant_Delivery_Mode":body.Restaurant_Delivery_Mode,
+      "Restaurant_Cuisine":body.Restaurant_Cuisine,
+      "Restaurant_Day_From":body.Restaurant_Day_From, 
+      "Restaurant_Day_To":body.Restaurant_Day_To
+    })
+    restaurant.save().then(result=>{
+      console.log(result)
+    })
+    .catch(error=>{
+      console.log(error)
     });
-  });  
+    res.status(200).json({
+      message: "Success",
+      product: restaurant
+    })
+    });  
 
 //updateRestaurantDetails
   router.post('/:RestID',async function(req, res){
     var body= req.body;
-    const sqlput = "UPDATE  RESTAURANT_DETAILS SET Restaurant_Name=?,Restaurant_Description=?,Restaurant_Contact=?, Restaurant_Type=?, Restaurant_Time_From=?, Restaurant_Time_To=?, Restaurant_Delivery_Mode=?, Restaurant_Cuisine=?, Restaurant_Day_From=?, Restaurant_Day_To=? WHERE Restaurant_ID=?";
-    var values=[body.RestName, body.RestDescription, body.RestContact, body.RestType, body.RestTimingFrom, body.RestTimingTo, body.RestDeliveryMode, body.RestCuisine, body.RestDayFrom, body.RestDayTo, req.params.RestID]
-    console.log(values)
-    
-    connection.query(sqlput, values, async function(error, results){
-      if(error){
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-        res.end(error.code)
-      }else{
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-        res.end(JSON.stringify(results))
-      }
-    });
-  });
 
+    Restaurant.findOneAndUpdate({"Restaurant_ID": req.params.RestID},{
+      "Restaurant_Name": body.RestName,
+      "Restaurant_Description":body.RestDescription,
+      "Restaurant_Contact": body.RestContact,
+      "Restaurant_Type":body.RestType,
+      "Restaurant_Time_From":body.RestTimingFrom,
+      "Restaurant_Time_To":body.RestTimingTo,
+      "Restaurant_Delivery_Mode":body.RestDeliveryMode, 
+      "Restaurant_Cuisine":body.RestCuisine,
+      "Restaurant_Day_From":body.RestDayFrom,
+      "Restaurant_Day_To":body.RestDayTo,
+    }).exec().then(doc=>{
+      console.log("Success aaa"+ doc[0])
+      res.send("Success");
+    }).catch(error=>{console.log(error+"iii")})
+  });
+    
+    
 
   router.get('/getLocationRestaurant',async function(req, res){
-    //console.log(req)
-    //console.log(res)
-      await connection.query("SELECT * FROM RESTAURANT_DETAILS where Restaurant_Location='"+req.body.Restaurant_Location +"'", async function(error, results){
-        if(error){
-          res.writeHead(200, {
-            'Content-Type':'text/plain'
-          });
-          res.end(error.code)
-        }else{
-          res.writeHead(200, {
-            'Content-Type':'text/plain'
-          });
-          res.end(JSON.stringify(results))
-        }
-      });
+    Restaurant.find({"Restaurant_Location": req.body.Restaurant_Location}).exec().then(doc=>{
+          //req.session.user= res;
+          res.status(200).json({
+            message: "Success",
+            product: doc[0]
+          })
+      }).catch (error=>{
+        console.log(error);
+      }) 
     });
   
 
   router.get('/menu/:Restaurant_ID',async function(req, res){
     console.log('inside menu api')
-    await connection.query("SELECT * FROM RESTAURANT_MENU WHERE RESTAURANT_ID='"+req.params.Restaurant_ID+"' ", async function(error, results){
-      console.log(error, results)
-      if(error){
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-        res.end(error.code)
-      }else{
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-        res.end(JSON.stringify(results))
-      }
+    Menu.find({"Restaurant_ID": req.params.Restaurant_ID}).exec().then(doc=>{
+      //console.log(doc[0]);
+          //req.session.user= res;
+          res.status(200).json({
+            message: "Success",
+            product: doc[0]
+          })
+      }).catch (error=>{
+        console.log(error);
+      }) 
     });
-  });
-
   
   router.put('/updateDeliveryStatus',async function(req, res){
     var body= req.body;
-    const sqlput = "UPDATE ORDER_DETAILS SET Delivery_Status=? where Order_ID =?";
-    var values=[body.Delivery_Status, body.Order_ID]
-  
-    connection.query(sqlput, values, async function(error, results){
-      console.log(query.toString)
-      console.log(error)
-      if(error){
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-        res.end(error.code)
-      }else{
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-        res.end(JSON.stringify(results))
-      }
-    });
+   
+    Order.findOneAndUpdate({"Order_ID": body.Order_ID},{
+      "Delivery_Status": body.Delivery_Status
+    }).exec().then(doc=>{
+      console.log("Success aaa"+ doc[0])
+      res.send("Success");
+    }).catch(error=>{console.log(error+"iii")})
   });
-
+  
   
 
   router.put('/addDish',async function(req, res){
     var body= req.body;
     console.log(req.body)
-    const sqlput = "INSERT INTO RESTAURANT_MENU (Dish_Name, Ingredients, Dish_Category, Dish_Description, Dish_Cost, Restaurant_Name) VALUES (?,?,?,?,?,?)";
-    var values=[body.Dish_Name, body.Ingredients, body.Dish_Category, body.Dish_Description, body.Dish_Cost, body.Restaurant_Name]
-  
-    connection.query(sqlput, values, async function(error, results){
-      console.log(query.toString+"asdfg")
-      console.log(error+"mnbv")
-      if(error){
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-        res.end(error.code)
-      }else{
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-        res.end(JSON.stringify(results))
-      }
+    
+    const menu = new Menu({
+      "Dish_Name":body.Dish_Name,
+      "Ingredients":body.Ingredients,
+      "Dish_Category":body.Dish_Category,
+      "Dish_Description":body.Dish_Description,
+      "Dish_Cost": body.Dish_Cost, 
+      "Restaurant_Name":body.Restaurant_Name
+    })
+    menu.save().then(result=>{
+      console.log(result)
+    })
+    .catch(error=>{
+      console.log(error)
     });
-  });  
+    res.status(200).json({
+      message: "Success",
+      product: menu
+    })
+    }); 
 
 
   router.put('/updateDishDetails',async function(req, res){
@@ -177,46 +161,42 @@ router.get('/one/:Restaurant_ID',async function(req, res){
     const sqlput = "Update RESTAURANT_MENU SET Dish_Name=?, Ingredients=?, Dish_Category=?, Dish_Description=?, Dish_Cost=?, Restaurant_Name=? WHERE Dish_ID=?";
     var values=[body.Dish_Name, body.Ingredients, body.Dish_Category, body.Dish_Description, body.Dish_Cost, body.Restaurant_Name, body.Dish_ID]
   
-    connection.query(sqlput, values, async function(error, results){
-      console.log(query.toString+"asdfg")
-      console.log(error+"mnbv")
-      if(error){
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-        res.end(error.code)
-      }else{
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-        res.end(JSON.stringify(results))
-      }
+    Menu.findOneAndUpdate({"Dish_ID":body.Dish_ID},{
+      "Dish_Name": body.Dish_Name,
+      "Ingredients":body.Ingredients,
+      "Dish_Category":body.Dish_Category,
+      "Dish_Description": body.Dish_Description,
+      "Dish_Cost": body.Dish_Cost,
+      "Restaurant_Name":body.Restaurant_Name
+    }).exec().then(doc=>{
+      console.log("Success aaa"+ doc[0])
+      res.send("Success");
+    }).catch(error=>{console.log(error+"iii")})
     });
-  }); 
-  
-  
+
   router.put('/addDish',async function(req, res){
     var body= req.body;
     console.log(req.body)
-    const sqlput = "INSERT INTO RESTAURANT_MENU (Dish_Name, Ingredients, Dish_Category, Dish_Description, Dish_Cost, Restaurant_Name) VALUES (?,?,?,?,?,?)";
-    var values=[body.Dish_Name, body.Ingredients, body.Dish_Category, body.Dish_Description, body.Dish_Cost, body.Restaurant_Name]
-  
-    connection.query(sqlput, values, async function(error, results){
-      console.log(query.toString+"asdfg")
-      console.log(error+"mnbv")
-      if(error){
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-        res.end(error.code)
-      }else{
-        res.writeHead(200, {
-          'Content-Type':'text/plain'
-        });
-        res.end(JSON.stringify(results))
-      }
+    
+    const menu = new Menu({
+      "Dish_Name":body.Dish_Name,
+      "Ingredients":body.Ingredients,
+      "Dish_Category": body.Dish_Category,
+      "Dish_Description":body.Dish_Description,
+      "Dish_Cost":body.Dish_Cost, 
+      "Restaurant_Name":body.Restaurant_Name
+    })
+    menu.save().then(result=>{
+      console.log(result)
+    })
+    .catch(error=>{
+      console.log(error)
     });
-  });  
+    res.status(200).json({
+      message: "Success",
+      product: menu
+    })
+  }); 
 
 
   module.exports= router

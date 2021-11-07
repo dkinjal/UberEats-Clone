@@ -14,6 +14,46 @@ const corsConfig ={
     credentials: true,
     origin: true
 }
+
+const Customer= require('./Models/CustomerModels');
+
+const { mongoDB } = require('./config');
+const mongoose = require('mongoose');
+var options = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  // poolSize: 500,
+  // bufferMaxEntries: 0
+};
+mongoose.connect(mongoDB, options, (err, res) => {
+  if (err) {
+      console.log(err);
+      console.log(`MongoDB Connection Failed`);
+  } else {
+      console.log(`MongoDB Connected`);
+  }
+});
+
+
+app.get('/aaa', (req, res) => {
+  Customer.find({}, (error, result) => {
+      if (error) {
+          res.writeHead(500, {
+              'Content-Type': 'text/plain'
+          })
+          res.end();
+      }
+      else {
+          res.writeHead(200, {
+              'Content-Type': 'application/json'
+          });
+          res.end(JSON.stringify(result));
+      }
+  });
+});
+
+
+
 // app.use(cors(corsConfig))
 //Middleware
 app.use(bodyParser.json());

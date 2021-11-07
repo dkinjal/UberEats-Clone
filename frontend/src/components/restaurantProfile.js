@@ -80,6 +80,7 @@ export default function RestaurantProfile(){
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const Restaurant_ID=useSelector(state => state.restLogin.restID)
+    const dispatch = useDispatch();
 
     
     
@@ -110,8 +111,6 @@ const getRestOne=()=>{
       }
 
 
-
-
     useEffect(()=>{
       fetch(`${backendurl}/restaurant/menu/${Restaurant_ID}`)
       .then(res => res.json())
@@ -120,7 +119,7 @@ const getRestOne=()=>{
         .catch=(error)=>{
           console.log(error)
         }
-console.log(Restaurant_ID+'rrr')
+      console.log(Restaurant_ID+'rrr')
       axios.get(`${backendurl}/restaurant/one/${Restaurant_ID}`)
       .then(response => 
         {let data = (response.data[0])
