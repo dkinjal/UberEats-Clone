@@ -17,8 +17,6 @@ import {updateCustomer, getCustomer} from '../actions/customerAction'
 import { IconButton } from "@mui/material";
 const axios = require('axios');
 
-
-
 const style = {
   position: 'absolute',
   top: '50%',

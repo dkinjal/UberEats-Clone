@@ -48,11 +48,11 @@ export default function Login() {
     const loginUser= async()=>{
         //dispatch(clear());
         const email_val = /^\S+@\S+\.\S+$/
-        if (!email_val.test(email)){
-            console.log('email')
+        // if (!email_val.test(email)){
+        //     console.log('email')
             
-            return
-        }
+        //     return
+        // }
         if (password.length === 0){
             return
         }

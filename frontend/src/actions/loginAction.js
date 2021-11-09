@@ -3,10 +3,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import backendurl from "../url";
 //================LOGIN======================================
 export const login = createAsyncThunk(
-    'users/login', async(input)=>{
-      console.log('inside action')
-      const result = await axios.post(`${backendurl}/user/login`,input)
-      console.log(result.status);
+    'users/login', (input)=>{
+      console.log('inside action'+ input)
+      const result =  axios.post(`${backendurl}/user/login`,input)
+      console.log(result);
       if(result.status===200){
         let data = result.data[0];
         localStorage.setItem('email', data.Cust_Email);

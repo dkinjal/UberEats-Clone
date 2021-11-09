@@ -158,6 +158,7 @@ export default function Orders(){
     <MenuItem value='Delivered'>Delivered</MenuItem>
     <MenuItem value='Pick up Ready'>Pick up Ready</MenuItem>
     <MenuItem value='Picked up'>Picked up</MenuItem>
+    <MenuItem value='Cancel the order'>Cancel the order</MenuItem>
 
   </Select>
               </TableCell>

@@ -5,6 +5,7 @@ var router = express.Router();
 var db = require('../dbConnection.js')
 var connection= db.connection;
 var Order = require('../Models/OrderModels')
+var kafka = require('../kafka/client')
 
 //addOrder
 
@@ -45,67 +46,114 @@ router.get('/:Cust_ID',async function(req, res){
 
 
 
-router.post('/update1/:OrderID',async function(req, res){
+//router.post('/update1/:OrderID',async function(req, res){
+  router.post('/update1',async function(req, res){
   var body= req.body;
   console.log('update delivery status kkkkk'+ body.DeliveryStatus)
-  const sqlput = "UPDATE ORDER_DETAILS SET Delivery_Status=? where Order_ID=?";
-  var values=[body.DeliveryStatus,req.params.OrderID]
-  console.log(values)
-  //Order.findOneAndUpdate()
-
-  connection.query(sqlput, values, async function(error, results){
-    if(error){
-      res.writeHead(200, {
-        'Content-Type':'text/plain'
-      });
-      res.end(error.code)
+  //const sqlput = "UPDATE ORDER_DETAILS SET Delivery_Status=? where Order_ID=?";
+  //var values=[body.DeliveryStatus,req.params.OrderID]
+  //console.log(values)
+  // Order.findOneAndUpdate({"Order_id":req.params.OrderID},{
+  //   "Delivery_Status": body.DeliveryStatus
+  // })
+  // .exec().then(doc=>{
+  //   console.log("Success aaa"+ doc[0])
+  //   res.send("Success");
+  // }).catch(error=>{console.log(error+"iii")})
+  // });
+  kafka.make_request('update_delivery_status',req.body, function(err,results){
+    console.log('in result');
+    console.log(results);
+    if (err){
+        console.log("Inside err");
+        res.json({
+            status:"error",
+            msg:"System Error, Try Again."
+        })
     }else{
-      res.writeHead(200, {
-        'Content-Type':'text/plain'
-      });
-      res.end(JSON.stringify(results))
-    }
-  });
+        console.log("Inside else");
+            res.json({
+                updatedList:results
+            });
+  
+            res.end();
+        }
+      })
+  // connection.query(sqlput, values, async function(error, results){
+  //   if(error){
+  //     res.writeHead(200, {
+  //       'Content-Type':'text/plain'
+  //     });
+  //     res.end(error.code)
+  //   }else{
+  //     res.writeHead(200, {
+  //       'Content-Type':'text/plain'
+  //     });
+  //     res.end(JSON.stringify(results))
+  //   }
+  // });
 });
 
 
 router.post('/',async function(req, res){
-  var lastRow="SELECT ORDER_ID FROM ORDER_DETAILS ORDER BY ORDER_id DESC LIMIT 1"
-  let last =0;
-  connection.query(lastRow, function(error, results){
-    if(error){
-      console.log(error+'aaa')
-    }else{
-      console.log(JSON.stringify(results[0])+'aaa')
-      const row= results[0];
-      last = row.ORDER_ID;
-      console.log(last+"lastttt")
-      var mainbody= req.body;
-      console.log(mainbody.length+'length')
+  // var lastRow="SELECT ORDER_ID FROM ORDER_DETAILS ORDER BY ORDER_id DESC LIMIT 1"
+  // let last =0;
+  // connection.query(lastRow, function(error, results){
+  //   if(error){
+  //     console.log(error+'aaa')
+  //   }else{
+  //     console.log(JSON.stringify(results[0])+'aaa')
+  //     const row= results[0];
+  //     last = row.ORDER_ID;
+  //     console.log(last+"lastttt")
+  //     var mainbody= req.body;
+  //     console.log(mainbody.length+'length')
       
-      var output=[];
-  console.log(last+"last")
-  for(let q=0; q< mainbody.length; q++){
-    var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  const sqlput = "INSERT INTO ORDER_DETAILS (ORDER_ID,Dish_Count, Dish_Name, Delivery_Status, Order_Status, Restaurant_ID, Order_Mode, Cust_ID, Dish_Cost,Order_Time) VALUES(?,?,?,?,?,?,?,?,?,?)";
-  var body= mainbody[q]
-  var values=[last+1, body.DishCount,body.DishName, body.DeliveryStatus, body.OrderStatus, body.RestID, body.OrderMode, body.CustID, body.DishCost, date+time]
-  connection.query(sqlput, values, async function(error, results){
-    if(error){
-      console.log(error+"error ")
-      
-      res.send(error.code)
+  //     var output=[];
+  // console.log(last+"last")
+  // for(let q=0; q< mainbody.length; q++){
+  //   var today = new Date();
+  //   var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  //   var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  // const sqlput = "INSERT INTO ORDER_DETAILS (ORDER_ID,Dish_Count, Dish_Name, Delivery_Status, Order_Status, Restaurant_ID, Order_Mode, Cust_ID, Dish_Cost,Order_Time) VALUES(?,?,?,?,?,?,?,?,?,?)";
+  // var body= mainbody[q]
+  // var values=[last+1, body.DishCount,body.DishName, body.DeliveryStatus, body.OrderStatus, body.RestID, body.OrderMode, body.CustID, body.DishCost, date+time]
+  kafka.make_request('add_order',req.body, function(err,results){
+    console.log('in result');
+    console.log(results);
+    if (err){
+        console.log("Inside err");
+        res.json({
+            status:"error",
+            msg:"System Error, Try Again."
+        })
     }else{
-      console.log('success')
-      output.push(results)
-      console.log(output)
-    }
+        console.log("Inside else");
+            res.json({
+                updatedList:results
+            });
+  
+            res.end();
+        }
+    
   });
-} res.send(output)
-}
-});
+
+
+
+//   connection.query(sqlput, values, async function(error, results){
+//     if(error){
+//       console.log(error+"error ")
+      
+//       res.send(error.code)
+//     }else{
+//       console.log('success')
+//       output.push(results)
+//       console.log(output)
+//     }
+//   });
+// } res.send(output)
+// }
+// });
 })
 
 router.get('/receipt/:orderID', function(req, res){
