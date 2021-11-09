@@ -12,7 +12,6 @@ import uberEatsLogo from '../Uber-Eats-Logo.png';
 import { useSelector, useDispatch } from "react-redux";
 import { restLogin, restClear } from "../../actions/restLoginAction";
 import axios from "axios";
-import backendurl from "../../url";
 
 const useStyles= makeStyles({
     button1: {

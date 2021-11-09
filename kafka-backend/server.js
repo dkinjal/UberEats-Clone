@@ -2,11 +2,33 @@ var connection =  new require('./kafka/Connection');
 //topics files
 //var signin = require('./services/signin.js');
 //var Books = require('./services/books.js');
-var Users = require('./services/createUser.js');
+var createUser = require('./services/createUser.js');
+var getUser = require('./services/customerLogin');
+var getDish = require('./services/getDish');
+var addDish = require('./services/addDish');
+var getFav = require('./services/getFav');
+var addFav = require('./services/addFav');
 
+const { mongoDB } = require('../backend/config');
+const mongoose = require('mongoose');
+var options = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  // poolSize: 500,
+  // bufferMaxEntries: 0
+};
+mongoose.connect(mongoDB, options, (err, res) => {
+    if (err) {
+        console.log(err);
+        console.log(`MongoDB Connection Failed`);
+    } else {
+        console.log(`MongoDB Connected`);
+    }
+  });
 function handleTopicRequest(topic_name,fname){
     //var topic_name = 'root_topic';
     var consumer = connection.getConsumer(topic_name);
+    console.log(topic_name+'11');
     var producer = connection.getProducer();
     console.log('server is running ');
     consumer.on('message', function (message) {
@@ -37,5 +59,12 @@ function handleTopicRequest(topic_name,fname){
 //first argument is topic name
 //second argument is a function that will handle this topic request
 //handleTopicRequest("post_book",Books)
-handleTopicRequest("post_user",Users)
+handleTopicRequest("post_user",createUser);
+handleTopicRequest("get_user",getUser);
+handleTopicRequest("get_dish", getDish);
+handleTopicRequest("add_dish", addDish);
+handleTopicRequest("get_fav", getFav);
+handleTopicRequest("add_fav", addFav);
+
+
 

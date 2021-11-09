@@ -32,6 +32,21 @@ export const updateCustomer = createAsyncThunk(
       }
  })
 
+ export const addCustomer = createAsyncThunk(
+  'customers/add', async(input)=>{
+    console.log('inside action'+input.Cust_ID);
+    const result = await axios.post(`${backendurl}/customer`,input)
+    console.log(result.status);
+    if(result.status===200){
+      let data = result.data[0];
+      console.log('success login action'+ data)
+      return {auth:true, data};
+    }else{
+      console.log('fail')
+      return {auth: false, message: "Couldn't update"}
+    }
+})
+
 
 
 

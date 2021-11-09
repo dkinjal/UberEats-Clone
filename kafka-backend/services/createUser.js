@@ -1,16 +1,11 @@
 
 var bcrypt = require('bcrypt');
 const saltRounds=10;
-//const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const Customer= require('../../backend/Models/CustomerModels');
-//const Restaurant = require('../../backend/Models/RestaurantModels');
-//const {secret} = require('');
-//const {auth} = require('../Utils/passport');
-//auth();
+const Customer= require('../Models/CustomerModels');
 
 function handle_request(msg, callback){
-    console.log("In handle request:"+ JSON.stringify(msg));
+    console.log("In handle request of post user:"+ JSON.stringify(msg));
     const name = msg.name;
     const password = msg.password;
     const email = msg.email;
@@ -22,9 +17,9 @@ function handle_request(msg, callback){
             Cust_Name: name
     })
     customer.save().then(result=>{
-        console.log(result)
+        console.log(result + "save result")
     }).catch(error=>{
-        console.log(error)
+        console.log(error+" save fail")
     });
     let res ={
         message: "Success",
