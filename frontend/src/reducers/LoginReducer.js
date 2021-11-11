@@ -14,16 +14,16 @@ export const LoginReducer = createSlice({
    
     extraReducers:{
         [login.fulfilled] : (state,action) => {
-            console.log(action.payload+ 'login reducer')
+            console.log(JSON.stringify(action) + 'login reducer 17')
             if (action.payload.auth){
                 state.error = null
                 state.pass = true
-                state.email = action.payload.email;
-                state.password= action.payload.password;
-                state.custID = action.payload.custID
+                // state.email = action.payload.email;
+                // state.password= action.payload.password;
+                // state.custID = action.payload.custID
             }
             else {
-                console.log("here")
+                console.log("here login reducer 26")
                 state.error = "Invalid Credentials"
             }
             //return state;

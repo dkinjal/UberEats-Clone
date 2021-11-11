@@ -85,11 +85,12 @@ export default function RestaurantProfile(){
     
     
 
-const getRestOne=()=>{
+  const getRestOne = () => {
+  console.log("inside restone")
   axios.get(`${backendurl}/restaurant/one/${Restaurant_ID}`)
       .then(response => 
-        {let data = (response.data[0])
-          console.log(response.data[0])
+        {let data = (response.data.product)
+          console.log(JSON.stringify(response.data.product)+"getrestone")
           setRestDetails(response.data[0])
           setRestName(data.Restaurant_Name)
           setRestDescription(data.Restaurant_Description)
@@ -111,37 +112,41 @@ const getRestOne=()=>{
       }
 
 
-    useEffect(()=>{
-      fetch(`${backendurl}/restaurant/menu/${Restaurant_ID}`)
+     useEffect(()=>{
+       fetch(`${backendurl}/restaurant/menu/${Restaurant_ID}`)
       .then(res => res.json())
-      .then(data =>{
-        setDishDetails(data)})
+        .then(data => {
+        console.log(data.product)
+          setDishDetails(JSON.parse(data.product))
+        console.log(DishDetails+"dish details")})
         .catch=(error)=>{
           console.log(error)
         }
-      console.log(Restaurant_ID+'rrr')
-      axios.get(`${backendurl}/restaurant/one/${Restaurant_ID}`)
-      .then(response => 
-        {let data = (response.data[0])
-          console.log(response.data[0])
-          setRestDetails(response.data[0])
-          setRestName(data.Restaurant_Name)
-          setRestDescription(data.Restaurant_Description)
-          setRestDayFrom(data.Restaurant_Day_From)
-          setRestDayTo(data.Restaurant_Day_To)
-          setRestCuisine(data.Restaurant_Cuisine)
-          setRestID(data.Restaurant_ID)
-          setRestType(data.Restaurant_Type)
-          setRestLocation(data.Restaurant_Location)
-          setRestDeliveryMode(data.Restaurant_Delivery_Mode)
-          setRestTimingFrom(data.Restaurant_Time_From)
-          setRestTimingTo(data.Restaurant_Time_To)
-          setRestContact(data.Restaurant_Contact)
-          setRestEmail(data.Restaurant_Email)
-          setRestProfile(data.Restaurant_Profile_Location)
-        }).catch=(error)=>{
-          console.log(error)
-        }  
+      console.log(Restaurant_ID+'rrr'+ DishDetails)
+      
+      getRestOne();
+      // axios.get(`${backendurl}/restaurant/one/${Restaurant_ID}`)
+      // .then(response => 
+      //   {let data = (response.data[0])
+      //     console.log(response.data[0])
+      //     setRestDetails(response.data[0])
+      //     setRestName(data.Restaurant_Name)
+      //     setRestDescription(data.Restaurant_Description)
+      //     setRestDayFrom(data.Restaurant_Day_From)
+      //     setRestDayTo(data.Restaurant_Day_To)
+      //     setRestCuisine(data.Restaurant_Cuisine)
+      //     setRestID(data.Restaurant_ID)
+      //     setRestType(data.Restaurant_Type)
+      //     setRestLocation(data.Restaurant_Location)
+      //     setRestDeliveryMode(data.Restaurant_Delivery_Mode)
+      //     setRestTimingFrom(data.Restaurant_Time_From)
+      //     setRestTimingTo(data.Restaurant_Time_To)
+      //     setRestContact(data.Restaurant_Contact)
+      //     setRestEmail(data.Restaurant_Email)
+      //     setRestProfile(data.Restaurant_Profile_Location)
+      //   }).catch=(error)=>{
+      //     console.log(error)
+      //   }  
       },[Restaurant_ID, RestDetails])
 
     function onChangeDetails(event){
@@ -176,7 +181,8 @@ const getRestOne=()=>{
               //history.push('/restaurantProfile')
               //history.goBack();
           })
-    }
+  }
+  console.log(DishDetails+"khullllaaa")
     return(
         <div>
           <Navbar className={Classes.navbar} position='absolute' style={{ position: 'fixed', top: 0 , left : 0,  margin: 0}}/>
@@ -295,8 +301,17 @@ const getRestOne=()=>{
             </Box>
             </div>
             <Grid container spacing={3} >
-            {DishDetails.map(details=>(
+            {/* {DishDetails.map(details=>(
              
+                <Grid item md={4} sm={6} key={details.Dish_ID}>
+                    <DishCard2 DishDetails={details}/>
+                </Grid>
+               
+            ))}
+             */}
+              
+              {DishDetails && DishDetails.map(details => (
+                
                 <Grid item md={4} sm={6} key={details.Dish_ID}>
                     <DishCard2 DishDetails={details}/>
                 </Grid>

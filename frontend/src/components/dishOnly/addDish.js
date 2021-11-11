@@ -44,7 +44,7 @@ export default function AddDish() {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const RestID = new URLSearchParams(search).get('Rest_ID');
-    console.log(RestID)
+    
 
 
     function addDish(){

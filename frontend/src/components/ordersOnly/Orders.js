@@ -59,24 +59,22 @@ export default function Orders(){
     const handleClose = () => setOpen(false);
     const handleChange = (event) => {
        setDeliveryStatus(event.target.value);
-     };
-     const search = useLocation().search;
-
-     const DeliveryStatusParam = new URLSearchParams(search).get('Delivery');
+    };
+    const search = useLocation().search;
+    const DeliveryStatusParam = new URLSearchParams(search).get('Delivery');
      
-      useEffect(()=>{
-        console.log({RestID})
-        fetch(`${backendurl}/order/rest/${RestID}`)
-        .then(res => res.json())
-        .then(data =>{
-          console.log(data)
-          setOrderDetails(data)
-          setDeliveryStatus(data.Delivery_Status)
-          
-        }).catch=(Error)=>{
-          console.log(Error)
-        }
-        },[ DeliveryStatus,RestID, DeliveryStatusParam])
+    useEffect(()=>{
+      console.log({RestID})
+    fetch(`${backendurl}/order/rest/${RestID}`)
+    .then(res => res.json())
+    .then(data =>{
+      console.log(data)
+      setOrderDetails(data)
+      setDeliveryStatus(data.Delivery_Status)  
+      }).catch=(Error)=>{
+        console.log(Error)
+      }
+      },[ DeliveryStatus,RestID, DeliveryStatusParam])
 
       function handleDeliveryChange(e, orderID){
         console.log('inside delivery change'+ e.target.value+ orderID)

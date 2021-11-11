@@ -83,7 +83,7 @@ router.post('/:Dish_ID',async function(req, res){
             res.json({
                 updatedList:results
             });
-  
+  console.log(res)
             res.end();
         }
     

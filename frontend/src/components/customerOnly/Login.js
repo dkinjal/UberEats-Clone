@@ -60,6 +60,7 @@ export default function Login() {
             email: email,
             password: password
         }
+        console.log(data)
         dispatch(login(data));
         axios.defaults.withCredentials = true;
         }

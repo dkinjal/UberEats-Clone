@@ -3,16 +3,15 @@ var mysql = require('mysql');
 const express = require("express");
 var router = express.Router();
 var db = require('../dbConnection.js')
-var connection= db.connection;
 const Restaurant = require('../Models/RestaurantModels')
 const Menu = require('../Models/MenuModels')
 const Order = require('../Models/OrderModels')
 const { checkAuth } = require("../utils/passport");
 
 
-router.get('/one/:Restaurant_ID',checkAuth,async function(req, res){
-  console.log(req.params.Restaurant_ID)
-    Customer.find({"Restaurant_ID": req.params.Restaurant_ID})
+router.get('/one/:Restaurant_ID',async function(req, res){
+  console.log(req.params.Restaurant_ID+ "inside one rest")
+    Restaurant.find({"Restaurant_ID": req.params.Restaurant_ID})
     .exec().then(doc=>{
       //console.log(doc[0]);
           //req.session.user= res;
@@ -65,7 +64,7 @@ router.get('/one/:Restaurant_ID',checkAuth,async function(req, res){
       message: "Success",
       product: restaurant
     })
-    });  
+    }); 
 
 //updateRestaurantDetails
   router.post('/:RestID',async function(req, res){
@@ -106,11 +105,11 @@ router.get('/one/:Restaurant_ID',checkAuth,async function(req, res){
   router.get('/menu/:Restaurant_ID',async function(req, res){
     console.log('inside menu api')
     Menu.find({"Restaurant_ID": req.params.Restaurant_ID}).exec().then(doc=>{
-      //console.log(doc[0]);
+      console.log(doc);
           //req.session.user= res;
           res.status(200).json({
             message: "Success",
-            product: doc[0]
+            product: JSON.stringify(doc)
           })
       }).catch (error=>{
         console.log(error);

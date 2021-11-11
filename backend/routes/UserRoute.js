@@ -64,27 +64,48 @@ router.post('/login',async function(req, res){
   const email = req.body.email;
   const password = req.body.password;
   Customer.find({"Cust_Email": email}).exec().then(doc=>{
-    console.log(doc[0]);
+    console.log(doc +"userroute 67");
     bcrypt.compare(password, doc[0].Cust_Password,(err,response)=>{
       if(response){
-        console.log('success'+ response)
-        const payload = { id: doc[0].Cust_ID, email: doc[0].Cust_Email};
-            const token = jwt.sign(payload, secret, {
-                expiresIn: 1008000
-            });
-        res.status(200).send(doc[0]).end("JWT " + token);
-        //res.send(doc[0]);
-      }else{
-        console.log(err +"kkk")
-        res.status(204).send("Invalid creds")
-      }
+        // console.log('success userroute 70'+ response)
+        // const payload = { id: doc.Cust_ID, email: doc.Cust_Email};
+        // const token = jwt.sign(payload, secret, {
+        //   expiresIn: 1008000
+        // });
+
+
+        //console.log('success')
+        //res.cookie('cookie',email,{maxAge: 900000, httpOnly: false, path : '/'});
+        //req.session.user= results
+        console.log(doc)
+        res.send(doc[0])
+
+
+
+
+        // let output =doc;
+        // output.token =  token;
+        // console.log(output+"after jwt");
+        // res.writeHead(200, {
+        //   "Content-Type": "application/json",
+        // });
+        //res.status(200).end("JWT " + token);
+        //res.end(JSON.stringify(doc));
+        }else{
+          console.log(err +"userroute 78")
+          res.status(204).send("Invalid creds")
+        }
     });
   
 
 });
 });
 
-
+// let op = {
+        //   "JWT": token,
+        //   "output":doc[0]
+        // }
+        // console.log(op+"op 79")
 ////////////////////////Restaurant----------------------------------------------
 
 router.post('/restsignup',async function(req, res){
