@@ -17,6 +17,9 @@ import ListItemText from '@mui/material/ListItemText';
 import { useSelector, useDispatch } from "react-redux";
 import Divider from '@mui/material/Divider';
 import backendurl from '../../url';
+import TableCell from '@mui/material/TableCell';
+import { Table, TableBody, TableContainer, TableRow } from '@mui/material'
+import { TableFooter, TablePagination } from '@material-ui/core';
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -34,99 +37,103 @@ const style = {
   p: 4,
 };
 
-export default function MyOrders(){
+export default function MyOrders() {
     const [OrderDetails, setOrderDetails] = useState([])
     const [ReceiptDetails, setReceiptDetails] = useState([])
-const[Total, setTotal]= useState([])
+    const[Total, setTotal]= useState([])
     const Cust_ID = useSelector(state => state.login.custID)
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-     useEffect(()=>{
-         console.log("insideeee")
-        fetch(`${backendurl}/order/${Cust_ID}`)
-        .then(res => res.json())
-        .then(data =>{
-          console.log(data)
-          setOrderDetails(data)
-          
-        }).catch=(Error)=>{
-          console.log(Error)
-        }
-        },[Cust_ID])
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+    // Avoid a layout jump when reaching the last page with empty rows.
+    const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - OrderDetails.length) : 0;
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+    useEffect(() => {
+        console.log("insideeee")
+        fetch(`${backendurl}/order/${Cust_ID}`).then(res => res.json()).then(data =>{
+        console.log(data)
+        setOrderDetails(data)
+    }).catch=(Error)=>{
+      console.log(Error)
+    }
+    },[Cust_ID])
         
-        const openReceipt=(orderID)=>{
-          fetch(`${backendurl}/order/receipt/${orderID}`)
-        .then(res => res.json())
-        .then(data =>{
-          let tempTotal = 0;
-          console.log(data)
-          setReceiptDetails(data)
-          
-          data.map((details)=>(
-          tempTotal += details.Dish_Cost * details.Dish_Count
-          ))
-          setTotal(tempTotal)
-          console.log(Total)
-          handleOpen()
-        }).catch=(Error)=>{
-          console.log(Error)
-        }
-        }
+    const openReceipt=(orderID)=>{
+        fetch(`${backendurl}/order/receipt/${orderID}`)
+    .then(res => res.json())
+    .then(data =>{
+        let tempTotal = 0;
+    console.log(data)
+    setReceiptDetails(data)
+    
+    data.map((details)=>(
+    tempTotal += details.Dish_Cost * details.Dish_Count
+        ))
+        setTotal(tempTotal)
+        console.log(Total)
+        handleOpen()
+    }).catch=(Error)=>{
+        console.log(Error)
+    }
+    }
 
-        return (
-            <div>
-                <Navbar/>
-                <Container>
-                <List>
-                <ListSubheader><h2>Past Orders</h2></ListSubheader>
-                {OrderDetails.map(details=>(
-                <ListItemButton onClick={()=>openReceipt(details.Order_ID)}>
-                <ListItem item md={3} key={details.Order_ID}>
-                    <ListItemText><b>{details.Restaurant_Name}</b></ListItemText>
-                    <ListItemText>{details.Quantity} items</ListItemText>
-                    <ListItemText>{details.Order_Time}</ListItemText>
-                    <ListItemText>{details.Delivery_Status}</ListItemText>
-                    <ListItemText>View receipt</ListItemText>
-                  </ListItem>
-                  </ListItemButton>
-            ))}
-                </List>
-                <Modal
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="modal-modal-title"
-                  aria-describedby="modal-modal-description"
-                >
-                  <Box sx={style}>
-                  <List>
-                <ListSubheader><h2>Receipt</h2></ListSubheader>
-                <ListItem >
-                    <ListItemText><b>Dish</b></ListItemText>
-                    <ListItemText><b>Quantity</b></ListItemText>
-                    <ListItemText><b>Cost</b></ListItemText>
-                    <ListItemText><b>Total Price</b></ListItemText>
-                  </ListItem>
-                {ReceiptDetails.map((details)=>(
-                <ListItem item md={3} key={details.Order_ID}>
-                    <ListItemText><b>{details.Dish_Name}</b></ListItemText>
-                    <ListItemText>{details.Dish_Count} x</ListItemText>
-                    <ListItemText>{details.Dish_Cost} $</ListItemText>
-                    <ListItemText>{details.Dish_Cost* details.Dish_Count}$</ListItemText>
-                  </ListItem>
-                  
-                ))}
-             <Divider />
-             <ListItem>
-             <ListItemText><b>Bill Amount: {1.079*Total}</b></ListItemText>
-             </ListItem>
+    return (
+        <div>
+            <Navbar/>
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableBody>
+                        {/* {OrderDetails.map(details => ( */}
+                        {(rowsPerPage > 0 ? OrderDetails.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage): OrderDetails).map((details) => (
+                        <TableRow key={details.orderID}>
+                            <TableCell>{ details.Order_ID}</TableCell>
+                            <TableCell>{details.Restaurant_Name }</TableCell>
+                            <TableCell>{details.Quantity}</TableCell>
+                            <TableCell>{details.Order_Time}</TableCell>
+                            <TableCell>{details.Delivery_Status}</TableCell>
+                            <TableCell>View receipt</TableCell>
 
-                </List>
-                  </Box>
-                </Modal>
-                </Container>
-            </div>
-          );
+                        </TableRow>
+                    ))}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination
+                            rowsPerPageOptions={[2, 5, 10, { label: 'All', value: -1 }]}
+                            colSpan={3}
+                            count={OrderDetails.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            SelectProps={{
+                                inputProps: {
+                                'aria-label': 'rows per page',
+                                },
+                                native: true,
+                                }}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            // ActionsComponent={TablePaginationActions}
+                            >
+
+                            </TablePagination>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </TableContainer>
+        </div>
+        );
 
 
 

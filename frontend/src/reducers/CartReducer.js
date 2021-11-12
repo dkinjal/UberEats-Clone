@@ -1,6 +1,6 @@
 import { switchUnstyledClasses } from '@mui/core';
 import { createSlice } from '@reduxjs/toolkit';
-import { addToCart, clearAdd, clearCart } from '../actions/cartAction';
+import { addToCart, clearAdd, clearCart, addItemCount , subItemCount } from '../actions/cartAction';
 import Cart from '../components/cartOnly/Cart';
 
 //===============CART REDUCER===================================
@@ -60,10 +60,50 @@ export const CartReducer = createSlice({
                     
                     state.subTotal= (state.subTotal+ (state.Cart[i].DishCost* state.Cart[i].count))
                 }
-                
-                
             //return state;
-        },  
+        },
+        [addItemCount.fulfilled]: (state, action) => {
+            let index=null;
+            for (let i = 0; i < state.Cart.length; i++){
+                if(action.payload.DishID===state.Cart[i].DishID){
+                    index=i;
+                }
+            }
+            console.log(index)
+            if (index != null) {
+                if (action.payload.auth) {
+                    console.log(state.Cart[index])
+                    state.Cart[index].count++;
+                }
+            }else {
+                console.log("here")
+                state.error = "Issues"
+            }
+            for(let i=0; i< state.Cart.length; i++){
+                state.subTotal= (state.subTotal+ (state.Cart[i].DishCost* state.Cart[i].count))
+            }
+
+        },
+        [subItemCount.fulfilled]: (state, action) => {
+            let index=null;
+            for (let i = 0; i < state.Cart.length; i++){
+                if(action.payload.DishID===state.Cart[i].DishID){
+                    index=i;
+                }
+            }
+            if (index != null) {
+                if (action.payload.auth) {
+                    state.Cart[index].count--;
+                }
+            }else {
+                console.log("here")
+                state.error = "Issues"
+            }
+            for(let i=0; i< state.Cart.length; i++){
+                state.subTotal= (state.subTotal+ (state.Cart[i].DishCost* state.Cart[i].count))
+            }
+
+        },
         [clearAdd.fulfilled] : (state,action) => {
             let index=null;
             state.error = ''

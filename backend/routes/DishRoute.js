@@ -43,9 +43,10 @@ router.get('/rest/:RestID', function(req, res){
   console.log(req.params.RestID, "nnooon")
   Menu.find({"Restaurant_ID": req.params.RestID}).exec().then(doc=>{
     //req.session.user= res;
+    console.log(doc)
     res.status(200).json({
       message: "Success",
-      product: doc[0]
+      product: JSON.stringify(doc)
     })
 }).catch (error=>{
   console.log(error);

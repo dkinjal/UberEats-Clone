@@ -64,13 +64,13 @@ export default function Orders(){
     const DeliveryStatusParam = new URLSearchParams(search).get('Delivery');
      
     useEffect(()=>{
-      console.log({RestID})
+      console.log(RestID)
     fetch(`${backendurl}/order/rest/${RestID}`)
     .then(res => res.json())
     .then(data =>{
       console.log(data)
-      setOrderDetails(data)
-      setDeliveryStatus(data.Delivery_Status)  
+      setOrderDetails(JSON.parse(data.product))
+      setDeliveryStatus(data.product.Delivery_Status)  
       }).catch=(Error)=>{
         console.log(Error)
       }

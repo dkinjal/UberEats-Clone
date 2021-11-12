@@ -115,7 +115,7 @@ const confirmOrder=()=>{
 
 <br/>
 <br/>
-<div>Delivery Type:{DeliveryType} </div>
+<div>Delivery Type : {DeliveryType} </div>
 <br/>
 
 <Button  variant="contained" color="success" onClick={confirmOrder}>

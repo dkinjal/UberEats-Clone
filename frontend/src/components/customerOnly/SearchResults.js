@@ -22,7 +22,7 @@ export default function SearchResults() {
         fetch(`${backendurl}/search/${searchvalue}`)
         .then(res => res.json())
         // .then(  data=>
-            .then(data =>{setRestaurantDetails(data)})
+            .then(data =>{setRestaurantDetails(JSON.parse(data.product))})
     },[deliveryType, searchvalue])
     return (
         <div>

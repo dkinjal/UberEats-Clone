@@ -9,18 +9,28 @@ var kafka = require('../kafka/client')
 
 //addOrder
 
-router.get('/rest/:RestID', function(req, res){
+router.get('/rest/:RestID', function (req, res) {
+  Order.find({"Restaurant_ID": req.params.RestID}).exec().then(doc=>{
+    //req.session.user= res;
+    console.log(doc)
+    res.status(200).json({
+      message: "Success",
+      product: JSON.stringify(doc)
+    })
+}).catch (error=>{
+  console.log(error);
+}) 
   // Order.find({""})
-   connection.query("SELECT * , CUST_NAME, SUM(ORDER_DETAILS.Dish_Count) AS DishCount, SUM(ORDER_DETAILS.Dish_Cost) AS DishCost2 FROM ORDER_DETAILS, CUSTOMER_DETAILS WHERE Restaurant_ID='"+req.params.RestID+"' AND ORDER_DETAILS.Cust_ID= CUSTOMER_DETAILS.Cust_ID GROUP BY  ORDER_DETAILS.Order_ID ", async function(error, results){
-    console.log(error, results,'aaaa')
-    if(error){
-      res.end(error.code)
-    }else{
-      console.log(results)
-      res.end(JSON.stringify(results))
-    }
+  //  connection.query("SELECT * , CUST_NAME, SUM(ORDER_DETAILS.Dish_Count) AS DishCount, SUM(ORDER_DETAILS.Dish_Cost) AS DishCost2 FROM ORDER_DETAILS, CUSTOMER_DETAILS WHERE Restaurant_ID='"+req.params.RestID+"' AND ORDER_DETAILS.Cust_ID= CUSTOMER_DETAILS.Cust_ID GROUP BY  ORDER_DETAILS.Order_ID ", async function(error, results){
+  //   console.log(error, results,'aaaa')
+  //   if(error){
+  //     res.end(error.code)
+  //   }else{
+  //     console.log(results)
+  //     res.end(JSON.stringify(results))
+  //   }
   });
-});
+
 
 
 router.get('/:Cust_ID',async function(req, res){
@@ -94,7 +104,28 @@ router.get('/:Cust_ID',async function(req, res){
   // });
 });
 
-
+router.post('/special',async function(req, res){
+  var body = req.body;
+  kafka.make_request('update_special_instructions', req.body, function (err, results) {
+    console.log('in result');
+    console.log(results);
+    if (err) {
+      console.log("Inside err");
+      res.json({
+        status: "error",
+        msg: "System Error, Try Again."
+      })
+    } else {
+      console.log("Inside else");
+      res.json({
+        updatedList: results
+    });
+  
+    res.end();
+    }
+  })
+})
+  
 router.post('/',async function(req, res){
   // var lastRow="SELECT ORDER_ID FROM ORDER_DETAILS ORDER BY ORDER_id DESC LIMIT 1"
   // let last =0;

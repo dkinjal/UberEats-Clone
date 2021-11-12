@@ -14,7 +14,10 @@ import backendurl from "../../url";
     useEffect(()=>{
         fetch(`${backendurl}/dish/rest/${RestID}`)
         .then(res => res.json())
-        .then(data =>{setDishDetails(data)})
+          .then(data => {
+            console.log(data.product)
+            setDishDetails(JSON.parse(data.product))
+          })
     },[RestID])
 
     return(
