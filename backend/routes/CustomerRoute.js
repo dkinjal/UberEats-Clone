@@ -9,13 +9,13 @@ const Customer= require('../Models/CustomerModels');
 //getCustomerDetails 
 router.get('/:customer_ID',async function(req, res){
   console.log("id"+req.params.customer_ID)
-    Customer.find({"Cust_ID": req.params.customer_ID}).exec().then(doc=>{
+    Customer.findOne({"Cust_ID": req.params.customer_ID}).exec().then(doc=>{
           //req.session.user= res;
           //console.log(doc[0].Cust_Name);
           console.log(doc);
           res.status(200).json({
             message: "Success",
-            product: doc[0]
+            product: JSON.stringify(doc)
           })
       }).catch (error=>{
         console.log(error);

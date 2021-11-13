@@ -9,7 +9,8 @@ export const LoginReducer = createSlice({
         password: '',
         error: '',
         pass: '',
-        custID:''
+        custID:'',
+        token: ''
     },
    
     extraReducers:{
@@ -18,9 +19,11 @@ export const LoginReducer = createSlice({
             if (action.payload.auth){
                 state.error = null
                 state.pass = true
-                // state.email = action.payload.email;
-                // state.password= action.payload.password;
-                // state.custID = action.payload.custID
+                console.log(action.payload)
+                state.token= action.payload.token
+                state.email = action.payload.email;
+                state.password= action.payload.password;
+                state.custID = action.payload.Cust_ID
             }
             else {
                 console.log("here login reducer 26")

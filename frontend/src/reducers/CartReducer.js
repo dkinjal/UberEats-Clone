@@ -1,6 +1,6 @@
 import { switchUnstyledClasses } from '@mui/core';
 import { createSlice } from '@reduxjs/toolkit';
-import { addToCart, clearAdd, clearCart, addItemCount , subItemCount } from '../actions/cartAction';
+import { addToCart, clearAdd, clearCart, addItemCount , subItemCount, removeItem } from '../actions/cartAction';
 import Cart from '../components/cartOnly/Cart';
 
 //===============CART REDUCER===================================
@@ -80,7 +80,9 @@ export const CartReducer = createSlice({
                 state.error = "Issues"
             }
             for(let i=0; i< state.Cart.length; i++){
-                state.subTotal= (state.subTotal+ (state.Cart[i].DishCost* state.Cart[i].count))
+                
+                state.subTotal = (state.subTotal + (state.Cart[i].DishCost * state.Cart[i].count))
+                // state.totalCount= state.Cart[i].count+ state.totalCount
             }
 
         },
@@ -101,6 +103,31 @@ export const CartReducer = createSlice({
             }
             for(let i=0; i< state.Cart.length; i++){
                 state.subTotal= (state.subTotal+ (state.Cart[i].DishCost* state.Cart[i].count))
+            }
+
+        },
+        [removeItem.fulfilled]: (state, action) => {
+            let index=null;
+            for (let i = 0; i < state.Cart.length; i++){
+                if(action.payload.DishID===state.Cart[i].DishID){
+                    index=i;
+                }
+            }
+            console.log(index)
+            if (index != null) {
+                console.log("here here")
+                if (action.payload.auth) {
+                    // state.Cart.totalCount = state.Cart.totalCount - state.Cart[index].count
+                    state.Cart.splice(index, 1);
+                }console.log("here")
+            }else {
+                console.log("here")
+                state.error = "Issues"
+            }
+            for (let i = 0; i < state.Cart.length; i++){
+                console.log(state.Cart[i])
+                // state.Cart.subTotal = (state.Cart.subTotal + (state.Cart[i].DishCost * state.Cart[i].count))
+                // state.Cart.totalCount= (state.Cart.totalCount-action.payload.count)
             }
 
         },

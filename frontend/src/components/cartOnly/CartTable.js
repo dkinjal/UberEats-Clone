@@ -8,7 +8,7 @@ import Paper from '@mui/material/Paper';
 import React, {useEffect, useState} from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@material-ui/core";
-import {addToCart, clearCart, clearAdd, addItemCount, subItemCount} from "../../actions/cartAction";
+import {addToCart, clearCart, clearAdd, addItemCount, subItemCount, removeItem} from "../../actions/cartAction";
 
 export default function CartTable() {
 
@@ -40,6 +40,15 @@ export default function CartTable() {
     }
       console.log('inside sub')
       dispatch(subItemCount(data))
+  }
+  const removeItems = async (DishID) => {
+    
+    let data = {
+      DishID: DishID,
+      count : x.count
+    }
+      console.log('inside rem')
+      dispatch(removeItem(data))
   }
 return (
 <TableContainer >
@@ -90,7 +99,7 @@ return (
               size="small"
               disableElevation
               variant="contained"
-              //onClick={() => subtractItemCount(x.DishID)}
+              onClick={() => removeItems(x.DishID)}
             >Remove</Button>
             </TableCell>
         </TableRow>

@@ -11,7 +11,6 @@ const Restaurant = require('../Models/RestaurantModels');
 const mongoose = require('mongoose');
 const {secret} = require('../config');
 const {auth} = require('../Utils/passport');
-auth();
 
 //New user Register
 router.post('/signup',async function(req, res){
@@ -61,44 +60,73 @@ kafka.make_request('post_user',req.body, function(err,results){
   
 //User Login
 router.post('/login',async function(req, res){
-  const email = req.body.email;
-  const password = req.body.password;
-  Customer.find({"Cust_Email": email}).exec().then(doc=>{
-    console.log(doc +"userroute 67");
-    bcrypt.compare(password, doc[0].Cust_Password,(err,response)=>{
-      if(response){
-        // console.log('success userroute 70'+ response)
-        // const payload = { id: doc.Cust_ID, email: doc.Cust_Email};
-        // const token = jwt.sign(payload, secret, {
-        //   expiresIn: 1008000
-        // });
+  
+  kafka.make_request('cust_login',req.body, function(err,results){
+  console.log('in result');
+  console.log(results);
+  if (err){
+      console.log("Inside err");
+      res.json({
+          status:"error",
+          msg:"System Error, Try Again."
+      })
+  }else{
+    console.log("Inside success");    
+    const payload = { _id: results.Cust_ID, email: results.Cust_Email};
+    const token = jwt.sign(payload, secret, {
+      expiresIn: 1008000
+    });
+    results.token = "JWT " + token;
+      res.writeHead(200, {
+        "Content-Type": "application/json",
+      });
+      res.end(JSON.stringify(results));
+    // res.json({
+    //           updatedList:results
+    //       });
+
+          res.end();
+      }
+  
+});
+  // Customer.find({"Cust_Email": email}).exec().then(doc=>{
+  //   console.log(doc +"userroute 67");
+  //   bcrypt.compare(password, doc[0].Cust_Password,(err,response)=>{
+  //     if(response){
+  //       console.log('success userroute 70'+ response)
+  //       const payload = { _id: doc.Cust_ID, email: doc.Cust_Email};
+  //       const token = jwt.sign(payload, secret, {
+  //         expiresIn: 1008000
+  //       });
 
 
         //console.log('success')
         //res.cookie('cookie',email,{maxAge: 900000, httpOnly: false, path : '/'});
         //req.session.user= results
-        console.log(doc)
-        res.send(doc[0])
+        // console.log(doc)
+        // res.send(doc[0])
 
 
 
 
-        // let output =doc;
-        // output.token =  token;
-        // console.log(output+"after jwt");
-        // res.writeHead(200, {
-        //   "Content-Type": "application/json",
-        // });
-        //res.status(200).end("JWT " + token);
-        //res.end(JSON.stringify(doc));
-        }else{
-          console.log(err +"userroute 78")
-          res.status(204).send("Invalid creds")
-        }
-    });
+//         let output = doc[0];
+//         console.log(doc[0])
+//         doc[0].token = "JWT " + token;
+//         console.log(output+"after1 jwt");
+//         res.writeHead(200, {
+//           "Content-Type": "application/json",
+//         });
+//         //res.status(200).end("JWT " + token);
+//         res.end(JSON.stringify(output));
+//         }else{
+//           console.log(err +"userroute 78")
+//           res.status(204).send("Invalid creds")
+//         }
+//     });
+  
   
 
-});
+// });
 });
 
 // let op = {
@@ -136,26 +164,48 @@ router.post('/restsignup',async function(req, res){
   })
   });
 
-  router.post('/restlogin',async function(req, res){
-    const email = req.body.email;
-    const password = req.body.password;
-    console.log(email, password)
-    Restaurant.find({"Restaurant_Email": email}).exec().then(doc=>{
-      console.log(doc[0]);
-      bcrypt.compare(password, doc[0].Restaurant_Password,(err,response)=>{
-        if(response){
-          console.log('success'+ response)
-          //req.session.user= res;
-          res.send(doc[0]);
-        }else{
-          console.log(err +"kkk")
-          res.status(204).send("Invalid creds")
-        }
+router.post('/restlogin', async function (req, res) {
+  const email = req.body.email;
+  const password = req.body.password;
+  console.log(email, password)
+  // Restaurant.find({"Restaurant_Email": email}).exec().then(doc=>{
+  //   console.log(doc[0]);
+  //   bcrypt.compare(password, doc[0].Restaurant_Password,(err,response)=>{
+  //     if(response){
+  //       console.log('success'+ response)
+  //       //req.session.user= res;
+  //       res.send(doc[0]);
+  //     }else{
+  //       console.log(err +"kkk")
+  //       res.status(204).send("Invalid creds")
+  //     }
+  //   });
+
+  kafka.make_request('rest_login', req.body, function (err, results) {
+    console.log('in result');
+    console.log(results);
+    if (err) {
+      console.log("Inside err");
+      res.json({
+        status: "error",
+        msg: "System Error, Try Again."
+      })
+    } else {
+      console.log("Inside success");
+      const payload = { _id: results.Cust_ID, email: results.Cust_Email };
+      const token = jwt.sign(payload, secret, {
+        expiresIn: 1008000
       });
-    
-  
-  });
+      results.token = "JWT " + token;
+      res.writeHead(200, {
+        "Content-Type": "application/json",
+      });
+      res.end(JSON.stringify(results));
+      res.end();
+
+    }
   })
+})
 
 
   module.exports= router

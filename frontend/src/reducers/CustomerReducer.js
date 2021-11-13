@@ -36,7 +36,7 @@ export const CustomerReducer = createSlice({
             //return state;
         }, 
         [getCustomer.fulfilled] : (state,action) => {
-            console.log(action.payload+ 'Customer reducer')
+            console.log(action.payload.Cust_Name+ 'Customer reducer')
             if (action.payload.auth){
                 state.error = null
                 state.pass = true

@@ -10,6 +10,8 @@ var getFav = require('./services/getFav');
 var addFav = require('./services/addFav');
 var updateDeliveryStatus = require('./services/setDeliveryStatus');
 var addOrder = require('./services/addOrder')
+var custLogin = require('./services/customerLogin');
+var restLogin = require('./services/restLogin');
 
 const { mongoDB } = require('../backend/config');
 const mongoose = require('mongoose');
@@ -68,7 +70,8 @@ handleTopicRequest("add_dish", addDish);
 handleTopicRequest("get_fav", getFav);
 handleTopicRequest("add_fav", addFav);
 handleTopicRequest("add_order", addOrder);
-
+handleTopicRequest("cust_login", custLogin);
+handleTopicRequest("rest_login", restLogin);
 handleTopicRequest("update_delivery_status", updateDeliveryStatus);
 
 

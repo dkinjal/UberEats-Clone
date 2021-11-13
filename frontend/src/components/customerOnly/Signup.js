@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import  { Container } from '@material-ui/core';
+import  { Container, Drawer } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid'
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -11,7 +11,8 @@ import  {useState} from "react";
 import UberEatsLogo from '../Uber-Eats-Logo.png';
 import {Redirect} from 'react-router';
 import backendurl from "../../url";
-
+import { useSelector, useDispatch } from "react-redux";
+import {custSignup, custSignupClear} from '../../actions/loginAction'
 
 
 const useStyles= makeStyles({
@@ -30,24 +31,34 @@ export default function Signup() {
     const [error, setError]= useState('');
     const [email, setEmail]= useState('')
     const history = useHistory();
+    const dispatch = useDispatch();
+
     let redirectvar =''
 
     function signup(){
-        fetch(`${backendurl}/user/signup`,{
-            method:'POST',
-            headers:{"Content-type": "application/json"},
-            body: JSON.stringify({
-                name:name,
-                password:password,
-                email: email
-            })})
-            .then(res =>
-                // console.log(JSON.stringify(res))
-                res.json())
-        .then(data => {
-            // console.log(data)
-            setError(data.message)})
-            history.push("/login")
+        // fetch(`${backendurl}/user/signup`,{
+        //     method:'POST',
+        //     headers:{"Content-type": "application/json"},
+        //     body: JSON.stringify({
+        //         name:name,
+        //         password:password,
+        //         email: email
+        //     })})
+        //     .then(res =>
+        //         // console.log(JSON.stringify(res))
+        //         res.json())
+        // .then(data => {
+        //     // console.log(data)
+        //     setError(data.message)})
+        // history.push("/login")
+        let data ={
+            name:name,
+            password:password,
+            email: email
+        }
+        dispatch(custSignup(data));
+
+
     }
 
 

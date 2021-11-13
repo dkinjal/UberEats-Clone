@@ -7,6 +7,7 @@ const Restaurant = require('../Models/RestaurantModels')
 const Menu = require('../Models/MenuModels')
 const Order = require('../Models/OrderModels')
 const { checkAuth } = require("../utils/passport");
+const mongoose = require('mongoose');
 
 
 router.get('/one/:Restaurant_ID',async function(req, res){
@@ -139,7 +140,8 @@ router.get('/one/:Restaurant_ID',async function(req, res){
       "Dish_Category":body.Dish_Category,
       "Dish_Description":body.Dish_Description,
       "Dish_Cost": body.Dish_Cost, 
-      "Restaurant_Name":body.Restaurant_Name
+      "Restaurant_Name": body.Restaurant_Name,
+      "Dish_ID":mongoose.Types.ObjectId()
     })
     menu.save().then(result=>{
       console.log(result)
@@ -173,29 +175,29 @@ router.get('/one/:Restaurant_ID',async function(req, res){
     }).catch(error=>{console.log(error+"iii")})
     });
 
-  router.put('/addDish',async function(req, res){
-    var body= req.body;
-    console.log(req.body)
+  // router.put('/addDish',async function(req, res){
+  //   var body= req.body;
+  //   console.log(req.body)
     
-    const menu = new Menu({
-      "Dish_Name":body.Dish_Name,
-      "Ingredients":body.Ingredients,
-      "Dish_Category": body.Dish_Category,
-      "Dish_Description":body.Dish_Description,
-      "Dish_Cost":body.Dish_Cost, 
-      "Restaurant_Name":body.Restaurant_Name
-    })
-    menu.save().then(result=>{
-      console.log(result)
-    })
-    .catch(error=>{
-      console.log(error)
-    });
-    res.status(200).json({
-      message: "Success",
-      product: menu
-    })
-  }); 
+  //   const menu = new Menu({
+  //     "Dish_Name":body.Dish_Name,
+  //     "Ingredients":body.Ingredients,
+  //     "Dish_Category": body.Dish_Category,
+  //     "Dish_Description":body.Dish_Description,
+  //     "Dish_Cost":body.Dish_Cost, 
+  //     "Restaurant_Name":body.Restaurant_Name
+  //   })
+  //   menu.save().then(result=>{
+  //     console.log(result)
+  //   })
+  //   .catch(error=>{
+  //     console.log(error)
+  //   });
+  //   res.status(200).json({
+  //     message: "Success",
+  //     product: menu
+  //   })
+  // }); 
 
 
   module.exports= router

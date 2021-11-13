@@ -88,7 +88,7 @@ export default function RestaurantProfile(){
   const getRestOne = () => {
   console.log("inside restone")
   axios.get(`${backendurl}/restaurant/one/${Restaurant_ID}`)
-      .then(response => 
+      .then(response =>
         {let data = (response.data.product)
           console.log(JSON.stringify(response.data.product)+"getrestone")
           setRestDetails(response.data[0])

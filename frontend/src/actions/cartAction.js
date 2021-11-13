@@ -12,7 +12,7 @@ export const addToCart = createAsyncThunk(
  })
 
 export const addItemCount = createAsyncThunk(
-  'users/cartcount', async(input)=>{
+  'users/cartcountadd', async(input)=>{
     console.log('inside cart count action'+ input.DishID)
       localStorage.setItem('DishID', input.DishID);
       
@@ -28,8 +28,18 @@ export const subItemCount = createAsyncThunk(
       return {auth:true, DishID:input.DishID, count: input.count};
     
 })
+export const removeItem = createAsyncThunk(
+  'users/cartcountrem', async(input)=>{
+    console.log('inside cart count action sub'+ input.DishID)
+      localStorage.setItem('DishID', input.DishID);
+      
+      return {auth:true, DishID:input.DishID, count: input.count};
+    
+})
 
- export const clearAdd = createAsyncThunk(
+
+
+export const clearAdd = createAsyncThunk(
   'users/clearAdd', async(input)=>{
     console.log('inside clear add action'+ input.DishID)
       
