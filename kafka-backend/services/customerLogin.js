@@ -11,8 +11,8 @@ function handle_request(msg, callback) {
             if (response) {
                 callback(null, doc);
             } else {
-                console.log(err + "userroute 78")
-                callback(error, "Error");
+                
+                callback(null, "Error");
             }
         });
     });

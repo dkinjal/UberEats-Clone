@@ -40,7 +40,7 @@ router.get('/:Cust_ID',async function(req, res){
     // query="SELECT *, SUM(Dish_Count) AS Quantity FROM ORDER_DETAILS, RESTAURANT_DETAILS WHERE CUST_ID='"+req.params.Cust_ID+"'AND RESTAURANT_DETAILS.Restaurant_ID= ORDER_DETAILS.Restaurant_ID GROUP BY ORDER_ID"
     Order.find({"Cust_ID": req.params.Cust_ID}).exec().then(doc=>{
     //req.session.user= res;
-    console.log(doc)
+    console.log("doc    "+doc)
     res.status(200).json({
       message: "Success",
       product: JSON.stringify(doc)

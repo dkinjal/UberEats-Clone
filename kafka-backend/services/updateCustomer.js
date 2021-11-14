@@ -3,7 +3,7 @@ var Customer = require('../Models/CustomerModels');
 function handle_request(msg, callback) {
     console.log(msg.Cust_ID + "aaaaaaaaa")
     console.log(msg)
-    Customer.findOneAndUpdate({ "Cust_ID": msg.Cust_ID }, {
+    Customer.updateOne({ "Cust_ID": msg.Cust_ID }, {
         "Cust_Name":msg.Cust_Name,
         "Cust_DOB":msg.Cust_DOB,
         "Cust_City":msg.Cust_City,
@@ -19,6 +19,7 @@ function handle_request(msg, callback) {
             message: "Success",
             product: JSON.stringify(doc)
         }
+        console.log(res)
         callback(null, res);
     }).catch(error => {
         console.log(error + "iii")

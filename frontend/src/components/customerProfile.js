@@ -33,7 +33,6 @@ export default function CustomerProfile(){
   const CustID = useSelector(state => state.login.custID);
   console.log(CustID)
     const redux_data = useSelector(state => state.cust);
-    console.log(redux_data)
     const [CustName, setCustName] = useState([])
     const [CustDOB, setCustDOB] = useState([])
     const [CustStreet, setCustStreet] = useState([])
@@ -71,6 +70,7 @@ export default function CustomerProfile(){
     // console.log(custData)
     // axios.defaults.withCredentials = true;
     // }
+    console.log(data)
       
     axios.post(`${backendurl}/customer/${CustID}`, {
               
@@ -107,8 +107,9 @@ export default function CustomerProfile(){
     
       axios.get(`${backendurl}/customer/${CustID}`)
         .then(res =>
-          {console.log(res.data)
-          let data = res.data;
+          {console.log(res.data.product)
+          let data = JSON.parse(res.data.product);
+          console.log(data.Cust_Name)
           // setCustDetails(res.data[0])
           setCustName(data.Cust_Name);
           setCustEmail(data.Cust_Email);

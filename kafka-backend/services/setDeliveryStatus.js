@@ -1,7 +1,7 @@
 var Order = require('../Models/OrderModels')
 
 function handle_request(msg, callback) {
-  console.log(msg +"     msg")
+  console.log(msg.DeliveryStatus +"     msg")
     Order.findOneAndUpdate({"Order_ID":msg.Order_ID},{
         "Delivery_Status": msg.DeliveryStatus
       })

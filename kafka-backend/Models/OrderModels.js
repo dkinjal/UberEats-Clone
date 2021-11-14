@@ -10,6 +10,7 @@ var orderSchema = new Schema({
     Order_Mode: { type: String },
     Order_Time: { type: String },
     Order_Status: { type: String },
+    Special_Instructions:{ type: String },
 }, {
     
     versionKey: false

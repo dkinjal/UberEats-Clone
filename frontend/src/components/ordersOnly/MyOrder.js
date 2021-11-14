@@ -40,6 +40,7 @@ export default function MyOrders() {
     const [OrderDetails, setOrderDetails] = useState([])
     const [ReceiptDetails, setReceiptDetails] = useState([])
     const[Total, setTotal]= useState([])
+    const [SI, setSI] = useState([])
 
     const[Length, setLength]= useState([])
     const Cust_ID = useSelector(state => state.login.custID)
@@ -96,7 +97,7 @@ const viewReceipt = async (OrderID) => {
         setReceiptDetails(dish)
         console.log(ReceiptDetails.length)
         setLength(dish.length)
-        console.log(dish[0])
+        setSI(dish[0].SpecialInstructions)
         setTotal(dish[0].DishCost * dish[0].DishCount + dish[1].DishCost * dish[1].DishCount)
         console.log(Total)
       handleOpen()
@@ -154,7 +155,7 @@ const viewReceipt = async (OrderID) => {
             ))}
                                         </Grid>
                                         <div>
-                                            Special Instructions : {ReceiptDetails[0].SpecialInstructions}
+                                            Special Instructions : {SI}
                                         </div>
                                         
                                         {/* <div>
