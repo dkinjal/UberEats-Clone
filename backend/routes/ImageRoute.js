@@ -8,6 +8,8 @@ var mysql = require('mysql');
 var db = require("../dbConnection");
 var connection= db.connection;
 var Customer = require('../Models/CustomerModels')
+var Restaurant = require('../Models/RestaurantModels')
+var Menu = require('../Models/MenuModels')
 
 
 const s3 = new aws.S3({
@@ -139,28 +141,38 @@ router.post('/cust/:ID', (req, res) => {
       // router.put("/", async function (req, res) {
           //var body = req.body;
           //console.log(req.body);
-          const sqlput =
-            "UPDATE  RESTAURANT_MENU SET DISH_IMAGE_LOCATION=? WHERE DISH_ID =?"
-          var values = [
-             imageLocation, req.params.ID
-          ];
-        
-          connection.query(sqlput, values,  function (error, results) {
-            console.log(error, results, 'aaaaa')
-            if (error) {
-              console.log('inside error')  
-              res.writeHead(200, {
-                "Content-Type": "text/plain",
-              });
-              res.end(error.code);
-            } else {
-              console.log('in success')  
-              // res.writeHead(200, {
-              //   "Content-Type": "text/plain",
-              // });
-              res.end(JSON.stringify(results));
-            }
-          });
+          // const sqlput =
+          //   "UPDATE  RESTAURANT_MENU SET DISH_IMAGE_LOCATION=? WHERE DISH_ID =?"
+          // var values = [
+          //    imageLocation, req.params.ID
+          // ];
+         console.log(req.params.ID+ "Dish ID")
+         Menu.findOneAndUpdate({ "Dish_ID": req.params.ID }, {
+           "Dish_Image_Location": imageLocation,
+           "Dish_Profile_Name": imageName
+        })
+          .exec().then(doc => {
+            console.log("Success aaa" + doc)
+            res.send("Success");
+          }).catch(error => {
+            console.log(error + "iii")
+          })
+          // connection.query(sqlput, values,  function (error, results) {
+          //   console.log(error, results, 'aaaaa')
+          //   if (error) {
+          //     console.log('inside error')  
+          //     res.writeHead(200, {
+          //       "Content-Type": "text/plain",
+          //     });
+          //     res.end(error.code);
+          //   } else {
+          //     console.log('in success')  
+          //     // res.writeHead(200, {
+          //     //   "Content-Type": "text/plain",
+          //     // });
+          //     res.end(JSON.stringify(results));
+          //   }
+          // });
         //});
       ////////////sql query end///////////////
       }
@@ -191,28 +203,39 @@ router.post('/cust/:ID', (req, res) => {
            location: imageLocation
           });
         
-            const sqlput =
-              "UPDATE  RESTAURANT_DETAILS SET Restaurant_Profile_Location =? WHERE Restaurant_ID =?"
-            var values = [
-               imageLocation, req.params.ID
-            ];
+            // const sqlput =
+            //   "UPDATE  RESTAURANT_DETAILS SET Restaurant_Profile_Location =? WHERE Restaurant_ID =?"
+            // var values = [
+            //    imageLocation, req.params.ID
+            // ];
+           Restaurant.findOneAndUpdate({ "Restaurant_ID": req.params.ID }, {
+          "Restaurant_Profile_Location": imageLocation,
+          "Restaurant_Profile_Name": imageName
+
+        })
+          .exec().then(doc => {
+            console.log("Success aaa" + doc)
+            res.send("Success");
+          }).catch(error => {
+            console.log(error + "iii")
+          })
           
-            connection.query(sqlput, values,  function (error, results) {
-              console.log(error, results, 'aaaaa')
-              if (error) {
-                console.log('inside error')  
-                res.writeHead(200, {
-                  "Content-Type": "text/plain",
-                });
-                res.end(error.code);
-              } else {
-                console.log('in success')  
-                // res.writeHead(200, {
-                //   "Content-Type": "text/plain",
-                // });
-                res.end(JSON.stringify(results));
-              }
-            });
+            // connection.query(sqlput, values,  function (error, results) {
+            //   console.log(error, results, 'aaaaa')
+            //   if (error) {
+            //     console.log('inside error')  
+            //     res.writeHead(200, {
+            //       "Content-Type": "text/plain",
+            //     });
+            //     res.end(error.code);
+            //   } else {
+            //     console.log('in success')  
+            //     // res.writeHead(200, {
+            //     //   "Content-Type": "text/plain",
+            //     // });
+            //     res.end(JSON.stringify(results));
+            //   }
+            // });
           //});
         ////////////sql query end///////////////
         }

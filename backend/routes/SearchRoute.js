@@ -9,12 +9,13 @@ const { auth, checkAuth, checkAuthRest } = require('../Utils/passport');
 router.get('/:searchvalue',async function(req, res){
  
   // let sql_query = "SELECT * FROM RESTAURANT_DETAILS WHERE Restaurant_Name LIKE'%" + req.params.searchvalue + "%' OR Restaurant_Cuisine LIKE'%" + req.params.searchvalue + "%' OR RESTAURANT_LOCATION LIKE '%" + req.params.searchvalue + "%'OR RESTAURANT_ID IN(SELECT Restaurant_ID FROM RESTAURANT_MENU WHERE DISH_NAME LIKE '%" + req.params.searchvalue + "%')"
-  
 
   Restaurant.find({
     $or: [{
-      Restaurant_Name: req.params.searchvalue
+      Restaurant_Location: req.params.searchvalue
         // { $eq: /$req.params.searchvalue$/ }
+    }, {
+      Restaurant_Name : req.params.searchvalue
     }
       // , { Restaurant_Cuisine: { $exists: true } }
     ]

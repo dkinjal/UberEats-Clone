@@ -20,7 +20,10 @@ router.get('/rest/:RestID', function (req, res) {
     })
 }).catch (error=>{
   console.log(error);
-}) 
+})
+  
+  
+  
   // Order.find({""})
   //  connection.query("SELECT * , CUST_NAME, SUM(ORDER_DETAILS.Dish_Count) AS DishCount, SUM(ORDER_DETAILS.Dish_Cost) AS DishCost2 FROM ORDER_DETAILS, CUSTOMER_DETAILS WHERE Restaurant_ID='"+req.params.RestID+"' AND ORDER_DETAILS.Cust_ID= CUSTOMER_DETAILS.Cust_ID GROUP BY  ORDER_DETAILS.Order_ID ", async function(error, results){
   //   console.log(error, results,'aaaa')
@@ -206,6 +209,30 @@ router.get('/receipt/:orderID', function(req, res){
         res.status(200).json({
           message: "Success",
           product: doc[0]
+        })
+    }).catch (error=>{
+      console.log(error);
+    }) 
+});
+
+router.get('/cancel/:custID', function(req, res){
+  console.log('RestID' + req.params.orderID)
+  
+  Order.find({
+    $or: [{
+      Cust_ID: req.params.custID
+      // { $eq: /$req.params.searchvalue$/ }
+    }, {
+      Delivery_Status: 'Cancel order'
+    }
+      // , { Restaurant_Cuisine: { $exists: true } }
+    ]
+  }).exec().then(doc=>{
+    //console.log(doc[0]);
+        //req.session.user= res;
+        res.status(200).json({
+          message: "Success",
+          product: doc
         })
     }).catch (error=>{
       console.log(error);

@@ -3,6 +3,12 @@ import { DataGrid } from '@material-ui/data-grid';
 import Modal from '@mui/material/Modal';
 import Grid from '@material-ui/core/Grid';
 import { styled } from '@mui/material/styles';
+import { Link } from 'react-router-dom';
+import { IconButton } from "@mui/material";
+import Button from '@mui/material/Button';
+import axios from 'axios'
+import Checkbox from '@mui/material/Checkbox';
+
 import Paper from '@mui/material/Paper';
 import ListSubheader from '@mui/material/ListSubheader';
 import { Container } from '@mui/material';
@@ -38,6 +44,8 @@ const style = {
 
 export default function MyOrders() {
     const [OrderDetails, setOrderDetails] = useState([])
+
+    const [CancelDetails, setCancelDetails] = useState([])
     const [ReceiptDetails, setReceiptDetails] = useState([])
     const[Total, setTotal]= useState([])
     const [SI, setSI] = useState([])
@@ -49,6 +57,11 @@ export default function MyOrders() {
     const handleClose = () => setOpen(false);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+const [checked, setChecked] = React.useState(false);
+
+  const handleChange = (event) => {
+    setChecked(event.target.checked);
+  };
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
@@ -73,6 +86,39 @@ const viewReceipt = async (OrderID) => {
     //   dispatch(subItemCount(data))
   }
 
+    const cancelOrder = (checked) => {
+        if (checked) {
+            fetch(`${backendurl}/order/cancel/${Cust_ID}`).then(res => res.json()).then(data => {
+                console.log(data.product)
+                let datadet = (data.product)
+                console.log(data.product)
+                setCancelDetails(datadet)
+                console.log(CancelDetails)
+            }).catch = (Error) => {
+                console.log(Error)
+            }
+        }
+    }
+    function  handleDeliveryChange (e, orderID){
+        console.log('inside delivery change'+ e.target.value+ orderID)
+        let OrderID= orderID
+        localStorage.setItem('DeliveryStatus', "Cancel order")
+        console.log(localStorage.getItem('DeliveryStatus'))
+        let input = {
+          DeliveryStatus: localStorage.getItem('DeliveryStatus'),
+          Order_ID: orderID
+        }
+        console.log(input)
+
+        axios.post(`${backendurl}/order/update1/${OrderID}`,input)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      }
+    
     useEffect(() => {
         console.log("insideeee")
         fetch(`${backendurl}/order/${Cust_ID}`).then(res => res.json()).then(data =>{
@@ -83,7 +129,7 @@ const viewReceipt = async (OrderID) => {
     }).catch=(Error)=>{
       console.log(Error)
     }
-    },[Cust_ID])
+    },[Cust_ID, localStorage.getItem('DeliveryStatus')])
         
     const openReceipt=(orderID)=>{
         fetch(`${backendurl}/order/receipt/${orderID}`)
@@ -95,7 +141,7 @@ const viewReceipt = async (OrderID) => {
         console.log(JSON.parse(dish2))
         let dish = JSON.parse(dish2)
         setReceiptDetails(dish)
-        console.log(ReceiptDetails.length)
+        console.log(ReceiptDetails.CustName)
         setLength(dish.length)
         setSI(dish[0].SpecialInstructions)
         setTotal(dish[0].DishCost * dish[0].DishCount + dish[1].DishCost * dish[1].DishCount)
@@ -115,26 +161,32 @@ const viewReceipt = async (OrderID) => {
 
     return (
         <div>
-            <Navbar/>
+            <Navbar />
+             <div><Checkbox
+                checked={checked}
+                onClick={checked=>cancelOrder(checked)}
+                onChange={handleChange}
+                inputProps={{ 'aria-label': 'controlled' }}
+                label="Label">  </Checkbox>
+                Show only Cancelled orders</div>
+            <br/>
             <TableContainer component={Paper}>
                 <Table>
-                    <TableBody>
+                    {checked?<div><TableBody>
                         {/* {OrderDetails.map(details => ( */}
-                        {(rowsPerPage > 0 ? OrderDetails.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage): OrderDetails).map((details) => (
-                        
-                            
-                            
+                        {(rowsPerPage > 0 ? CancelDetails.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage): CancelDetails).map((details) => (
                             <TableRow key={details.DishID}>
                             <TableCell>{ details.Order_ID}</TableCell>
-
-                            <TableCell>{ details.Cust_ID}</TableCell>
-                            <TableCell>{details.Restaurant_Name}</TableCell>
+                            <TableCell>{ details.Cust_Name}</TableCell>
+                            <TableCell>{details.Rest_Name}</TableCell>
                             <TableCell>{details.Quantity}</TableCell>
                             <TableCell>{details.Order_Time}</TableCell>
-                            <TableCell>{details.Delivery_Status}</TableCell>
+                                <TableCell></TableCell>
+                                
                                 <TableCell
                                     onClick={() => openReceipt(details.Order_ID)}
-                                >View receipt</TableCell>
+                                ><IconButton
+                                size="small">View receipt</IconButton></TableCell>
                                 <Modal
                                     open={open}
                                     onClose={handleClose}
@@ -158,25 +210,63 @@ const viewReceipt = async (OrderID) => {
                                             Special Instructions : {SI}
                                         </div>
                                         
-                                        {/* <div>
-                                            {ReceiptDetails[0].DishName}</div>
+                                    </Box>
+                                </Modal>
+                            </TableRow>
+                            
+                    ))}
+                    </TableBody></div>:
+                    <TableBody>
+                        {/* {OrderDetails.map(details => ( */}
+                        {(rowsPerPage > 0 ? OrderDetails.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage): OrderDetails).map((details) => (
+                        
+                            
+
+                            <TableRow key={details.DishID}>
+                            <TableCell>{ details.Order_ID}</TableCell>
+
+                            {/* <TableCell>{ details.CustName}</TableCell> */}
+                            <TableCell>{details.Rest_Name}</TableCell>
+                            <TableCell>{details.Quantity}</TableCell>
+                            <TableCell>{details.Order_Time}</TableCell>
+                            <TableCell>{details.Delivery_Status}</TableCell>
+                                <TableCell><IconButton
+                                    onClick={(e)=>handleDeliveryChange(e,details.Order_ID)}
+                                size="small" color="secondary" variant="outlined">Cancel Order</IconButton></TableCell>
+                                
+                                <TableCell
+                                    onClick={() => openReceipt(details.Order_ID)}
+                                ><IconButton
+                                size="small">View receipt</IconButton></TableCell>
+                                <Modal
+                                    open={open}
+                                    onClose={handleClose}
+                                    aria-labelledby="modal-modal-title"
+                                    aria-describedby="modal-modal-description"
+                                >
+                                    <Box sx={style}>
+                                        <h1>Receipt</h1>
+                                        <h3>Total:   ${Total}</h3>
+                                            <Grid container spacing={3} >
+            {ReceiptDetails.map(details=>(
+                <Grid  item md={12} key={details.DishID}>
+                    <p>
+                        {details.DishName}  {details.DishCost} x {details.DishCount}  ${details.DishCount*details.DishCost}  
+                   </p> 
+                </Grid>
+
+            ))}
+                                        </Grid>
                                         <div>
-                                            {ReceiptDetails[0].DishCount}*{ReceiptDetails[0].DishCost}   :     ${ReceiptDetails[0].DishCount*ReceiptDetails[0].DishCost}
+                                            Special Instructions : {SI}
                                         </div>
-                                        
-                                        <div>
-                                            {ReceiptDetails[1].DishName}</div>
-                                        <div>
-                                            {ReceiptDetails[1].DishCount}*{ReceiptDetails[1].DishCost}   :     ${ReceiptDetails[1].DishCount*ReceiptDetails[1].DishCost}
-                                            </div> */}
-                                        
                                         
                                     </Box>
                                 </Modal>
                             </TableRow>
                             
                     ))}
-                    </TableBody>
+                    </TableBody>}
                     <TableFooter>
                         <TableRow>
                             <TablePagination

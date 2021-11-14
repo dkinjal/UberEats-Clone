@@ -26,7 +26,7 @@ router.get('/:customer_ID',async function(req, res){
     //   }).catch (error=>{
     //     console.log(error);
     //   }) 
-  kafka.make_request('get_cust',rest, function(err,results){
+  kafka.make_request('get_cust',req.params.customer_ID, function(err,results){
     console.log('in result');
     console.log(results);
     if (err){

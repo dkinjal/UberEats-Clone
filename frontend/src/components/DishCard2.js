@@ -22,17 +22,20 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import backendurl from '../url';
 
-export default function DishCard2({DishDetails}) {  
+export default function DishCard2({ DishDetails }) {
+  console.log(DishDetails.Dish_ID)
   const [DishID, setDishID] = React.useState(DishDetails.Dish_ID);
   const [DishName, setDishName] = React.useState(DishDetails.Dish_Name);
   const [DishCost, setDishCost] = React.useState(DishDetails.Dish_Cost);
   const [open, setOpen] = React.useState(false);
+  const Restaurant_ID=useSelector(state => state.addToCart.RestID)
+
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = (props) => {
     console.log(props+'aa')
-    if(props=='create'){
+    if(props==='create'){
       console.log('inside create')
       let data = {
         DishID: DishID,
@@ -52,7 +55,6 @@ export default function DishCard2({DishDetails}) {
 
   const dispatch = useDispatch();
   
-  const Restaurant_ID=useSelector(state => state.addToCart.RestID)
   const AddItem= async()=>{
     let data = {
       DishID: DishID,

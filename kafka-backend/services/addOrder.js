@@ -36,7 +36,9 @@ function handle_request(msg, callback) {
     "Delivery_Status": msg[0].DeliveryStatus,
     "Order_Mode": msg[0].OrderMode,
     "Order_Time": msg[0].Order_Time,
-    "Order_Status":msg[0].OrderStatus,
+    "Order_Status": msg[0].OrderStatus,
+    "Special_Instructions": msg[0].SpecialInstructions,
+    "Rest_Name": msg[0].RestName,
   })
 
   order.save().then(result=>{

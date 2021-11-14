@@ -1,4 +1,6 @@
 var Menu = require('../Models/MenuModels');
+const mongoose = require('mongoose');
+
 function handle_request(msg, callback){
 var body= msg;
   console.log(body.RestID +'mmm')
@@ -9,7 +11,8 @@ var body= msg;
     "Dish_Description":body.DishDescription, 
     "Dish_Cost":body.DishCost, 
     "Restaurant_ID":body.RestID, 
-    "Dish_Type":body.DishType
+    "Dish_Type": body.DishType,
+    "Dish_ID": mongoose.Types.ObjectId()
   })
   menu.save().then(result=>{
     console.log(result)

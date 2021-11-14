@@ -12,7 +12,7 @@ export const custSignupReducer = createSlice({
    
     extraReducers:{
         [custSignup.fulfilled] : (state,action) => {
-            console.log('aa');
+            console.log('aa'+ action.payload);
             console.log(action.payload.auth+ 'cust signup reducer')
             if (action.payload.auth){
                 state.error = null

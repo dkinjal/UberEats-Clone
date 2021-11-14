@@ -52,11 +52,12 @@ export default function UpdateDish() {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false)
-  useEffect(()=>{
+  useEffect(() => {
+    console.log(DishID)
     axios.get(`${backendurl}/dish/${DishID}`)
       .then(response => 
-        {let data = (response.data[0])
-          console.log(response.data[0])
+        {let data = (response.data.product)
+          console.log(response.data.product)
           setDishDetails(data);
           setDishName(data.Dish_Name);
           setDishCategory(data.Dish_Category);

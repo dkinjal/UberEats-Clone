@@ -45,13 +45,13 @@ export default function Cart() {
           <h2>{localStorage.getItem('RestName')}</h2>
           <CartTable/>
         <br />
-        <TextField width='200'
+        {/* <TextField width='200'
           id="outlined-multiline-static"
           label="Special Instructions"
           multiline
           onChange={e=>setSpecialInstructions(e.target.value)}
           rows={2}
-        />
+        /> */}
         <br/><br/>
           <Link to='/checkout'>
           <Button  variant="contained" color="success" onClick={addInstruction} >

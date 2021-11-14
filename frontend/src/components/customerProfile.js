@@ -104,7 +104,7 @@ export default function CustomerProfile(){
     //   console.log(custData)
     //   axios.defaults.withCredentials = true;
     // },[CustID, custData, dispatch])
-    
+      console.log(CustID)
       axios.get(`${backendurl}/customer/${CustID}`)
         .then(res =>
           {console.log(res.data.product)

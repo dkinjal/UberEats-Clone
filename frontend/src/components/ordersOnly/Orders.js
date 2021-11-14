@@ -74,7 +74,7 @@ export default function Orders(){
       }).catch=(Error)=>{
         console.log(Error)
       }
-      },[ DeliveryStatus,RestID, DeliveryStatusParam,localStorage.getItem('DeliveryStatus')])
+      },[ DeliveryStatus,RestID, DeliveryStatusParam,])
 
       function  handleDeliveryChange (e, orderID){
         console.log('inside delivery change'+ e.target.value+ orderID)
@@ -160,7 +160,7 @@ export default function Orders(){
     <MenuItem value='Delivered'>Delivered</MenuItem>
     <MenuItem value='Pick up Ready'>Pick up Ready</MenuItem>
     <MenuItem value='Picked up'>Picked up</MenuItem>
-    <MenuItem value='Cancel the order'>Cancel the order</MenuItem>
+    <MenuItem value='Cancel order'>Cancel order</MenuItem>
 
   </Select>
               </TableCell>

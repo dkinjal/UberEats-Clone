@@ -106,7 +106,7 @@ router.get('/one/:Restaurant_ID',async function(req, res){
   router.get('/menu/:Restaurant_ID',async function(req, res){
     console.log('inside menu api')
     Menu.find({"Restaurant_ID": req.params.Restaurant_ID}).exec().then(doc=>{
-      console.log(doc);
+      console.log(doc+"      ok");
           //req.session.user= res;
           res.status(200).json({
             message: "Success",
@@ -132,7 +132,7 @@ router.get('/one/:Restaurant_ID',async function(req, res){
 
   router.put('/addDish',async function(req, res){
     var body= req.body;
-    console.log(req.body)
+    console.log(req.body+ 'inside add dish')
     
     const menu = new Menu({
       "Dish_Name":body.Dish_Name,
@@ -141,13 +141,13 @@ router.get('/one/:Restaurant_ID',async function(req, res){
       "Dish_Description":body.Dish_Description,
       "Dish_Cost": body.Dish_Cost, 
       "Restaurant_Name": body.Restaurant_Name,
-      "Dish_ID":mongoose.Types.ObjectId()
+      "Dish_ID": mongoose.Types.ObjectId()
     })
     menu.save().then(result=>{
       console.log(result)
     })
     .catch(error=>{
-      console.log(error)
+      console.log("Error      " + error)
     });
     res.status(200).json({
       message: "Success",

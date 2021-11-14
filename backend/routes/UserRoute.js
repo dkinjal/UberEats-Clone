@@ -38,7 +38,7 @@ router.post('/signup',async function(req, res){
 //   })
 // })
 kafka.make_request('post_user',req.body, function(err,results){
-  console.log('in result');
+  console.log('in result of post user');
   console.log(results);
   if (err){
       console.log("Inside err");

@@ -16,8 +16,8 @@ export const login = createAsyncThunk(
       if(result.status===200){
         let data = result.data;
         console.log(data)
-        console.log('success login action 15')
-        return {auth:true, email:data.Cust_Email, password: data.Cust_Password, custID: data.Cust_ID, token: data.token};
+        console.log('success login action 15'+ data.CustID)
+        return {auth:true, email:data.Cust_Email, password: data.Cust_Password, custID: data.CustID, token: data.token, custName:data.Cust_Name};
         // return {auth:true}
       }else{
         console.log('login action fail')
@@ -39,10 +39,10 @@ export const clear = createAsyncThunk(
     'users/custsignup', async(input)=>{
       console.log('inside action')
       //const result = await axios.post(`${backendurl}/user/signup`,input)
-      axios.post(`${backendurl}/user/login`,input).then(result=>{
+      axios.post(`${backendurl}/user/signup`,input).then(result=>{
       console.log(result);
       if(result.status===200){
-        let data = result.data[0];
+        let data = result;
         console.log('inside 200' + data) 
         localStorage.setItem('signup', "success");
         return {auth:true};

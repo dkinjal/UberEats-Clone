@@ -6,10 +6,10 @@ var kafka = require('../kafka/client')
 
 //addOrder
 
-// router.get('/:Dish_ID', function(req, res){
-  router.get('/one', function(req, res){
+ router.get('/:Dish_ID', function(req, res){
+ // router.get('/one', function(req, res){
 
-kafka.make_request('get_dish',req.body, function(err,results){
+kafka.make_request('get_dish',req.params.Dish_ID, function(err,results){
     console.log('in result');
     console.log(results);
     if (err){
@@ -20,10 +20,10 @@ kafka.make_request('get_dish',req.body, function(err,results){
         })
     }else{
         console.log("Inside else");
-            res.json({
-                updatedList:results
-            });
-  
+           res.writeHead(200, {
+        "Content-Type": "application/json",
+      });
+      res.end(JSON.stringify(results))
             res.end();
         }
     

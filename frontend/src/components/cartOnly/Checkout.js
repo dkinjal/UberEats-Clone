@@ -15,6 +15,8 @@ export default function Checkout() {
     const x = useSelector(state => state.addToCart.Cart)
     let RestID=useSelector(state => state.addToCart.RestID)
     let Cust_ID = useSelector(state => state.login.custID)
+    let Cust_Name = useSelector(state => state.login.name)
+
   const history = useHistory();
   const [SpecialInstructions, setSpecialInstructions] = useState([]);
     let DeliveryType = localStorage.getItem('DeliveryType')   
@@ -60,14 +62,17 @@ export default function Checkout() {
     {DishName: x.DishName,
       DishCost: x.DishCost,
       DishCount : x.count,
-      RestID : RestID,
-      CustID: Cust_ID,
+      RestID: RestID,
+      RestName: localStorage.getItem('RestName'),
+        CustID: Cust_ID,
+      CustName: Cust_Name,
       OrderStatus:"New Order",
       DeliveryStatus:"Order Received",
       OrderMode: DeliveryType,
       Order_Time: date + time,
       DishID: x.DishID,
-    SpecialInstructions: SpecialInstructions}
+      SpecialInstructions: SpecialInstructions
+      }
   ))
   console.log(data)
     // x.map((x)=>(

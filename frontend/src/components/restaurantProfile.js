@@ -105,7 +105,7 @@ export default function RestaurantProfile(){
           setRestTimingTo(data.Restaurant_Time_To)
           setRestContact(data.Restaurant_Contact)
           setRestEmail(data.Restaurant_Email)
-          setRestProfile(data.Restaurant_Profile_Location)
+        setRestProfile(data.Restaurant_Profile_Location)
         }).catch=(error)=>{
           console.log(error)
         }  
@@ -116,8 +116,8 @@ export default function RestaurantProfile(){
        fetch(`${backendurl}/restaurant/menu/${Restaurant_ID}`)
       .then(res => res.json())
         .then(data => {
-        console.log(data.product)
-          setDishDetails(JSON.parse(data.product))
+        console.log(JSON.parse(data.product))
+        setDishDetails(JSON.parse(data.product))
         console.log(DishDetails+"dish details")})
         .catch=(error)=>{
           console.log(error)
