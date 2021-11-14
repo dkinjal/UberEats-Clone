@@ -6,8 +6,8 @@ var db = require('../dbConnection.js')
 const Restaurant = require('../Models/RestaurantModels')
 const Menu = require('../Models/MenuModels')
 const Order = require('../Models/OrderModels')
-const { checkAuth } = require("../utils/passport");
 const mongoose = require('mongoose');
+const { auth, checkAuth, checkAuthRest } = require('../Utils/passport');
 
 
 router.get('/one/:Restaurant_ID',async function(req, res){

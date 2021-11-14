@@ -70,21 +70,25 @@ export default function Orders(){
     .then(data =>{
       console.log(data)
       setOrderDetails(JSON.parse(data.product))
-      setDeliveryStatus(data.product.Delivery_Status)  
+      setDeliveryStatus(localStorage.getItem('DeliveryStatus'))  
       }).catch=(Error)=>{
         console.log(Error)
       }
-      },[ DeliveryStatus,RestID, DeliveryStatusParam])
+      },[ DeliveryStatus,RestID, DeliveryStatusParam,localStorage.getItem('DeliveryStatus')])
 
-      function handleDeliveryChange(e, orderID){
+      function  handleDeliveryChange (e, orderID){
         console.log('inside delivery change'+ e.target.value+ orderID)
         setDeliveryStatus(e.target.value)
         console.log(DeliveryStatus)
         let OrderID= orderID
-        localStorage.setItem('DeliveryStatus',e.target.value)
-        axios.post(`${backendurl}/order/update1/${OrderID}`, {
-        DeliveryStatus: localStorage.getItem('DeliveryStatus')
-      })
+        localStorage.setItem('DeliveryStatus', e.target.value)
+        console.log(localStorage.getItem('DeliveryStatus'))
+        let input = {
+          DeliveryStatus: localStorage.getItem('DeliveryStatus'),
+          Order_ID: orderID
+        }
+        console.log(input)
+        axios.post(`${backendurl}/order/update1/${OrderID}`,input)
       .then(function (response) {
         console.log(response);
       })

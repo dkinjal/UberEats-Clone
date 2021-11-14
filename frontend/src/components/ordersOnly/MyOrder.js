@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import { DataGrid } from '@material-ui/data-grid';
+import Modal from '@mui/material/Modal';
 import Grid from '@material-ui/core/Grid';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import ListSubheader from '@mui/material/ListSubheader';
-import Modal from '@mui/material/Modal';
 import { Container } from '@mui/material';
 import Navbar from '../Navbar';
 import Box from '@mui/material/Box';
@@ -29,8 +29,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width:500,
-  
+  width: 200,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -41,6 +40,8 @@ export default function MyOrders() {
     const [OrderDetails, setOrderDetails] = useState([])
     const [ReceiptDetails, setReceiptDetails] = useState([])
     const[Total, setTotal]= useState([])
+
+    const[Length, setLength]= useState([])
     const Cust_ID = useSelector(state => state.login.custID)
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -60,11 +61,24 @@ export default function MyOrders() {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+
+const viewReceipt = async (OrderID) => {
+    
+    let data = {
+      Order_ID: OrderID,
+      
+    }
+    //   console.log('inside sub')
+    //   dispatch(subItemCount(data))
+  }
+
     useEffect(() => {
         console.log("insideeee")
         fetch(`${backendurl}/order/${Cust_ID}`).then(res => res.json()).then(data =>{
-        console.log(data)
-        setOrderDetails(data)
+            let datadet = JSON.parse(data.product)
+            console.log(data.product)
+            setOrderDetails(datadet)
+            console.log(OrderDetails)
     }).catch=(Error)=>{
       console.log(Error)
     }
@@ -74,19 +88,28 @@ export default function MyOrders() {
         fetch(`${backendurl}/order/receipt/${orderID}`)
     .then(res => res.json())
     .then(data =>{
-        let tempTotal = 0;
-    console.log(data)
-    setReceiptDetails(data)
-    
-    data.map((details)=>(
-    tempTotal += details.Dish_Cost * details.Dish_Count
-        ))
-        setTotal(tempTotal)
+    let tempTotal = 0;
+        let dish2= (data.product.Order_Details)
+        // setReceiptDetails(data)
+        console.log(JSON.parse(dish2))
+        let dish = JSON.parse(dish2)
+        setReceiptDetails(dish)
+        console.log(ReceiptDetails.length)
+        setLength(dish.length)
+        console.log(dish[0])
+        setTotal(dish[0].DishCost * dish[0].DishCount + dish[1].DishCost * dish[1].DishCount)
         console.log(Total)
-        handleOpen()
-    }).catch=(Error)=>{
-        console.log(Error)
-    }
+      handleOpen()
+    
+    // data.map((details)=>(
+    // tempTotal += details.Dish_Cost * details.Dish_Count
+    //     ))
+    //     setTotal(tempTotal)
+    //     console.log(Total)
+    //     handleOpen()
+    // }).catch=(Error)=>{
+    //     console.log(Error)
+     })
     }
 
     return (
@@ -97,15 +120,60 @@ export default function MyOrders() {
                     <TableBody>
                         {/* {OrderDetails.map(details => ( */}
                         {(rowsPerPage > 0 ? OrderDetails.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage): OrderDetails).map((details) => (
-                        <TableRow key={details.orderID}>
+                        
+                            
+                            
+                            <TableRow key={details.DishID}>
                             <TableCell>{ details.Order_ID}</TableCell>
-                            <TableCell>{details.Restaurant_Name }</TableCell>
+
+                            <TableCell>{ details.Cust_ID}</TableCell>
+                            <TableCell>{details.Restaurant_Name}</TableCell>
                             <TableCell>{details.Quantity}</TableCell>
                             <TableCell>{details.Order_Time}</TableCell>
                             <TableCell>{details.Delivery_Status}</TableCell>
-                            <TableCell>View receipt</TableCell>
+                                <TableCell
+                                    onClick={() => openReceipt(details.Order_ID)}
+                                >View receipt</TableCell>
+                                <Modal
+                                    open={open}
+                                    onClose={handleClose}
+                                    aria-labelledby="modal-modal-title"
+                                    aria-describedby="modal-modal-description"
+                                >
+                                    <Box sx={style}>
+                                        <h1>Receipt</h1>
+                                        <h3>Total:   ${Total}</h3>
+                                            <Grid container spacing={3} >
+            {ReceiptDetails.map(details=>(
+                <Grid  item md={12} key={details.DishID}>
+                    <p>
+                        {details.DishName}  {details.DishCost} x {details.DishCount}  ${details.DishCount*details.DishCost}  
+                   </p> 
+                </Grid>
 
-                        </TableRow>
+            ))}
+                                        </Grid>
+                                        <div>
+                                            Special Instructions : {ReceiptDetails[0].SpecialInstructions}
+                                        </div>
+                                        
+                                        {/* <div>
+                                            {ReceiptDetails[0].DishName}</div>
+                                        <div>
+                                            {ReceiptDetails[0].DishCount}*{ReceiptDetails[0].DishCost}   :     ${ReceiptDetails[0].DishCount*ReceiptDetails[0].DishCost}
+                                        </div>
+                                        
+                                        <div>
+                                            {ReceiptDetails[1].DishName}</div>
+                                        <div>
+                                            {ReceiptDetails[1].DishCount}*{ReceiptDetails[1].DishCost}   :     ${ReceiptDetails[1].DishCount*ReceiptDetails[1].DishCost}
+                                            </div> */}
+                                        
+                                        
+                                    </Box>
+                                </Modal>
+                            </TableRow>
+                            
                     ))}
                     </TableBody>
                     <TableFooter>

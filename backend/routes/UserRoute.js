@@ -10,7 +10,8 @@ const Customer= require('../Models/CustomerModels');
 const Restaurant = require('../Models/RestaurantModels');
 const mongoose = require('mongoose');
 const {secret} = require('../config');
-const {auth} = require('../Utils/passport');
+const { auth, checkAuth, checkAuthRest } = require('../Utils/passport');
+
 
 //New user Register
 router.post('/signup',async function(req, res){

@@ -7,7 +7,7 @@ var router = express.Router();
 var mysql = require('mysql');
 var db = require("../dbConnection");
 var connection= db.connection;
-
+var Customer = require('../Models/CustomerModels')
 
 
 const s3 = new aws.S3({
@@ -45,57 +45,71 @@ const profileImgUpload = multer({
    }).single('profileImage');
 
 
-router.post( '/cust/cust:ID', ( req, res ) => 
-{
-  profileImgUpload( req, res, ( error ) => {
-    console.log( 'requestOkokok', req.file );
-    if( error ){
-     console.log( 'errors', error );
-     res.json( { error: error } );
+router.post('/cust/:ID', (req, res) => {
+  profileImgUpload(req, res, (error) => {
+    console.log('requestOkokok', req.file);
+    console.log('requestOkokok', req.body);
+    
+    if (error) {
+      console.log('errors', error);
+      res.json({ error: error });
     } else {
-     // If File not found
-     if( req.file === undefined ){
-      //console.log( 'Error: No File Selected!' );
-      res.json( 'Error: No File Selected' );
-     } else {
-      // If Success
-      const imageName = req.file.key;
-      const imageLocation = req.file.location;// Save the file name into database into profile model
-      const ID = req.file.ID;
-      console.log(ID+'IDddddd')
-      res.json( {
-       image: imageName,
-       location: imageLocation
-      });
+      // If File not found
+      if (req.file === undefined) {
+        //console.log( 'Error: No File Selected!' );
+        res.json('Error: No File Selected');
+      } else {
+        // If Success
+        const imageName = req.file.key;
+        const imageLocation = req.file.location;// Save the file name into database into profile model
+        const ID = req.file.ID;
+        console.log(ID + 'IDddddd')
+        // res.json( {
+        //  image: imageName,
+        //  location: imageLocation
+        // });
 
-        const sqlput =
-          "UPDATE  CUSTOMER_DETAILS SET Cust_Profile_Name =?, Cust_Profile_Location=? WHERE Cust_ID =?"
-        var values = [
-          imageName, imageLocation, req.params.ID
-        ];
+        //   const sqlput =
+        //     "UPDATE  CUSTOMER_DETAILS SET Cust_Profile_Name =?, Cust_Profile_Location=? WHERE Cust_ID =?"
+        //   var values = [
+        //     imageName, imageLocation, req.params.ID
+        //  ];
+        Customer.findOneAndUpdate({ "Cust_ID": req.params.ID }, {
+          "Cust_Profile_Location": imageLocation,
+          "Cust_Profile_Name": imageName
+
+        })
+          .exec().then(doc => {
+            console.log("Success aaa" + doc)
+            res.send("Success");
+          }).catch(error => {
+            console.log(error + "iii")
+          })
+      }
+    }
+})
       
-        connection.query(sqlput, values,  function (error, results) {
-          console.log(error, results, 'aaaaa')
-          if (error) {
-            console.log('inside error')  
-            res.writeHead(200, {
-              "Content-Type": "text/plain",
-            });
-            res.end(error.code);
-          } else {
-            console.log('in success')  
-            // res.writeHead(200, {
-            //   "Content-Type": "text/plain",
-            // });
-            res.end(JSON.stringify(results));
-          }
-        });
+        // connection.query(sqlput, values,  function (error, results) {
+        //   console.log(error, results, 'aaaaa')
+        //   if (error) {
+        //     console.log('inside error')  
+        //     res.writeHead(200, {
+        //       "Content-Type": "text/plain",
+        //     });
+        //     res.end(error.code);
+        //   } else {
+        //     console.log('in success')  
+        //     // res.writeHead(200, {
+        //     //   "Content-Type": "text/plain",
+        //     // });
+        //     res.end(JSON.stringify(results));
+        //   }
+        // });
       //});
     ////////////sql query end///////////////
-    }
-    }
+    
    });
-  });
+  
 
 
   router.post( '/dish/:ID', ( req, res ) => 

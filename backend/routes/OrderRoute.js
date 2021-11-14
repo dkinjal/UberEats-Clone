@@ -6,6 +6,7 @@ var db = require('../dbConnection.js')
 var connection= db.connection;
 var Order = require('../Models/OrderModels')
 var kafka = require('../kafka/client')
+const { auth, checkAuth, checkAuthRest } = require('../Utils/passport');
 
 //addOrder
 
@@ -36,30 +37,40 @@ router.get('/rest/:RestID', function (req, res) {
 router.get('/:Cust_ID',async function(req, res){
     //console.log(req)
     //console.log(res)
-    query="SELECT *, SUM(Dish_Count) AS Quantity FROM ORDER_DETAILS, RESTAURANT_DETAILS WHERE CUST_ID='"+req.params.Cust_ID+"'AND RESTAURANT_DETAILS.Restaurant_ID= ORDER_DETAILS.Restaurant_ID GROUP BY ORDER_ID"
-      await connection.query(query, async function(error, results){
-        if(error){
-          res.writeHead(200, {
-            'Content-Type':'text/plain'
-          });
-          res.end(error.code)
-        }else{
-          res.writeHead(200, {
-            'Content-Type':'text/plain'
-          });
-          console.log("success")
-          console.log(JSON.stringify(results))
-          res.end(JSON.stringify(results))
-        }
-      });
+    // query="SELECT *, SUM(Dish_Count) AS Quantity FROM ORDER_DETAILS, RESTAURANT_DETAILS WHERE CUST_ID='"+req.params.Cust_ID+"'AND RESTAURANT_DETAILS.Restaurant_ID= ORDER_DETAILS.Restaurant_ID GROUP BY ORDER_ID"
+    Order.find({"Cust_ID": req.params.Cust_ID}).exec().then(doc=>{
+    //req.session.user= res;
+    console.log(doc)
+    res.status(200).json({
+      message: "Success",
+      product: JSON.stringify(doc)
+    })
+    }).catch (error=>{
+      console.log(error);
+    }) 
+      // await connection.query(query, async function(error, results){
+      //   if(error){
+      //     res.writeHead(200, {
+      //       'Content-Type':'text/plain'
+      //     });
+      //     res.end(error.code)
+      //   }else{
+      //     res.writeHead(200, {
+      //       'Content-Type':'text/plain'
+      //     });
+      //     console.log("success")
+      //     console.log(JSON.stringify(results))
+      //     res.end(JSON.stringify(results))
+      //   }
+      // });
     });
 
 
 
 //router.post('/update1/:OrderID',async function(req, res){
-  router.post('/update1',async function(req, res){
+  router.post('/update1/:OrderID',async function(req, res){
   var body= req.body;
-  console.log('update delivery status kkkkk'+ body.DeliveryStatus)
+  console.log('update delivery status kkkkk'+ body)
   //const sqlput = "UPDATE ORDER_DETAILS SET Delivery_Status=? where Order_ID=?";
   //var values=[body.DeliveryStatus,req.params.OrderID]
   //console.log(values)

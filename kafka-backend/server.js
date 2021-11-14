@@ -12,6 +12,8 @@ var updateDeliveryStatus = require('./services/setDeliveryStatus');
 var addOrder = require('./services/addOrder')
 var custLogin = require('./services/customerLogin');
 var restLogin = require('./services/restLogin');
+var updateCust = require('./services/updateCustomer');
+var getCust = require('./services/getCust');
 
 const { mongoDB } = require('../backend/config');
 const mongoose = require('mongoose');
@@ -68,10 +70,12 @@ handleTopicRequest("get_user",getUser);
 handleTopicRequest("get_dish", getDish);
 handleTopicRequest("add_dish", addDish);
 handleTopicRequest("get_fav", getFav);
+handleTopicRequest("get_cust", getCust);
 handleTopicRequest("add_fav", addFav);
 handleTopicRequest("add_order", addOrder);
 handleTopicRequest("cust_login", custLogin);
 handleTopicRequest("rest_login", restLogin);
+handleTopicRequest("update_cust", updateCust);
 handleTopicRequest("update_delivery_status", updateDeliveryStatus);
 
 

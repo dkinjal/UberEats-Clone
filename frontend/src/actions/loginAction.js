@@ -1,11 +1,14 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import backendurl from "../url";
+import { useSelector } from "react-redux";
+
+
 //================LOGIN======================================
 export const login = createAsyncThunk(
     'users/login', async (input)=>{
       console.log('login action 7'+ input.email)
-      
+      // axios.defaults.headers.common.authorization = useSelector(state => state.cust.token);
       let  result = await axios.post(`${backendurl}/user/login`,input)
       //axios.post(`${backendurl}/user/login`,input).then(result=>{
       console.log(JSON.stringify(result.status) +" aa login action 9");
@@ -14,7 +17,7 @@ export const login = createAsyncThunk(
         let data = result.data;
         console.log(data)
         console.log('success login action 15')
-        return {auth:true, email:data.Cust_Email, password: data.Cust_Password, custID: data.Cust_ID, token: data.token, Cust_ID: data.Cust_ID};
+        return {auth:true, email:data.Cust_Email, password: data.Cust_Password, custID: data.Cust_ID, token: data.token};
         // return {auth:true}
       }else{
         console.log('login action fail')

@@ -7,6 +7,7 @@ var db = require("../dbConnection");
 //var connection= db.connection;
 const Favourite= require('../Models/FavouritesModels')
 var kafka = require('../kafka/client')
+const { auth, checkAuth, checkAuthRest } = require('../Utils/passport');
 
 
 //router.get('/:customer_ID',async function(req, res){

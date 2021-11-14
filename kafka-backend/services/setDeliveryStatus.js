@@ -1,13 +1,15 @@
 var Order = require('../Models/OrderModels')
 
-function handle_request(msg, callback){
-    Order.findOneAndUpdate({"Order_ID":msg.OrderID},{
+function handle_request(msg, callback) {
+  console.log(msg +"     msg")
+    Order.findOneAndUpdate({"Order_ID":msg.Order_ID},{
         "Delivery_Status": msg.DeliveryStatus
       })
-      .exec().then(doc=>{
+      .exec().then(doc => {
+        console.log(doc)
         let res={
             message: "Success",
-            product: doc[0]
+            product: doc
         }
         callback(null, res);
         //console.log("Success aaa"+ doc[0])

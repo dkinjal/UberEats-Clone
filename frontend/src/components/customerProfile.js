@@ -30,11 +30,14 @@ const style = {
 };
 
 export default function CustomerProfile(){
-    const CustID ='617311df9c43bf3cb49b6a51';
+  const CustID = useSelector(state => state.login.custID);
+  console.log(CustID)
+    const redux_data = useSelector(state => state.cust);
+    console.log(redux_data)
     const [CustName, setCustName] = useState([])
     const [CustDOB, setCustDOB] = useState([])
     const [CustStreet, setCustStreet] = useState([])
-    const dispatch = useDispatch();
+
     const [CustCity, setCustCity] = useState([])
     const [CustState, setCustState] = useState([])
     const [CustCountry, setCustCountry] = useState([])
@@ -42,80 +45,83 @@ export default function CustomerProfile(){
     const [CustEmail, setCustEmail] = useState([])
     const [CustNickname, setCustNickname] = useState([])
     const [CustProfile, setCustProfile] = useState([])
+    const [custData, setCustData] = useState();
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    const redux_data = useSelector(state => state.cust);
     const isPassed = redux_data.pass;
     const isError = redux_data.error;
 
-    const saveChanges=()=>{
-      console.log(CustCountry)
-      let data={
-        Cust_Name: CustName,
-        Cust_DOB: CustDOB,
-        Cust_City: CustCity,
-        Cust_State: CustState,
-        Cust_Country: CustCountry,
-        Cust_Nickname: CustNickname,
-        Cust_Email: CustEmail,
-        Cust_Phone: CustPhone,
-        Cust_Street: CustStreet,
-        Cust_ID: CustID
-      }
+  const saveChanges = () => {
+    console.log(CustID)
+    let data = {
+      Cust_Name: CustName,
+      Cust_DOB: CustDOB,
+      Cust_City: CustCity,
+      Cust_State: CustState,
+      Cust_Country: CustCountry,
+      Cust_Nickname: CustNickname,
+      Cust_Email: CustEmail,
+      Cust_Phone: CustPhone,
+      Cust_Street: CustStreet,
+      Cust_ID: CustID
+    }
+    // console.log(data + "cust profile")
+    // dispatch(updateCustomer(data, setCustData));
+    // console.log(custData)
+    // axios.defaults.withCredentials = true;
+    // }
       
-      dispatch(updateCustomer(data));
-      axios.defaults.withCredentials = true;
-      }
-      
-      // axios.post(`${backendurl}/customer/${CustID}`,{
+    axios.post(`${backendurl}/customer/${CustID}`, {
               
-      //         Cust_Name: CustName,
-      //         Cust_DOB: CustDOB,
-      //         Cust_City: CustCity,
-      //         Cust_State: CustState,
-      //         Cust_Country: CustCountry,
-      //         Cust_Nickname: CustNickname,
-      //         Cust_Email: CustEmail,
-      //         Cust_Phone: CustPhone,
-      //         Cust_Street: CustStreet
+      Cust_Name: CustName,
+      Cust_DOB: CustDOB,
+      Cust_City: CustCity,
+      Cust_State: CustState,
+      Cust_Country: CustCountry,
+      Cust_Nickname: CustNickname,
+      Cust_Email: CustEmail,
+      Cust_Phone: CustPhone,
+      Cust_Street: CustStreet,
+      Cust_ID : CustID
 
 
-      //     })
-      //     .then(response=>{
-              
-      //         //history.push('/restaurantProfile')
-      //         //history.goBack();
-      //     })
-   
+    })
+      .then(response => {
+          
+        //history.push('/restaurantProfile')
+        //history.goBack();
+      })
+  }
 
-    useEffect(()=>{
-      let data={
-        Cust_ID: CustID
-      }
-      dispatch(getCustomer(data));
-      axios.defaults.withCredentials = true;
+     useEffect(()=>{
+    //   let data={
+    //     Cust_ID: CustID
+    //   }
+    //   console.log(data)
+    //   //dispatch(getCustomer(data));
+    //   dispatch(getCustomer(data, setCustData));
+    //   console.log(custData)
+    //   axios.defaults.withCredentials = true;
+    // },[CustID, custData, dispatch])
     
-      // axios.get(`${backendurl}/customer/${CustID}`)
-      // .then(res => 
-      //     {let data = res.data.product;
-      //     // setCustDetails(res.data[0])
-      //     console.log(res.data.product)
-      //     setCustName(data.Cust_Name);
-      //     setCustEmail(data.Cust_Email);
-      //     setCustCity(data.Cust_City);
-      //     setCustCountry(data.Cust_Country);
-      //     setCustState(data.Cust_State);
-      //     setCustNickname(data.Cust_Nickname);
-      //     setCustPhone(data.Cust_Phone);
-      //     setCustDOB(data.Cust_DOB);
-      //     setCustProfile(data.Cust_Profile_Location)
-      //     setCustStreet(data.Cust_Street)
-      //     })
-      // },[])
-    },[dispatch])
-    
-
+      axios.get(`${backendurl}/customer/${CustID}`)
+        .then(res =>
+          {console.log(res.data)
+          let data = res.data;
+          // setCustDetails(res.data[0])
+          setCustName(data.Cust_Name);
+          setCustEmail(data.Cust_Email);
+          setCustCity(data.Cust_City);
+          setCustCountry(data.Cust_Country);
+          setCustState(data.Cust_State);
+          setCustNickname(data.Cust_Nickname);
+          setCustPhone(data.Cust_Phone);
+          setCustDOB(data.Cust_DOB);
+          setCustProfile(data.Cust_Profile_Location)
+          setCustStreet(data.Cust_Street)
+          })
+      },[CustID])
 
     return(
         <div>
@@ -158,7 +164,7 @@ export default function CustomerProfile(){
                 id="filled-disabled"
                 label="DOB"
                 value= {CustDOB}
-                defaultValue="Hello World"
+                
                 variant="filled"
                 onChange={e=>setCustDOB(e.target.value)}
                 />
@@ -173,23 +179,23 @@ export default function CustomerProfile(){
                 id="filled-disabled"
                 label="City"
                 value= {CustCity}
-                defaultValue="Hello World"
+                defaultValue="Hello world"
                 variant="filled"
                 onChange={e=>setCustCity(e.target.value)}
                 />
                 <TextField
                 id="filled-disabled"
                 label="State"
-                value= {CustState}
-                defaultValue="Hello World"
+                  value={CustState}
+                  defaultValue="Hello World"
                 variant="filled"
                 onChange={e=>setCustState(e.target.value)}
                 />
                 <TextField
-                id="filled-disabled"
+                  id="filled-disabled"
+                  defaultValue="Hello World"
                 label="Country"
                 value= {CustCountry}
-                defaultValue="Hello World"
                 variant="filled"
                 
                 />
@@ -197,7 +203,6 @@ export default function CustomerProfile(){
                 id="filled-disabled"
                 label="Nickname"
                 value= {CustNickname}
-                defaultValue="Hello World"
                 variant="filled"
                 onChange={e=>setCustNickname(e.target.value)}
                 />
@@ -211,7 +216,6 @@ export default function CustomerProfile(){
                 label="Phone"
                 value= {CustPhone}
                 onChange={e=>setCustPhone(e.target.value)}
-                defaultValue="Hello World"
                 variant="filled"
                 />
                 <TextField
@@ -219,7 +223,6 @@ export default function CustomerProfile(){
                 label="Email"
                 value= {CustEmail}
                 onChange={e=>setCustEmail(e.target.value)}
-                defaultValue="Hello World"
                 variant="filled"
                 /> 
                 <br/> 

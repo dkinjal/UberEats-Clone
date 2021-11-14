@@ -7,22 +7,23 @@ export const CustomerReducer = createSlice({
         
         error: '',
         pass: '',
-        // Cust_Name:'',
-        // Cust_Email:'',
-        // Cust_City:'',
-        // Cust_State:'',
-        // Cust_Country:'',
-        // Cust_Nickname:'',
-        // Cust_Phone:'',
-        // Cust_DOB:'',
-        // Cust_Profile_Location:'',
-        customer:[]
+        Cust_Name: '',
+        Cust_Nickname:'',
+        Cust_Phone:'',
+        Cust_City:'',
+        Cust_State:'',
+        Cust_Country:'',
+        Cust_Email:'',
+        Cust_DOB:'',
+        Cust_Profile_Location:'',
+         
     },
    
     extraReducers:{
         [updateCustomer.fulfilled] : (state,action) => {
-            console.log(action.payload+ 'Customer reducer')
-            if (action.payload.auth){
+            console.log(action.payload.data+ 'Customer reducer')
+            if (action.payload.auth) {
+                
                 state.error = null
                 state.pass = true
                 // state.email = action.payload.email;
@@ -35,23 +36,32 @@ export const CustomerReducer = createSlice({
             }
             //return state;
         }, 
-        [getCustomer.fulfilled] : (state,action) => {
-            console.log(action.payload.Cust_Name+ 'Customer reducer')
-            if (action.payload.auth){
+        [getCustomer.fulfilled]: (state, action) => {
+            
+            // console.log(action.payload.Cust_Email+ 'Customer reducer')
+            console.log(JSON.parse(action.payload.product)+ 'Customer reducer')
+            let data =JSON.parse(action.payload.product)
+            if (action.payload.auth) {
+                console.log("inside auth")
                 state.error = null
                 state.pass = true
-                let newCustomer={
-                    Cust_Name: action.payload.Cust_Name,
-                    Cust_Nickname: action.payload.Cust_Nickname,
-                    Cust_Phone: action.payload.Cust_Phone,
-                    Cust_City: action.payload.Cust_City,
-                    Cust_State: action.payload.Cust_State,
-                    Cust_Country: action.payload.Cust_Country,
-                    Cust_Email: action.payload.Cust_Email,
-                    Cust_DOB: action.payload.Cust_DOB,
-                    Cust_Profile_Location: action.payload.Cust_Profile_Location
-                }
-                state.customer.push(newCustomer);
+                console.log(data)
+                // let newCustomer={
+                    state.Cust_Name= data.Cust_Name
+                    state.Cust_Nickname= data.Cust_Nickname
+                    state.Cust_Phone= data.Cust_Phone
+                    state.Cust_City= data.Cust_City
+                    state.Cust_State= data.Cust_State
+                    state.Cust_Country= data.Cust_Country
+                    state.Cust_Email= data.Cust_Email
+                    state.Cust_DOB= data.Cust_DOB
+                    state.Cust_Profile_Location=data.Cust_Profile_Location
+                // }
+                // console.log(newCustomer)
+                // state.customer.push(newCustomer);
+                // state.email = data.Cust_Email;
+
+
                 // state.email = action.payload.email;
                 // state.password= action.payload.password;
                 // state.custID = action.payload.custID

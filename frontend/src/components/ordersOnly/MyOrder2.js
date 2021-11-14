@@ -87,7 +87,9 @@ export default function MyOrders(){
                     <ListItemText>{details.Quantity} items</ListItemText>
                     <ListItemText>{details.Order_Time}</ListItemText>
                     <ListItemText>{details.Delivery_Status}</ListItemText>
-                    <ListItemText>View receipt</ListItemText>
+                      <ListItemText
+                      
+                      >View receipt</ListItemText>
                   </ListItem>
                   </ListItemButton>
             ))}
