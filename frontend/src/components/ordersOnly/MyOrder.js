@@ -120,7 +120,7 @@ const viewReceipt = async (OrderID) => {
       }
     
     useEffect(() => {
-        console.log("insideeee")
+        console.log("insideeee" + Cust_ID)
         fetch(`${backendurl}/order/${Cust_ID}`).then(res => res.json()).then(data =>{
             let datadet = JSON.parse(data.product)
             console.log(data.product)
@@ -129,7 +129,7 @@ const viewReceipt = async (OrderID) => {
     }).catch=(Error)=>{
       console.log(Error)
     }
-    },[Cust_ID, localStorage.getItem('DeliveryStatus')])
+    },[Cust_ID,CancelDetails, localStorage.getItem('DeliveryStatus')])
         
     const openReceipt=(orderID)=>{
         fetch(`${backendurl}/order/receipt/${orderID}`)

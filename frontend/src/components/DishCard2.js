@@ -23,7 +23,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import backendurl from '../url';
 
 export default function DishCard2({ DishDetails }) {
-  console.log(DishDetails.Dish_ID)
+  console.log(DishDetails.Dish_Cost)
   const [DishID, setDishID] = React.useState(DishDetails.Dish_ID);
   const [DishName, setDishName] = React.useState(DishDetails.Dish_Name);
   const [DishCost, setDishCost] = React.useState(DishDetails.Dish_Cost);
@@ -97,7 +97,7 @@ export default function DishCard2({ DishDetails }) {
         </CardContent>
         <CardActions>
         
-          <Button size="small"><AttachMoneyIcon/>{DishDetails.Dish_Cost}</Button>
+          <Button size="small" color="secondary"><AttachMoneyIcon/>{DishCost}</Button>
         <IconButton 
         onClick={AddItem}
         variant='outlined' >

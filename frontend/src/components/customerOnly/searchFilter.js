@@ -14,10 +14,10 @@ const styles = {
     }
 };
 
-export default function SearchResults() {
+export default function SearchFilter() {
     const [RestaurantDetails, setRestaurantDetails] = useState([])
     const deliveryType = localStorage.getItem('DeliveryType')
-    let searchvalue = localStorage.getItem('search_id')
+    let searchvalue = "Panda Express"
     console.log(searchvalue)
     useEffect(()=>{
         fetch(`${backendurl}/search/${searchvalue}`)

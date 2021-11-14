@@ -51,8 +51,11 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
   }));
 export default function Orders(){
-    const [OrderDetails, setOrderDetails] = useState([])
-    const [open, setOpen] = React.useState(false);
+  const [OrderDetails, setOrderDetails] = useState([])
+      const [InnerDetails, setInnerDetails] = useState([])
+
+
+  const [open, setOpen] = React.useState(false);
     const [DeliveryStatus, setDeliveryStatus]= useState()
     let RestID=useSelector(state => state.restLogin.restID)
     const handleOpen = () => setOpen(true);
@@ -68,9 +71,12 @@ export default function Orders(){
     fetch(`${backendurl}/order/rest/${RestID}`)
     .then(res => res.json())
     .then(data =>{
-      console.log(data)
+      console.log(JSON.parse(data.product))
       setOrderDetails(JSON.parse(data.product))
-      setDeliveryStatus(localStorage.getItem('DeliveryStatus'))  
+      //console.log(JSON.parse(OrderDetails[0].Order_Details))
+      setDeliveryStatus(localStorage.getItem('DeliveryStatus'))
+      // setInnerDetails(JSON.parse(OrderDetails.Order_Details))
+      console.log(typeof(OrderDetails.Order_Details))
       }).catch=(Error)=>{
         console.log(Error)
       }
@@ -139,7 +145,9 @@ export default function Orders(){
               <TableCell padding="checkbox">
             
           </TableCell>
-              <TableCell  component="th" scope="row">{OrderDetails.Cust_Name}</TableCell>
+              <TableCell component="th" scope="row">{OrderDetails.Cust_Name}</TableCell>
+              
+
               <TableCell >{OrderDetails.Order_ID}</TableCell>
               <TableCell >{OrderDetails.DishCost2}$</TableCell>
               <TableCell >{OrderDetails.Dish_Count}</TableCell>

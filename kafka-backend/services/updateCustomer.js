@@ -3,7 +3,7 @@ var Customer = require('../Models/CustomerModels');
 function handle_request(msg, callback) {
     console.log(msg.Cust_ID + "aaaaaaaaa")
     console.log(msg)
-    Customer.updateOne({ "Cust_ID": msg.Cust_ID }, {
+    Customer.updateOne({ "CustID": msg.Cust_ID }, {
         "Cust_Name":msg.Cust_Name,
         "Cust_DOB":msg.Cust_DOB,
         "Cust_City":msg.Cust_City,

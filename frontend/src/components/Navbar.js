@@ -207,12 +207,10 @@ const [value, setValue] = React.useState('Delivery');
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    localStorage.setItem('DeliveryType',value )
-    
-
-
-
-
+    localStorage.setItem('DeliveryType', value)
+    let searchvalue = "Panda Express"
+    localStorage.setItem("search_id", searchvalue)
+  history.push('/searchfilter')
   };
   return (
     <Box  sx={{ flexGrow: 1 }}>
@@ -266,11 +264,13 @@ const [value, setValue] = React.useState('Delivery');
           <Box sx={{ width: '100%', typography: 'body1' }}>
           <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList onChange={handleChange} aria-label="lab API tabs example">
+          <Link to={'/searchfilter'}>
+                      <TabList onChange={handleChange} aria-label="lab API tabs example">
             <Tab label="Delivery" value="Delivery" />
             <Tab label="Pick-up" value="Pickup" />
             
           </TabList>
+          </Link>
         </Box>
         {/* <TabPanel value="Delivery"></TabPanel>
         <TabPanel value="Pickup"></TabPanel> */}

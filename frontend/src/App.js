@@ -14,6 +14,7 @@ import RestaurantLogin from './components/restaurantOnly/RestaurantLogin';
 import RestaurantSignup from './components/restaurantOnly/RestaurantSignup';
 import Landing from './components/Landing';
 import ImageUpload from "./components/ImageUpload";
+import SearchFilter from "./components/customerOnly/searchFilter"
 import DishCard2 from './components/DishCard2';
 import UpdateDish from './components/dishOnly/updateDish';
 import Orders from './components/ordersOnly/Orders';
@@ -77,6 +78,9 @@ function App() {
                 </Route>
                 <Route path='/search'>
                 <SearchResults/>
+                    </Route>
+                    <Route path='/searchfilter'>
+                <SearchFilter/>
                 </Route>
                 <Route path='/restaurantSignup'>
                 <RestaurantSignup/>

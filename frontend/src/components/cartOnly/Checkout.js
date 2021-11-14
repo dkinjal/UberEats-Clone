@@ -9,12 +9,17 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import { useHistory } from "react-router-dom";
 import backendurl from "../../url"
+import {addToCart, clearCart, clearAdd} from "../../actions/cartAction";
+
 const axios = require('axios');
 
 export default function Checkout() {
+    const dispatch = useDispatch();
+
     const x = useSelector(state => state.addToCart.Cart)
     let RestID=useSelector(state => state.addToCart.RestID)
-    let Cust_ID = useSelector(state => state.login.custID)
+  let Cust_ID = useSelector(state => state.login.custID)
+  console.log(Cust_ID)
     let Cust_Name = useSelector(state => state.login.name)
 
   const history = useHistory();
@@ -64,7 +69,7 @@ export default function Checkout() {
       DishCount : x.count,
       RestID: RestID,
       RestName: localStorage.getItem('RestName'),
-        CustID: Cust_ID,
+      CustID: Cust_ID,
       CustName: Cust_Name,
       OrderStatus:"New Order",
       DeliveryStatus:"Order Received",
@@ -90,7 +95,8 @@ export default function Checkout() {
     //     }
         )
         .then(response=>{
-            history.push(`/menu?RestID=${RestID}`)
+          history.push(`/menu?RestID=${RestID}`)
+          dispatch(clearCart());
             //history.goBack();
         })
     // ))

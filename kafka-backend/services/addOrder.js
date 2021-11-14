@@ -32,6 +32,7 @@ function handle_request(msg, callback) {
     "Order_Details": JSON.stringify(msg),
     "Order_ID": mongoose.Types.ObjectId(),
     "Cust_ID": msg[0].CustID,
+    "Cust_Name":msg[0].CustName,
     "Restaurant_ID": msg[0].RestID,
     "Delivery_Status": msg[0].DeliveryStatus,
     "Order_Mode": msg[0].OrderMode,
