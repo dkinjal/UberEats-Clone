@@ -52,5 +52,10 @@ export const updateCustomer = createAsyncThunk(
 })
 
 
-
+export const setDelivery = createAsyncThunk(
+  'delivery/set', async (input) => {
+    console.log('inside action' + input);
+    return { delivery: input }
+    
+})
 

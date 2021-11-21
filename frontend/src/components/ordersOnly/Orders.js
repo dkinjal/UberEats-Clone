@@ -5,6 +5,8 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import { Container } from '@mui/material';
 import Navbar from '../Navbar';
+import { useHistory } from "react-router-dom";
+
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -53,6 +55,7 @@ const Item = styled(Paper)(({ theme }) => ({
 export default function Orders(){
   const [OrderDetails, setOrderDetails] = useState([])
       const [InnerDetails, setInnerDetails] = useState([])
+const history= useHistory();
 
 
   const [open, setOpen] = React.useState(false);
@@ -62,12 +65,16 @@ export default function Orders(){
     const handleClose = () => setOpen(false);
     const handleChange = (event) => {
        setDeliveryStatus(event.target.value);
-    };
+  };
+  const logindelivery = sessionStorage.getItem('logindelivery')
     const search = useLocation().search;
     const DeliveryStatusParam = new URLSearchParams(search).get('Delivery');
      
     useEffect(()=>{
       console.log(RestID)
+      if (RestID == '') {
+        history.push('/login')
+      }
     fetch(`${backendurl}/order/rest/${RestID}`)
     .then(res => res.json())
     .then(data =>{
@@ -147,30 +154,35 @@ export default function Orders(){
           </TableCell>
               <TableCell component="th" scope="row">{OrderDetails.Cust_Name}</TableCell>
               
-
               <TableCell >{OrderDetails.Order_ID}</TableCell>
-              <TableCell >{OrderDetails.DishCost2}$</TableCell>
-              <TableCell >{OrderDetails.Dish_Count}</TableCell>
+              {/* <TableCell >{OrderDetails.DishCost2}$</TableCell> */}
+              {/* <TableCell >{OrderDetails.Dish_Count}</TableCell> */}
               <TableCell >{OrderDetails.Order_Mode}</TableCell>
               <TableCell >{OrderDetails.Delivery_Status}</TableCell>
 
               <TableCell >
-              <Select
+              
+      {logindelivery=='Delivery'?<Select
     labelId="demo-simple-select-label"
     id="demo-simple-select"
     value={DeliveryStatus}
     label="Update"
     onChange={(e)=>handleDeliveryChange(e,OrderDetails.Order_ID)}
-  >
-    <MenuItem value='Order Received'>Order Received</MenuItem>
-    <MenuItem value='Preparing'>Preparing</MenuItem>
-    <MenuItem value='On the way'>On the way</MenuItem>
+                ><MenuItem value='Order Received'>Order Received</MenuItem>
+                    <MenuItem value='Preparing'>Preparing</MenuItem>
+                    <MenuItem value='On the way'>On the way</MenuItem>
     <MenuItem value='Delivered'>Delivered</MenuItem>
-    <MenuItem value='Pick up Ready'>Pick up Ready</MenuItem>
+    <MenuItem value='Cancel order'>Cancel order</MenuItem></Select>: <Select
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    value={DeliveryStatus}
+    label="Update"
+    onChange={(e)=>handleDeliveryChange(e,OrderDetails.Order_ID)}
+                ><MenuItem value='Order Received'>Order Received</MenuItem>
+                    <MenuItem value='Preparing'>Preparing</MenuItem>
+                    <MenuItem value='Pick up Ready'>Pick up Ready</MenuItem>
     <MenuItem value='Picked up'>Picked up</MenuItem>
-    <MenuItem value='Cancel order'>Cancel order</MenuItem>
-
-  </Select>
+    <MenuItem value='Cancel order'>Cancel order</MenuItem></Select>}            
               </TableCell>
             </TableRow>
           ))}

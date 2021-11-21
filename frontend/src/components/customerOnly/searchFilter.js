@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import RestaurantCard from "../restaurantCard";
 import Container from '@material-ui/core/Container'
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const styles = {
     Nav:{
@@ -16,22 +17,32 @@ const styles = {
 
 export default function SearchFilter() {
     const [RestaurantDetails, setRestaurantDetails] = useState([])
-    const deliveryType = localStorage.getItem('DeliveryType')
-    let searchvalue = "Panda Express"
+    const delivery = useSelector(state => state.cust.Delivery_Type);
+    const [deliveryType, setDeliveryType] = useState(delivery);
+    
+    let searchvalue = sessionStorage.getItem('search_id')
     console.log(searchvalue)
-    useEffect(()=>{
-        fetch(`${backendurl}/search/${searchvalue}`)
-        .then(res => res.json())
-        // .then(  data=>
-            .then(data => {
-                console.log(data.product)
-
-                setRestaurantDetails(JSON.parse(data.product))
+    useEffect(() => {
+        let data = {
+            "search": searchvalue,
+            "delivery_type": deliveryType
+        }
+        console.log(data)
+        // fetch(`${backendurl}/search/${searchvalue}`)
+        // .then(res => res.json())
+        // // .then(  data=>
+        //     .then(data => {
+        axios.post(`${backendurl}/search/filter/${searchvalue}`, data)
+        .then(res =>{
+            console.log(JSON.parse(res.data.product))
+            let op = JSON.parse(res.data.product)
+                setRestaurantDetails(op)
             })
-    },[deliveryType,  searchvalue])
+    },[deliveryType,delivery,searchvalue])
     return (
         <div>
-        <Navbar 
+            <Navbar
+        // setDeliveryType={setDeliveryType}        
         // setRestaurantDetails={setRestaurantDetails} 
         style={styles.Nav} />
 <Container>

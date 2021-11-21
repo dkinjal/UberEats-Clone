@@ -10,23 +10,44 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Link } from 'react-router-dom';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import backendurl from '../url'
+import backendurl from '../url';
+import { useSelector, useDispatch } from "react-redux";
+const axios = require('axios');
+
 
 export default function RestaurantCard({restaurantDetails}) { 
-   
+  const customer_ID= useSelector(state => state.login.custID);
+  const addToFav = async (RestID) => {
+    let data = {
+      "Rest_ID": RestID,
+      "Cust_ID": customer_ID
+    }
+    axios.post(`${backendurl}/favourites`, data).then(result => {
+      console.log(result);
+      if (result.status === 200) {
+        return "Success"
+      }
+    })
+    
+  }
+  const setData=(restDeets)=>{
+    localStorage.setItem('RestName', restDeets.Restaurant_Name)
+    localStorage.setItem('Current_Delivery', restDeets.Restaurant_Delivery_Mode)
+  }
+
   return (
-      <Card  elevation={3} sx={{minHeight:450, Height:345, maxWidth: 345 }}>
+      <Card  elevation={3} sx={{minHeight:400, Height:305, maxWidth: 345 }}>
         <CardMedia
           component="img"
           height="140"
-          image='https://uber-bucket-kd.s3.us-west-1.amazonaws.com/rest-1633931413703.png'
+          image={restaurantDetails.Restaurant_Profile_Location}
           alt="Food image"
         />
         <CardContent>
           <Link to={`/menu?RestID=${restaurantDetails.Restaurant_ID}`}
           >
           <Typography gutterBottom variant="h5" component="div"
-          onClick={localStorage.setItem('RestName', restaurantDetails.Restaurant_Name)}>
+            onClick={()=>setData(restaurantDetails)}>
             {restaurantDetails.Restaurant_Name}
           </Typography>
           </Link>
@@ -35,7 +56,9 @@ export default function RestaurantCard({restaurantDetails}) {
           </Typography>
         </CardContent>
         <CardActions>
-        <Link to ='/Favourites'>
+        <Link
+          onClick={() => addToFav(restaurantDetails.Restaurant_ID)}
+          to='/Favourites'>
         <IconButton variant='outlined' aria-label="add to favorites">
           <FavoriteBorderIcon />
         </IconButton>

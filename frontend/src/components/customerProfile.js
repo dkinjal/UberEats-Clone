@@ -53,6 +53,9 @@ export default function CustomerProfile(){
 
   const saveChanges = () => {
     console.log(CustID)
+    if (CustPhone.match(/\d/g).length != 10) {
+      alert("Invalid Phone Number")
+    }
     let data = {
       Cust_Name: CustName,
       Cust_DOB: CustDOB,
@@ -192,14 +195,7 @@ export default function CustomerProfile(){
                 variant="filled"
                 onChange={e=>setCustState(e.target.value)}
                 />
-                <TextField
-                  id="filled-disabled"
-                  defaultValue="Hello World"
-                label="Country"
-                value= {CustCountry}
-                variant="filled"
                 
-                />
                 <TextField
                 id="filled-disabled"
                 label="Nickname"
@@ -207,9 +203,18 @@ export default function CustomerProfile(){
                 variant="filled"
                 onChange={e=>setCustNickname(e.target.value)}
                 />
-                <CountrySelect 
+                {CustCountry?<TextField
+                  id="filled-disabled"
+                  defaultValue="Hello World"
+                label="Country"
+                value= {CustCountry}
+                variant="filled"
+                
+                />:<CountrySelect 
                 setCustCountry={setCustCountry}
                 CustCountry={CustCountry}/>
+                 }
+                
                 <br/>
                 <Typography>Contact</Typography>
                 <TextField

@@ -17,7 +17,16 @@ export const login = createAsyncThunk(
         let data = result.data;
         console.log(data)
         console.log('success login action 15'+ data.CustID)
-        return {auth:true, email:data.Cust_Email, password: data.Cust_Password, custID: data.CustID, token: data.token, custName:data.Cust_Name};
+        if (data === 'Error') {
+          return {
+            auth: false
+          }
+        } else {
+          return { auth: true, email: data.Cust_Email, password: data.Cust_Password, custID: data.CustID, token: data.token, custName: data.Cust_Name };
+          
+        }
+        
+        
         // return {auth:true}
       }else{
         console.log('login action fail')

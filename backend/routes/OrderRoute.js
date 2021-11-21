@@ -216,10 +216,10 @@ router.get('/receipt/:orderID', function(req, res){
 });
 
 router.get('/cancel/:custID', function(req, res){
-  console.log('RestID' + req.params.orderID)
+  console.log('RestID' + req.params.custID)
   
   Order.find({
-    $or: [{
+    $and: [{
       Cust_ID: req.params.custID
       // { $eq: /$req.params.searchvalue$/ }
     }, {
@@ -228,7 +228,7 @@ router.get('/cancel/:custID', function(req, res){
       // , { Restaurant_Cuisine: { $exists: true } }
     ]
   }).exec().then(doc=>{
-    //console.log(doc[0]);
+    console.log(doc+"aaaaaaaaaaaa");
         //req.session.user= res;
         res.status(200).json({
           message: "Success",

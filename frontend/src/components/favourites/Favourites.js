@@ -3,19 +3,32 @@ import React, {useEffect, useState} from "react";
 import Grid from '@material-ui/core/Grid'
 import backendurl from "../../url";
 import RestaurantCard from "../restaurantCard";
-import Navbar from '../Navbar'
+import Navbar from '../Navbar';
+import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+
 
   export default function Favourites() {
-      const customer_ID=1;
+      let customer_ID = 1;
+      const history= useHistory();
+      customer_ID = useSelector(state => state.login.custID);
+      if (customer_ID == '') {
+          customer_ID=1
+      }
     const [RestaurantDetails, setRestaurantDetails] = useState([])
-    
-    useEffect(()=>{
-        fetch(`${backendurl}/favourites/${customer_ID}`)
-        .then(res => res.json())
-        .then(data =>{setRestaurantDetails(data)})
-    },[])
-
-        
+    const token =useSelector(state => state.login.token);
+      useEffect(() => {
+        axios.defaults.headers.common['authorization'] = token;
+        axios.get(`${backendurl}/favourites/${customer_ID}`)
+            .then(data => {
+                console.log(data)
+                setRestaurantDetails(data.data)
+            }).catch(error => {
+                console.log(error)
+             history.push('/login')   
+            })
+    },[customer_ID, token]) 
 
     return(
         <div>

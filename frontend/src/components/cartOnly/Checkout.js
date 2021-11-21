@@ -19,6 +19,7 @@ export default function Checkout() {
     const x = useSelector(state => state.addToCart.Cart)
     let RestID=useSelector(state => state.addToCart.RestID)
   let Cust_ID = useSelector(state => state.login.custID)
+  let currentDelivery = localStorage.getItem('Current_Delivery')
   console.log(Cust_ID)
     let Cust_Name = useSelector(state => state.login.name)
 
@@ -110,7 +111,9 @@ export default function Checkout() {
   <Container component={Paper}>
   <h2>{localStorage.getItem('RestName')}</h2>
 <CartTable/>
-<br/>
+        <br />
+        {currentDelivery == 'Delivery' ?
+          <div>
 <Typography>Delivery Address: </Typography>
 <TextField
                 id="filled-disabled"
@@ -144,12 +147,13 @@ export default function Checkout() {
                 defaultValue="Hello World"
                 variant="filled"
                 onChange={e=>setCustCountry(e.target.value)}
-                />
+            />
+          </div> : <div />}
 
 
 <br/>
 <br/>
-<div>Delivery Type : {DeliveryType} </div>
+<div>Delivery Type : {currentDelivery} </div>
 <br/>
 <TextField width='800'
           id="outlined-multiline-static"

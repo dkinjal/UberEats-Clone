@@ -15,7 +15,7 @@ const style = {
     top: '50%',
     left: '73%',
     transform: 'translate(-50%, -50%)',
-    width: 415,
+    width: 435,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -27,6 +27,7 @@ export default function Cart() {
 
   const [SpecialInstructions, setSpecialInstructions] = useState([]);
   const x = useSelector(state => state.addToCart.Cart)
+  let current = useSelector(state=> state.addToCart.totalCount)
   const addInstruction = () => {
     let data = {
       "Special_Instructions": SpecialInstructions,
@@ -53,11 +54,13 @@ export default function Cart() {
           rows={2}
         /> */}
         <br/><br/>
+        {current ?
           <Link to='/checkout'>
-          <Button  variant="contained" color="success" onClick={addInstruction} >
-                Proceed to checkout
+            <Button variant="contained" color="success" onClick={addInstruction} >
+              Proceed to checkout
             </Button>
-            </Link>
+          </Link>:<div></div>
+}
         </Box>
       
     </div>

@@ -26,12 +26,14 @@ router.get('/one/:Restaurant_ID',async function(req, res){
   });
 
   //getAllRestaurants
-  router.get('/',async function(req, res){
-    Customer.find().exec().then(doc=>{
+router.get('/', async function (req, res) {
+    console.log('all')
+  Restaurant.find().exec().then(doc => {
+      console.log(doc)
           //req.session.user= res;
           res.status(200).json({
             message: "Success",
-            product: doc[0]
+            product: JSON.stringify(doc)
           })
       }).catch (error=>{
         console.log(error);
@@ -159,9 +161,6 @@ router.get('/one/:Restaurant_ID',async function(req, res){
   router.put('/updateDishDetails',async function(req, res){
     var body= req.body;
     console.log(req.body)
-    const sqlput = "Update RESTAURANT_MENU SET Dish_Name=?, Ingredients=?, Dish_Category=?, Dish_Description=?, Dish_Cost=?, Restaurant_Name=? WHERE Dish_ID=?";
-    var values=[body.Dish_Name, body.Ingredients, body.Dish_Category, body.Dish_Description, body.Dish_Cost, body.Restaurant_Name, body.Dish_ID]
-  
     Menu.findOneAndUpdate({"Dish_ID":body.Dish_ID},{
       "Dish_Name": body.Dish_Name,
       "Ingredients":body.Ingredients,
@@ -175,29 +174,6 @@ router.get('/one/:Restaurant_ID',async function(req, res){
     }).catch(error=>{console.log(error+"iii")})
     });
 
-  // router.put('/addDish',async function(req, res){
-  //   var body= req.body;
-  //   console.log(req.body)
-    
-  //   const menu = new Menu({
-  //     "Dish_Name":body.Dish_Name,
-  //     "Ingredients":body.Ingredients,
-  //     "Dish_Category": body.Dish_Category,
-  //     "Dish_Description":body.Dish_Description,
-  //     "Dish_Cost":body.Dish_Cost, 
-  //     "Restaurant_Name":body.Restaurant_Name
-  //   })
-  //   menu.save().then(result=>{
-  //     console.log(result)
-  //   })
-  //   .catch(error=>{
-  //     console.log(error)
-  //   });
-  //   res.status(200).json({
-  //     message: "Success",
-  //     product: menu
-  //   })
-  // }); 
 
 
   module.exports= router

@@ -39,7 +39,8 @@ export const LoginReducer = createSlice({
                 state.pass = false
                 state.password = ''
                 state.email=''
-                state.custID=''
+                state.custID = ''
+                state.token=''
             }
             return state;
         }     

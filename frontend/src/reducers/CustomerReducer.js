@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {updateCustomer, getCustomer} from '../actions/customerAction';
+import {updateCustomer, getCustomer, setDelivery} from '../actions/customerAction';
 
 export const CustomerReducer = createSlice({
     name: "cust",
@@ -7,15 +7,7 @@ export const CustomerReducer = createSlice({
         
         error: '',
         pass: '',
-        Cust_Name: '',
-        Cust_Nickname:'',
-        Cust_Phone:'',
-        Cust_City:'',
-        Cust_State:'',
-        Cust_Country:'',
-        Cust_Email:'',
-        Cust_DOB:'',
-        Cust_Profile_Location:'',
+        Delivery_Type:'Delivery'
          
     },
    
@@ -71,7 +63,12 @@ export const CustomerReducer = createSlice({
                 state.error = "Could not update"
             }
             //return state;
-        },  
+        },
+        [setDelivery.fulfilled] : (state,action) => {
+            console.log((action.payload.delivery)+ 'Customer reducer')
+            state.Delivery_Type=action.payload.delivery
+            //return state;
+        }
         // [clear.fulfilled] : (state, action) => {
         //     if (action.payload.arg){
         //         state.error = ''
@@ -86,3 +83,5 @@ export const CustomerReducer = createSlice({
 });
 
 export default CustomerReducer.reducer;
+
+

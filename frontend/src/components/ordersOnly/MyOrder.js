@@ -8,6 +8,7 @@ import { IconButton } from "@mui/material";
 import Button from '@mui/material/Button';
 import axios from 'axios'
 import Checkbox from '@mui/material/Checkbox';
+import { useHistory } from "react-router-dom";
 
 import Paper from '@mui/material/Paper';
 import ListSubheader from '@mui/material/ListSubheader';
@@ -44,12 +45,12 @@ const style = {
 
 export default function MyOrders() {
     const [OrderDetails, setOrderDetails] = useState([])
-
+const history= useHistory();
     const [CancelDetails, setCancelDetails] = useState([])
     const [ReceiptDetails, setReceiptDetails] = useState([])
     const[Total, setTotal]= useState([])
     const [SI, setSI] = useState([])
-
+const [delivery, setDelivery]= useState([])
     const[Length, setLength]= useState([])
     const Cust_ID = useSelector(state => state.login.custID)
     const [open, setOpen] = React.useState(false);
@@ -87,6 +88,7 @@ const viewReceipt = async (OrderID) => {
   }
 
     const cancelOrder = (checked) => {
+        console.log("checked"+ checked)
         if (checked) {
             fetch(`${backendurl}/order/cancel/${Cust_ID}`).then(res => res.json()).then(data => {
                 console.log(data.product)
@@ -103,6 +105,7 @@ const viewReceipt = async (OrderID) => {
         console.log('inside delivery change'+ e.target.value+ orderID)
         let OrderID= orderID
         localStorage.setItem('DeliveryStatus', "Cancel order")
+        setDelivery('Cancel Order')
         console.log(localStorage.getItem('DeliveryStatus'))
         let input = {
           DeliveryStatus: localStorage.getItem('DeliveryStatus'),
@@ -121,6 +124,9 @@ const viewReceipt = async (OrderID) => {
     
     useEffect(() => {
         console.log("insideeee" + Cust_ID)
+        if (Cust_ID === '') {
+            history.push('./login')
+        }
         fetch(`${backendurl}/order/${Cust_ID}`).then(res => res.json()).then(data =>{
             let datadet = JSON.parse(data.product)
             console.log(data.product)
@@ -129,7 +135,7 @@ const viewReceipt = async (OrderID) => {
     }).catch=(Error)=>{
       console.log(Error)
     }
-    },[Cust_ID,CancelDetails, localStorage.getItem('DeliveryStatus')])
+    },[Cust_ID,CancelDetails,delivery,localStorage.getItem('DeliveryStatus')])
         
     const openReceipt=(orderID)=>{
         fetch(`${backendurl}/order/receipt/${orderID}`)
@@ -141,10 +147,15 @@ const viewReceipt = async (OrderID) => {
         console.log(JSON.parse(dish2))
         let dish = JSON.parse(dish2)
         setReceiptDetails(dish)
-        console.log(ReceiptDetails.CustName)
+        console.log(ReceiptDetails.length)
+        let tot=0
+        ReceiptDetails.map(details => {
+            console.log(details.DishCost)
+            tot= tot+ details.DishCost
+        })
         setLength(dish.length)
         setSI(dish[0].SpecialInstructions)
-        setTotal(dish[0].DishCost * dish[0].DishCount + dish[1].DishCost * dish[1].DishCount)
+        setTotal(tot)
         console.log(Total)
       handleOpen()
     
@@ -180,7 +191,8 @@ const viewReceipt = async (OrderID) => {
                             <TableCell>{ details.Cust_Name}</TableCell>
                             <TableCell>{details.Rest_Name}</TableCell>
                             <TableCell>{details.Quantity}</TableCell>
-                            <TableCell>{details.Order_Time}</TableCell>
+                                <TableCell>{details.Order_Time}</TableCell>
+                                <TableCell>{details.Delivery_Status}</TableCell>
                                 <TableCell></TableCell>
                                 
                                 <TableCell
@@ -263,8 +275,7 @@ const viewReceipt = async (OrderID) => {
                                         
                                     </Box>
                                 </Modal>
-                            </TableRow>
-                            
+                            </TableRow>  
                     ))}
                     </TableBody>}
                     <TableFooter>

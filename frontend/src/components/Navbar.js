@@ -10,7 +10,8 @@ import Box from '@mui/material/Box';
 import backendurl from '../url';
 import Tab from '@mui/material/Tab';
 import { useSelector, useDispatch } from "react-redux";
-import {clear} from '../actions/loginAction'
+import { clear } from '../actions/loginAction'
+import { setDelivery } from '../actions/customerAction';
 import {restClear} from '../actions/restLoginAction'
 import {clearCart} from '../actions/cartAction'
 import Cart from './cartOnly/Cart'
@@ -143,7 +144,8 @@ export default function PrimarySearchAppBar() {
   const handleOpen = () => setOpen2(true);
   const handleClose = () => setOpen2(false);
   const RestID=useSelector(state => state.restLogin.restID)
-  const count = useSelector(state=> state.addToCart.totalCount)
+  const count = useSelector(state => state.addToCart.totalCount)
+  const delivery_type = useSelector(state => state.login.Delivery_Type)
   const dispatch= useDispatch()
   // const isMenuOpen = Boolean(anchorEl);
   // const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -158,7 +160,7 @@ export default function PrimarySearchAppBar() {
 
   }
 
-  const [search, setSearch]= React.useState('');
+  const [search, setSearch]= React.useState([]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -201,17 +203,22 @@ export default function PrimarySearchAppBar() {
     }
   }
   useEffect(()=>{
-    console.log(search);
-},[search])
-const [value, setValue] = React.useState('Delivery');
+  }, [ count])
+  
+const [value, setValue] = React.useState(delivery_type);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    console.log(newValue)
+    dispatch(setDelivery(newValue))
     localStorage.setItem('DeliveryType', value)
-    let searchvalue = "Panda Express"
+    let searchvalue = localStorage.getItem('search_id')
     localStorage.setItem("search_id", searchvalue)
-  history.push('/searchfilter')
+    history.push('/searchfilter')
   };
+
+
+
   return (
     <Box  sx={{ flexGrow: 1 }}>
       <AppBar style={{ background: '#516285' }} position="static">
@@ -237,9 +244,15 @@ const [value, setValue] = React.useState('Delivery');
            </Link>
             <StyledInputBase
               placeholder="What are you craving?"
-              inputProps={{ 'aria-label': 'search',}}
+              // value={sessionStorage.getItem('search_id')}
+              value={search}
+              inputProps={{ 'aria-label': 'search', }}
               //onChange={(e)=>setSearchMain(e.target.value)}
-              onChange={(e)=>localStorage.setItem('search_id',e.target.value )}
+              onChange={(e) => {
+                setSearch(e.target.value)
+                localStorage.setItem('search_id', e.target.value)
+                sessionStorage.setItem('search_id', e.target.value)
+              }}
             />
           </Search>}
           
@@ -250,7 +263,9 @@ const [value, setValue] = React.useState('Delivery');
             variant="filled"
            
             startAdornment={<InputAdornment color="secondary"position="start">
-            <LocationOnOutlinedIcon color="white"/>
+              <LocationOnOutlinedIcon
+                onClick={localStorage.setItem('location',value)}
+                color="white" />
           </InputAdornment>}
               placeholder="Location"
               value={localStorage.getItem('city')}
@@ -265,7 +280,7 @@ const [value, setValue] = React.useState('Delivery');
           <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Link to={'/searchfilter'}>
-                      <TabList onChange={handleChange} aria-label="lab API tabs example">
+            <TabList onChange={handleChange} aria-label="lab API tabs example">
             <Tab label="Delivery" value="Delivery" />
             <Tab label="Pick-up" value="Pickup" />
             
@@ -405,13 +420,15 @@ const [value, setValue] = React.useState('Delivery');
             <ListItemIcon><AccountCircle /></ListItemIcon>
             <ListItemText>My Profile</ListItemText>
           </ListItem>
-          </Link>}
-          <Link to='/orders'>
-          <ListItem>
-            <ListItemIcon><AddBusinessIcon /></ListItemIcon>
-            <ListItemText>Orders</ListItemText>
-          </ListItem>
-          </Link>
+            </Link>}
+          {RestID ? 
+            <Link to='/orders'>
+              <ListItem>
+                <ListItemIcon><AddBusinessIcon /></ListItemIcon>
+                <ListItemText>Orders</ListItemText>
+              </ListItem>
+            </Link>: <div></div> 
+          }
         </List>
         
       </Drawer>

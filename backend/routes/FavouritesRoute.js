@@ -11,10 +11,10 @@ const { auth, checkAuth, checkAuthRest } = require('../Utils/passport');
 
 
 //router.get('/:customer_ID',async function(req, res){
-  router.get('/',async function(req, res){
-
-  kafka.make_request('get_fav',req.body, function(err,results){
-    console.log('in result');
+router.get('/:customer_ID', checkAuth, async function(req, res){
+console.log(JSON.stringify(req.params.customer_ID)+ "req body for get fav")
+  kafka.make_request('get_fav',req.params.customer_ID, function(err,results){
+    console.log('in result of get fav');
     console.log(results);
     if (err){
         console.log("Inside err");
@@ -23,11 +23,11 @@ const { auth, checkAuth, checkAuthRest } = require('../Utils/passport');
             msg:"System Error, Try Again."
         })
     }else{
-        console.log("Inside else");
-            res.json({
-                updatedList:results
-            });
-  
+         console.log("Inside else");
+           res.writeHead(200, {
+        "Content-Type": "application/json",
+      });
+      res.end(JSON.stringify(results))
             res.end();
         }
     

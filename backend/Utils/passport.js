@@ -9,18 +9,23 @@ const Restaurant = require('../Models/RestaurantModels');
 
 // Setup work and export for the JWT passport strategy
 function auth() {
+    console.log("inside auth")
     var opts = {
         jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt"),
         secretOrKey: secret
     };
+    
     passport.use(
         new JwtStrategy(opts, (jwt_payload, callback) => {
+            console.log("okok"+ JSON.stringify(jwt_payload))
             const user_id = jwt_payload._id;
+            console.log(user_id+'-----------------------------')
             Customer.findById(user_id, (err, results) => {
                 if (err) {
                     return callback(err, false);
                 }
                 if (results) {
+                    console.log(results)
                     callback(null, results);
                 }
                 else {

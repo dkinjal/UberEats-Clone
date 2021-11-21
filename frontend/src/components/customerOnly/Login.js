@@ -36,11 +36,12 @@ export default function Login() {
 
     useEffect(() => {
         if (isPassed===true){
-            history.push('/landing')
+            history.push('/restaurantList')
         }
 
         if (isError){
             dispatch(clear());
+            alert('Invalid credentials')
         }
     // }, [isPassed, isError, dispatch])
     },[dispatch, history, isError, isPassed, redux_data])
@@ -48,12 +49,13 @@ export default function Login() {
     const loginUser= async()=>{
         //dispatch(clear());
         const email_val = /^\S+@\S+\.\S+$/
-        // if (!email_val.test(email)){
-        //     console.log('email')
+        if (!email_val.test(email)){
+            alert('Enter valid email')
             
-        //     return
-        // }
+            return
+        }
         if (password.length === 0){
+            alert('Enter Password')
             return
         }
         let data = {

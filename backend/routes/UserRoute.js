@@ -11,7 +11,7 @@ const Restaurant = require('../Models/RestaurantModels');
 const mongoose = require('mongoose');
 const {secret} = require('../config');
 const { auth, checkAuth, checkAuthRest } = require('../Utils/passport');
-
+auth();
 
 //New user Register
 router.post('/signup',async function(req, res){
@@ -61,7 +61,6 @@ kafka.make_request('post_user',req.body, function(err,results){
   
 //User Login
 router.post('/login',async function(req, res){
-  
   kafka.make_request('cust_login',req.body, function(err,results){
   console.log('in result');
   console.log(results);
@@ -72,8 +71,8 @@ router.post('/login',async function(req, res){
           msg:"System Error, Try Again."
       })
   }else{
-    console.log("Inside success");    
-    const payload = { _id: results.Cust_ID, email: results.Cust_Email};
+    console.log("Inside success"+ results);   
+    const payload = { _id: results._id, email: results.Cust_Email};
     const token = jwt.sign(payload, secret, {
       expiresIn: 1008000
     });
@@ -81,12 +80,9 @@ router.post('/login',async function(req, res){
       res.writeHead(200, {
         "Content-Type": "application/json",
       });
+    console.log(results)
       res.end(JSON.stringify(results));
-    // res.json({
-    //           updatedList:results
-    //       });
-
-          res.end();
+      res.end();
       }
   
 });
@@ -209,4 +205,4 @@ router.post('/restlogin', async function (req, res) {
 })
 
 
-  module.exports= router
+module.exports= router

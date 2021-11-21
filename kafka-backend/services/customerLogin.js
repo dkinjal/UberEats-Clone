@@ -7,14 +7,18 @@ function handle_request(msg, callback) {
     const password = msg.password;
     Customer.findOne({ "Cust_Email": email }).exec().then(doc => {
         console.log(doc + "userroute 67");
-        bcrypt.compare(password, doc.Cust_Password, (err, response) => {
-            if (response) {
-                callback(null, doc);
-            } else {
+        if (doc == null) {
+            callback(null, "Error");
+        } else {
+            bcrypt.compare(password, doc.Cust_Password, (err, response) => {
+                if (response) {
+                    callback(null, doc);
+                } else {
                 
-                callback(null, "Error");
-            }
-        });
+                    callback(null, "Error");
+                }
+            });
+        }
     });
 }
 

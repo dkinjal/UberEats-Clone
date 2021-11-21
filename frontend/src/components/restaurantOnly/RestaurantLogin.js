@@ -40,6 +40,7 @@ export default function Login() {
 
         if (isError){
             dispatch(restClear());
+            alert('Invalid credentials')
 
         }
     // }, [isPassed, isError, dispatch])

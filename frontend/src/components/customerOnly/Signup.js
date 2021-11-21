@@ -35,7 +35,13 @@ export default function Signup() {
 
     let redirectvar =''
 
-    function signup(){
+    function signup() {
+        const email_val = /^\S+@\S+\.\S+$/
+        if (!email_val.test(email)){
+            console.log('email')
+            alert('Invalid Email ID')
+            return;
+        }
         // fetch(`${backendurl}/user/signup`,{
         //     method:'POST',
         //     headers:{"Content-type": "application/json"},

@@ -18,6 +18,7 @@ export default function SearchResults() {
     const [RestaurantDetails, setRestaurantDetails] = useState([])
     const deliveryType = localStorage.getItem('DeliveryType')
     let searchvalue = localStorage.getItem('search_id')
+    
     console.log(searchvalue)
     useEffect(()=>{
         fetch(`${backendurl}/search/${searchvalue}`)
@@ -28,7 +29,7 @@ export default function SearchResults() {
 
                 setRestaurantDetails(JSON.parse(data.product))
             })
-    },[deliveryType,  searchvalue])
+    },[deliveryType ,searchvalue])
     return (
         <div>
         <Navbar 

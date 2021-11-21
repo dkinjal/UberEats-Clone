@@ -31,9 +31,9 @@ export const subItemCount = createAsyncThunk(
 export const removeItem = createAsyncThunk(
   'users/cartcountrem', async(input)=>{
     console.log('inside cart count action sub'+ input.DishID)
-      localStorage.setItem('DishID', input.DishID);
+    localStorage.setItem('DishID', input.DishID);
       
-      return {auth:true, DishID:input.DishID, count: input.count};
+    return {auth:true, DishID:input.DishID, count: input.count};
     
 })
 

@@ -1,11 +1,11 @@
 const Favourite= require('../Models/FavouritesModels')
 
 function handle_request(msg, callback){
-var body= msg;
-  console.log(body.Restaurant_ID +'mmm')
+  console.log('inside add to fav ---------------------')
+  console.log(msg.Rest_ID +'mmm')
   const fav= new Favourite({
-    "Cust_ID":body.Cust_ID, 
-    "Restaurant_ID":body.Restaurant_ID,
+    "Cust_ID":msg.Cust_ID, 
+    "Restaurant_ID":msg.Rest_ID,
     
   })
   fav.save().then(result=>{
