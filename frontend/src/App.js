@@ -23,6 +23,31 @@ import AddDish from "./components/dishOnly/addDish";
 import RestaurantMenu from "./components/restaurantOnly/RestaurantMenu";
 import Checkout from './components/cartOnly/Checkout';
 import MyOrders from "./components/ordersOnly/MyOrder";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  HttpLink,
+  from,
+} from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
+
+const errorLink = onError(({ graphqlErrors, networkError }) => {
+  if (graphqlErrors) {
+    graphqlErrors.map(({ message, location, path }) => {
+      alert(`Graphql error ${message}`);
+    });
+  }
+});
+
+const link = from([
+  errorLink,
+  new HttpLink({ uri: "http://localhost:6969/graphql" }),
+]);
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: link,
+});
 
 
 const theme = createTheme({
@@ -39,7 +64,8 @@ const theme = createTheme({
     }
 })
 function App() {
-    return(
+    return (
+        <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
         <Router>
             <Switch>
@@ -106,10 +132,11 @@ function App() {
                 <Route path='/orders'>
                 <Orders/>
                 </Route>
-                {/* <Route exact path = "/customerProfile" component = {Profile}></Route>                 */}
+                
             </Switch>
         </Router>
         </ThemeProvider>
+        </ApolloProvider>
     )
 }
 export default App;

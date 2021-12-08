@@ -15,6 +15,14 @@ const corsConfig ={
     origin: true
 }
 
+const { graphqlHTTP } = require("express-graphql");
+const schema = require("./Schemas/index");
+
+
+
+
+
+
 const Customer= require('./Models/CustomerModels');
 
 const { mongoDB } = require('./config');
@@ -52,7 +60,11 @@ app.get('/aaa', (req, res) => {
   });
 });
 
-
+app.use(cors({
+  origin:"http://localhost:3000",
+  credentials: true,
+  methods:["GET","POST"]
+}))
 
 // app.use(cors(corsConfig))
 //Middleware
@@ -68,14 +80,34 @@ app.use(session({
     }
 }));
 
-app.use(cors({
-  origin:"http://localhost:3000",
-  credentials: true,
-  methods:["GET","POST"]
-}))
+// app.use(function (req, res, next){
+//   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000/');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,POST,PUT');
+//   res.setHeader('Access-Control-Allow-Headers','GET,HEAD,POST,PUT')
+// })
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", 'http://localhost:3000');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+
+
+
 
 app.use(cookieParser("cmpe_273_secure_string"));
 //require("./passportConfig")(passport);
+
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema,
+    graphiql: true,
+  })
+);
+
+
 
 var connection = mysql.createPool(
     {

@@ -43,6 +43,8 @@ export default function Checkout() {
       }
     })
   }
+
+  
     useEffect(()=>{
         axios.get(`${backendurl}/customer/${Cust_ID}`)
       .then(res => 
@@ -153,13 +155,13 @@ export default function Checkout() {
 
 <br/>
 <br/>
-<div>Delivery Type : {currentDelivery} </div>
+<div>Delivery Type : Pickup </div>
 <br/>
 <TextField width='800'
           id="outlined-multiline-static"
           label="Special Instructions"
           multiline
-          onChange={e=>setSpecialInstructions(e.target.value)}
+          // onChange={e=>setSpecialInstructions(e.target.value)}
           rows={3}
           
         />

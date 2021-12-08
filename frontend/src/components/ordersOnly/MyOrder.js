@@ -137,10 +137,12 @@ const viewReceipt = async (OrderID) => {
     }
     },[Cust_ID,CancelDetails,delivery,localStorage.getItem('DeliveryStatus')])
         
-    const openReceipt=(orderID)=>{
+    const openReceipt = (orderID) => {
+        console.log(orderID)
         fetch(`${backendurl}/order/receipt/${orderID}`)
     .then(res => res.json())
-    .then(data =>{
+            .then(data => {
+        console.log(data.product)
     let tempTotal = 0;
         let dish2= (data.product.Order_Details)
         // setReceiptDetails(data)
@@ -196,7 +198,8 @@ const viewReceipt = async (OrderID) => {
                                 <TableCell></TableCell>
                                 
                                 <TableCell
-                                    onClick={() => openReceipt(details.Order_ID)}
+                                    // onClick={() => openReceipt(details.Order_ID)}
+                                    onClick={handleOpen}
                                 ><IconButton
                                 size="small">View receipt</IconButton></TableCell>
                                 <Modal
@@ -247,7 +250,8 @@ const viewReceipt = async (OrderID) => {
                                 size="small" color="secondary" variant="outlined">Cancel Order</IconButton></TableCell>
                                 
                                 <TableCell
-                                    onClick={() => openReceipt(details.Order_ID)}
+                                    // onClick={() => openReceipt(details.Order_ID)}
+                                     onClick={handleOpen}
                                 ><IconButton
                                 size="small">View receipt</IconButton></TableCell>
                                 <Modal
@@ -258,19 +262,24 @@ const viewReceipt = async (OrderID) => {
                                 >
                                     <Box sx={style}>
                                         <h1>Receipt</h1>
-                                        <h3>Total:   ${Total}</h3>
-                                            <Grid container spacing={3} >
+                                        <h3>Total:   $ 12.948{Total}</h3>
+                                        <Grid container spacing={3} >
+                                            <Grid  item md={12} key={details.DishID}>
+                    <p>
+                        French Fries {details.DishName}  12 x 1  = 12  
+                   </p> 
+                </Grid>
             {ReceiptDetails.map(details=>(
                 <Grid  item md={12} key={details.DishID}>
                     <p>
-                        {details.DishName}  {details.DishCost} x {details.DishCount}  ${details.DishCount*details.DishCost}  
+                        French Fries {details.DishName}  {details.DishCost} x {details.DishCount}  ${details.DishCount*details.DishCost}  
                    </p> 
                 </Grid>
 
             ))}
                                         </Grid>
                                         <div>
-                                            Special Instructions : {SI}
+                                            Special Instructions : NA {SI}
                                         </div>
                                         
                                     </Box>

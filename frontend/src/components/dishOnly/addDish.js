@@ -13,6 +13,8 @@ import Box from '@mui/material/Box';
 import { IconButton } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
 import backendurl from "../../url";
+import { ADD_DISH } from '../../Graphql/Mutations'
+const axios = require('axios');
 
 const style = {
     position: 'absolute',
@@ -45,9 +47,27 @@ export default function AddDish() {
     const handleClose = () => setOpen(false);
     const RestID = new URLSearchParams(search).get('Rest_ID');
     
+  async function abc() {
+  console.log("inside abccc"+RestID)
+  let AA= await axios.post(`${backendurl}/graphql`,
+      {
+        query: ADD_DISH,
+        variables: {
+        
+    Dish_Name:DishName,
+    Ingredients:DishIngredients,
+    Dish_Description:DishDescription,
+    Dish_Category:DishCategory,
+    Dish_Cost:DishCost,
+    Restaurant_ID:RestID,
+    Dish_Type:DishType,
+        }
+    })
+    console.log("called here ",AA)
+}
 
-
-    function addDish(){
+  function addDish() {
+    abc();
         fetch(`${backendurl}/dish`,{
                 method:'POST',
                 headers:{"Content-type": "application/json"},

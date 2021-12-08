@@ -6,7 +6,7 @@ import Paper from '@mui/material/Paper';
 import { Container } from '@mui/material';
 import Navbar from '../Navbar';
 import { useHistory } from "react-router-dom";
-
+import { Update_Delivery } from '../../Graphql/Mutations';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -87,9 +87,28 @@ const history= useHistory();
       }).catch=(Error)=>{
         console.log(Error)
       }
-      },[ DeliveryStatus,RestID, DeliveryStatusParam,])
-
-      function  handleDeliveryChange (e, orderID){
+    }, [DeliveryStatus, RestID, DeliveryStatusParam,])
+  
+  
+  
+  
+  async function handleDeliveryChange(e, orderID) {
+    localStorage.setItem('DeliveryStatus', e.target.value)
+    await console.log("inside abccc" +e.target.value+ orderID)
+    let DeliveryStatus= localStorage.getItem('DeliveryStatus')
+    console.log("inside abccc" + DeliveryStatus)
+    let AA = await axios.post(`${backendurl}/graphql`,
+      {
+        query: Update_Delivery,
+        variables: {
+          Order_ID: orderID,
+          Delivery_Status: DeliveryStatus
+        }
+    })
+    console.log("called here ",AA)
+}
+  function handleDeliveryChange2(e, orderID) {
+    // abc(orderID);
         console.log('inside delivery change'+ e.target.value+ orderID)
         setDeliveryStatus(e.target.value)
         console.log(DeliveryStatus)
@@ -180,7 +199,8 @@ const history= useHistory();
     onChange={(e)=>handleDeliveryChange(e,OrderDetails.Order_ID)}
                 ><MenuItem value='Order Received'>Order Received</MenuItem>
                     <MenuItem value='Preparing'>Preparing</MenuItem>
-                    <MenuItem value='Pick up Ready'>Pick up Ready</MenuItem>
+                    {/* <MenuItem value='Pick up Ready'>Pick up Ready</MenuItem> */}
+                    <MenuItem value='Delivered'>Delivered</MenuItem>
     <MenuItem value='Picked up'>Picked up</MenuItem>
     <MenuItem value='Cancel order'>Cancel order</MenuItem></Select>}            
               </TableCell>

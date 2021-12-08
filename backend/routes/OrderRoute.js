@@ -2,6 +2,8 @@ var constants= require('../config.json')
 var mysql = require('mysql');
 const express = require("express");
 var router = express.Router();
+const mongoose = require('mongoose');
+
 var db = require('../dbConnection.js')
 var connection= db.connection;
 var Order = require('../Models/OrderModels')
@@ -85,24 +87,37 @@ router.get('/:Cust_ID',async function(req, res){
   //   res.send("Success");
   // }).catch(error=>{console.log(error+"iii")})
   // });
-  kafka.make_request('update_delivery_status',req.body, function(err,results){
-    console.log('in result');
-    console.log(results);
-    if (err){
-        console.log("Inside err");
-        res.json({
-            status:"error",
-            msg:"System Error, Try Again."
-        })
-    }else{
-        console.log("Inside else");
-            res.json({
-                updatedList:results
-            });
+  // kafka.make_request('update_delivery_status',req.body, function(err,results){
+  //   console.log('in result');
+  //   console.log(results);
+  //   if (err){
+  //       console.log("Inside err");
+  //       res.json({
+  //           status:"error",
+  //           msg:"System Error, Try Again."
+  //       })
+  //   }else{
+  //       console.log("Inside else");
+  //           res.json({
+  //               updatedList:results
+  //           });
   
-            res.end();
-        }
+  //           res.end();
+  //       }
+  //     })
+    Order.findOneAndUpdate({"Order_ID":body.Order_ID},{
+        "Delivery_Status": body.Delivery_Status
       })
+      .exec().then(doc => {
+        console.log(doc)
+        let res={
+            message: "Success",
+            product: doc
+        }
+        // callback(null, res);
+        //console.log("Success aaa"+ doc[0])
+       // res.send("Success");
+      }).catch(error=>{console.log(error+"iii")})
   // connection.query(sqlput, values, async function(error, results){
   //   if(error){
   //     res.writeHead(200, {
@@ -140,7 +155,7 @@ router.post('/special',async function(req, res){
   })
 })
   
-router.post('/',async function(req, res){
+router.post('/', async function (req, res) {
   // var lastRow="SELECT ORDER_ID FROM ORDER_DETAILS ORDER BY ORDER_id DESC LIMIT 1"
   // let last =0;
   // connection.query(lastRow, function(error, results){
@@ -157,33 +172,60 @@ router.post('/',async function(req, res){
   //     var output=[];
   // console.log(last+"last")
   // for(let q=0; q< mainbody.length; q++){
-  //   var today = new Date();
-  //   var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-  //   var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  var today = new Date();
+  var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
   // const sqlput = "INSERT INTO ORDER_DETAILS (ORDER_ID,Dish_Count, Dish_Name, Delivery_Status, Order_Status, Restaurant_ID, Order_Mode, Cust_ID, Dish_Cost,Order_Time) VALUES(?,?,?,?,?,?,?,?,?,?)";
   // var body= mainbody[q]
   // var values=[last+1, body.DishCount,body.DishName, body.DeliveryStatus, body.OrderStatus, body.RestID, body.OrderMode, body.CustID, body.DishCost, date+time]
-  kafka.make_request('add_order',req.body, function(err,results){
-    console.log('in result');
-    console.log(results);
-    if (err){
-        console.log("Inside err");
-        res.json({
-            status:"error",
-            msg:"System Error, Try Again."
-        })
-    }else{
-        console.log("Inside else");
-            res.json({
-                updatedList:results
-            });
-  
-            res.end();
-        }
+  let body = req.body[0]
+  console.log(body[0])
+  const order = new Order({
     
-  });
+    "Order_ID": mongoose.Types.ObjectId(),
+    "Cust_ID": body.CustID,
+    "Cust_Name": body.CustName,
+    "Restaurant_ID": body.RestID,
+    "Delivery_Status": body.DeliveryStatus,
+    "Order_Mode": body.OrderMode,
+    "Order_Time": body.Order_Time,
+    "Order_Status": body.OrderStatus,
+    "Special_Instructions": body.SpecialInstructions,
+    "Rest_Name": body.RestName,
+  })
 
+  order.save().then(result => {
+    console.log(result)
+    let res = {
+      message: "Success",
+      product: order
+    }
+    // callback(null, res);
+  })
+    .catch(error => {
+      console.log(error)
+    });
+  // kafka.make_request('add_order',req.body, function(err,results){
+  //   console.log('in result');
+  //   console.log(results);
+  //   if (err){
+  //       console.log("Inside err");
+  //       res.json({
+  //           status:"error",
+  //           msg:"System Error, Try Again."
+  //       })
+  //   }else{
+  //       console.log("Inside else");
+  //           res.json({
+  //               updatedList:results
+  //           });
+  
+  //           res.end();
+  //       }
+    
+  // });
 
+})
 
 //   connection.query(sqlput, values, async function(error, results){
 //     if(error){
@@ -199,17 +241,18 @@ router.post('/',async function(req, res){
 // } res.send(output)
 // }
 // });
-})
+// })
 
 router.get('/receipt/:orderID', function(req, res){
   console.log('RestID'+ req.params.orderID)
   Order.find({"Order_ID": req.params.orderID}).exec().then(doc=>{
-    //console.log(doc[0]);
+    console.log(doc[0]);
         //req.session.user= res;
         res.status(200).json({
           message: "Success",
           product: doc[0]
         })
+    
     }).catch (error=>{
       console.log(error);
     }) 

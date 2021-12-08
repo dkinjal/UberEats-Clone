@@ -10,13 +10,9 @@ var connection= db.connection;
 var Customer = require('../Models/CustomerModels')
 var Restaurant = require('../Models/RestaurantModels')
 var Menu = require('../Models/MenuModels')
+var s3 = require('../Utils/imageConfig')
 
 
-const s3 = new aws.S3({
-    accessKeyId: 'AKIAXUKC3TYXL6D6T2QM',
-    secretAccessKey: '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',
-    Bucket: 'uber-bucket-kd'
-   });
 
 function checkFileType( file, cb ){
 // Allowed ext

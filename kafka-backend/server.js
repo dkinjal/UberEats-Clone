@@ -69,13 +69,13 @@ handleTopicRequest("get_user",getUser);
 handleTopicRequest("get_dish", getDish);
 handleTopicRequest("add_dish", addDish);
 handleTopicRequest("get_fav", getFav);
-handleTopicRequest("get_cust", getCust);
-handleTopicRequest("add_fav", addFav);
-handleTopicRequest("add_order", addOrder);
+// handleTopicRequest("get_cust", getCust);
+// handleTopicRequest("add_fav", addFav);
+// handleTopicRequest("add_order", addOrder);
 handleTopicRequest("cust_login", custLogin);
 handleTopicRequest("rest_login", restLogin);
-handleTopicRequest("update_cust", updateCust);
-handleTopicRequest("update_delivery_status", updateDeliveryStatus);
+// handleTopicRequest("update_cust", updateCust);
+// handleTopicRequest("update_delivery_status", updateDeliveryStatus);
 
 
 

@@ -108,7 +108,7 @@ router.get('/', async function (req, res) {
   router.get('/menu/:Restaurant_ID',async function(req, res){
     console.log('inside menu api')
     Menu.find({"Restaurant_ID": req.params.Restaurant_ID}).exec().then(doc=>{
-      console.log(doc+"      ok");
+      //console.log(doc+"      ok");
           //req.session.user= res;
           res.status(200).json({
             message: "Success",

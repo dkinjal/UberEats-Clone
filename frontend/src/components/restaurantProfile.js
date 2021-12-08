@@ -23,6 +23,9 @@ import addRestProfile from "./ProfileUpdate";
 import { IconButton } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
 
+import { useQuery, gql } from "@apollo/client";
+import { GET_RESTAURANT } from "../Graphql/Query";
+
 import { Card } from "@mui/material";
 const axios = require('axios');
 
@@ -57,40 +60,52 @@ const useStyles= makeStyles({
     p: 4,
   };
   
-export default function RestaurantProfile(){
-    const Classes = useStyles()
-    const [DishDetails, setDishDetails] = useState([])
-    const [RestDetails, setRestDetails] = useState({})
-    const [RestName, setRestName] = useState()
-    const [RestDescription, setRestDescription] = useState()
-    const [RestDayFrom, setRestDayFrom] = useState()
-    const [RestDayTo, setRestDayTo] = useState()
-    const [RestCuisine, setRestCuisine] = useState()
-    const [RestID, setRestID] = useState()
-    const [RestEmail, setRestEmail] = useState()
-    const [RestLocation, setRestLocation] = useState()
-    const [RestDeliveryMode, setRestDeliveryMode] = useState()
-    const [RestTimingFrom, setRestTimingFrom] = useState({})
-    const [RestTimingTo, setRestTimingTo] = useState({})
-    const [RestContact, setRestContact] = useState({})
-    const [RestProfile, setRestProfile] = useState({})
-    const [RestType, setRestType] = useState({})
-    const [open, setOpen] = React.useState(false);
-    const [ifDisable, setIfDisable]= useState(true);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-    const Restaurant_ID=useSelector(state => state.restLogin.restID)
-    const dispatch = useDispatch();
+export default function RestaurantProfile() {
+  const Classes = useStyles()
+  const [DishDetails, setDishDetails] = useState([])
+  const [RestDetails, setRestDetails] = useState({})
+  const [RestName, setRestName] = useState()
+  const [RestDescription, setRestDescription] = useState()
+  const [RestDayFrom, setRestDayFrom] = useState()
+  const [RestDayTo, setRestDayTo] = useState()
+  const [RestCuisine, setRestCuisine] = useState()
+  const [RestID, setRestID] = useState()
+  const [RestEmail, setRestEmail] = useState()
+  const [RestLocation, setRestLocation] = useState()
+  const [RestDeliveryMode, setRestDeliveryMode] = useState()
+  const [RestTimingFrom, setRestTimingFrom] = useState({})
+  const [RestTimingTo, setRestTimingTo] = useState({})
+  const [RestContact, setRestContact] = useState({})
+  const [RestProfile, setRestProfile] = useState({})
+  const [RestType, setRestType] = useState({})
+  const [open, setOpen] = React.useState(false);
+  const [ifDisable, setIfDisable] = useState(true);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const Restaurant_ID = useSelector(state => state.restLogin.restID)
+  const dispatch = useDispatch();
+  
+  
+  async function abc() {
+    console.log("inside abccc"+Restaurant_ID)
+  let AA= await axios.post(`${backendurl}/graphql`,
+      {
+        query: GET_RESTAURANT,
+        variables: {
+          id: Restaurant_ID
+        }
+    })
+    console.log("called here ",AA)
+}
 
-    
-    
+
 
   const getRestOne = () => {
-  console.log("inside restone")
-  axios.get(`${backendurl}/restaurant/one/${Restaurant_ID}`)
+    console.log("inside restone")
+    axios.get(`${backendurl}/restaurant/one/${Restaurant_ID}`)
       .then(response =>
         {let data = (response.data.product)
-          console.log(JSON.stringify(response.data.product)+"getrestone")
+          // console.log(JSON.stringify(response.data.product)+"getrestone")
           setRestDetails(response.data[0])
           setRestName(data.Restaurant_Name)
           setRestDescription(data.Restaurant_Description)
@@ -113,7 +128,8 @@ export default function RestaurantProfile(){
       }
 
 
-     useEffect(()=>{
+  useEffect(() => {
+       abc();
        fetch(`${backendurl}/restaurant/menu/${Restaurant_ID}`)
       .then(res => res.json())
         .then(data => {
@@ -125,7 +141,8 @@ export default function RestaurantProfile(){
         }
       console.log(Restaurant_ID+'rrr'+ DishDetails)
       
-      getRestOne();
+       getRestOne();
+       
       // axios.get(`${backendurl}/restaurant/one/${Restaurant_ID}`)
       // .then(response => 
       //   {let data = (response.data[0])

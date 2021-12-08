@@ -15,41 +15,41 @@ router.get('/:customer_ID',async function(req, res){
   let rest = {
     Cust_ID : req.params.customer_ID
   }
-    // Customer.findOne({"Cust_ID": req.params.customer_ID}).exec().then(doc=>{
-    //       //req.session.user= res;
-    //       //console.log(doc[0].Cust_Name);
-    //       console.log(doc);
-    //       res.status(200).json({
-    //         message: "Success",
-    //         product: JSON.stringify(doc)
-    //       })
-    //   }).catch (error=>{
-    //     console.log(error);
-    //   }) 
-  kafka.make_request('get_cust',req.params.customer_ID, function(err,results){
-    console.log('in result');
-    console.log(results);
-    if (err){
-        console.log("Inside err");
-        res.json({
-            status:"error",
-            msg:"System Error, Try Again."
-        })
-    }else{
-        console.log("Inside success");
-            // res.json({
-            //     updatedList:results
-            // });
+    Customer.findOne({"CustID": req.params.customer_ID}).exec().then(doc=>{
+          //req.session.user= res;
+          //console.log(doc[0].Cust_Name);
+          console.log(doc);
+          res.status(200).json({
+            message: "Success",
+            product: JSON.stringify(doc)
+          })
+      }).catch (error=>{
+        console.log(error);
+      }) 
+  // kafka.make_request('get_cust',req.params.customer_ID, function(err,results){
+  //   console.log('in result');
+  //   console.log(results);
+  //   if (err){
+  //       console.log("Inside err");
+  //       res.json({
+  //           status:"error",
+  //           msg:"System Error, Try Again."
+  //       })
+  //   }else{
+  //       console.log("Inside success");
+  //           // res.json({
+  //           //     updatedList:results
+  //           // });
   
-            // res.end();
-      res.writeHead(200, {
-        "Content-Type": "application/json",
-      });
-      res.end(JSON.stringify(results));
+  //           // res.end();
+  //     res.writeHead(200, {
+  //       "Content-Type": "application/json",
+  //     });
+  //     res.end(JSON.stringify(results));
   
-        }
+  //       }
     
-  });
+  // });
   
 });
 
@@ -68,43 +68,43 @@ router.get('/:customer_ID',async function(req, res){
 router.post("/:CustID", async function (req, res) {
   console.log('inside cust update' + req.body.Cust_ID)
   console.log(req.body)
-  kafka.make_request('update_cust',req.body, function(err,results){
-    console.log('in result');
-    console.log(results);
-    if (err){
-        console.log("Inside err");
-        res.json({
-            status:"error",
-            msg:"System Error, Try Again."
-        })
-    }else{
-        console.log("Inside else");
-            // res.json({
-            //     updatedList:results
-            // });
-      res.writeHead(200, {
-        "Content-Type": "application/json",
-      });
-      res.end(JSON.stringify(results));
+  // kafka.make_request('update_cust',req.body, function(err,results){
+  //   console.log('in result');
+  //   console.log(results);
+  //   if (err){
+  //       console.log("Inside err");
+  //       res.json({
+  //           status:"error",
+  //           msg:"System Error, Try Again."
+  //       })
+  //   }else{
+  //       console.log("Inside else");
+  //           // res.json({
+  //           //     updatedList:results
+  //           // });
+  //     res.writeHead(200, {
+  //       "Content-Type": "application/json",
+  //     });
+  //     res.end(JSON.stringify(results));
   
-            // res.end();
-        }
+  //           // res.end();
+  //       }
     
-  });
-  // Customer.findOneAndUpdate({"Cust_ID": req.body.Cust_ID},{
-  //   "Cust_Name":req.body.Cust_Name,
-  //   "Cust_DOB":req.body.Cust_DOB,
-  //   "Cust_City":req.body.Cust_City,
-  //   "Cust_State":req.body.Cust_State,
-  //   "Cust_Country":req.body.Cust_Country,
-  //   "Cust_Nickname":req.body.Cust_Nickname,
-  //   "Cust_Phone":req.body.Cust_Phone,
-  //   "Cust_Email": req.body.Cust_Email
-  // })
-  // .exec().then(doc => {
-  //   console.log("Success aaa"+ doc)
-  //   res.send("Success");
-  // }).catch(error=>{console.log(error+"iii")})
+  // });
+  Customer.findOneAndUpdate({"CustID": req.body.Cust_ID},{
+    "Cust_Name":req.body.Cust_Name,
+    "Cust_DOB":req.body.Cust_DOB,
+    "Cust_City":req.body.Cust_City,
+    "Cust_State":req.body.Cust_State,
+    "Cust_Country":req.body.Cust_Country,
+    "Cust_Nickname":req.body.Cust_Nickname,
+    "Cust_Phone":req.body.Cust_Phone,
+    "Cust_Email": req.body.Cust_Email
+  })
+  .exec().then(doc => {
+    console.log("Success aaa"+ doc)
+    res.send("Success");
+  }).catch(error=>{console.log(error+"iii")})
 });
 
 
