@@ -89,7 +89,7 @@ export const UPDATE_USER = `
     Cust_Email:$Cust_Email,
     Cust_Phone: $Cust_Phone,
     ){
-    Cust_Name
+    Cust_Name,
   }
 }
 `;
