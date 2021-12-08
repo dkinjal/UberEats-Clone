@@ -1,5 +1,3 @@
-
-
 export const GET_RESTAURANT = `
   query($id :String!){
   getRestaurantByID(id:$id){
@@ -73,6 +71,3 @@ export const GET_DISH_BY_ID = `
   }
 }
 `;
-
-
-
